@@ -12,6 +12,7 @@ import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/wit
 import createStyles from '@material-ui/core/styles/createStyles';
 import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
+import withRoot from '../withRoot'
 
 const styles = (theme: Theme) => {
     return createStyles({
@@ -52,4 +53,4 @@ class AboutPage extends React.PureComponent<AboutPageProps> {
 
 
 
-export default withStyles(styles)(AboutPage);
+export default withRoot(withStyles(styles)(AboutPage));

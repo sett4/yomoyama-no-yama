@@ -13,6 +13,7 @@ import createStyles from '@material-ui/core/styles/createStyles';
 import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
 import { Helmet } from "react-helmet"
+import withRoot from '../withRoot'
 
 
 const styles = (theme: Theme) => {
@@ -29,8 +30,8 @@ const styles = (theme: Theme) => {
 };
 
 interface IncidentIndexProps extends WithStyles<typeof styles> {
+  classes: any,
   data: {
-    classes: any,
     incident: {
       edges: [{
         node: {
@@ -52,7 +53,7 @@ const Incident = ({ node, classes }) => (
   <ListItem>
     <Link
       style={{ color: `inherit`, textDecoration: `none` }}
-      to={`/incident/${node.id}`}
+      to={`/incident/${node.id}/`}
     >
       <ListItemText primary={ moment(node.date).format('YYYY-MM-DD') + ' '+ node.title } secondary={
         <React.Fragment>
@@ -93,7 +94,7 @@ class IncidentIndexPage extends React.PureComponent<IncidentIndexProps> {
 
 
 
-export default withStyles(styles)(IncidentIndexPage);
+export default withRoot(withStyles(styles)(IncidentIndexPage));
 
 
 export const pageQuery = graphql`
