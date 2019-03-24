@@ -31,7 +31,7 @@ module.exports = {
     {
       resolve: 'gatsby-source-firestore',
       options: {
-        credential: require("./mt-incident-2847996a3e43.json"),
+        credential: JSON.parse(process.env['FIRESTORE_CREDENTIAL_JSON']),
         types: [
           {
             type: 'Incident',
