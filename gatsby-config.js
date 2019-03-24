@@ -1,10 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
+    title: `よもやまごとのやま`,
     description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
     author: `@gatsbyjs`,
   },
   plugins: [
+    `gatsby-plugin-typescript`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -27,6 +28,28 @@ module.exports = {
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
       },
     },
+    {
+      resolve: 'gatsby-source-firestore',
+      options: {
+        credential: require("./mt-incident-2847996a3e43.json"),
+        types: [
+          {
+            type: 'Incident',
+            collection: 'incident',
+            map: doc => ({
+              title: doc.subject,
+              source: doc.source,
+              content: doc.content,
+              url: doc.url,
+              date: doc.date,
+              publishedDate: doc.publishedDate,
+              category: doc.category
+              // author___NODE: doc.author.id,
+            }),
+          },
+        ],
+      },
+    },    
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // 'gatsby-plugin-offline',
