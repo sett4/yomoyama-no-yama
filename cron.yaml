@@ -2,3 +2,6 @@ cron:
 - description: "update Nagano Police 24 oclock"
   url: /datasource/np24/update
   schedule: every 24 hours
+- description: "update Yahoo News"
+  url: /datasource/yahoo/update
+  schedule: every 2 hours

@@ -54,7 +54,9 @@ export class FirestoreArticleRepository implements ArticleRepository {
     
 }
 
-
+export interface IndexScraper {
+    getArticleUrls(): Promise<string[]>;
+}
 export class IncidentArticle {
     source: string
     url: string;
@@ -65,8 +67,13 @@ export class IncidentArticle {
     category: Set<string> = new Set<string>();
     date: string;
     sourceName: string;
+    author: string;
+    _kc: ArticleKeyCreator;
+    set keyCreator(kc: ArticleKeyCreator) {
+        this._kc = kc
+    }
 
-    constructor(source: string, sourceName: string, url: string, subject: string, content: string, date: string, publishedDate: string, processedDate: Date) {
+    constructor(source: string, sourceName: string, url: string, subject: string, content: string, date: string, publishedDate: string, processedDate: Date, author: string) {
         this.source = source
         this.sourceName = sourceName
         this.url = url
@@ -75,11 +82,15 @@ export class IncidentArticle {
         this.publishedDate = publishedDate
         this.processedDate = processedDate
         this.date = date
+        this.author = author
+        this._kc = (a) => new SingleArticleKey(a.source, a.url);
     }
 
     toKey(): ArticleKey {
-        return new ArticleKey(this.source, this.url, this.subject)
+        return this._kc(this)
     }
+
+
 
     toData(): any {
         let category: string[] = [];
@@ -99,7 +110,12 @@ export class IncidentArticle {
     }
 }
 
-export class ArticleKey {
+export interface ArticleKey {
+    getId(): string
+}
+
+export type ArticleKeyCreator = (a: IncidentArticle) => ArticleKey;
+export class MultipleArticleKey {
     source: string
     url: string;
     subject: string;
@@ -114,6 +130,22 @@ export class ArticleKey {
         hash.update(this.source)
         hash.update(this.url)
         hash.update(this.subject)
+        return this.source+'.'+hash.digest('hex')
+    }
+}
+
+export class SingleArticleKey {
+    source: string
+    url: string;
+    constructor(source: string, url: string) {
+        this.source = source
+        this.url = url
+    }
+
+    getId(): string {
+        let hash = crypto.createHash('sha256')
+        hash.update(this.source)
+        hash.update(this.url)
         return this.source+'.'+hash.digest('hex')
     }
 }

@@ -60,13 +60,11 @@ class IncidentTemplate extends React.Component<IncidentTemplateProps> {
         >
         </div>
         <h2>{incident.title}</h2>
-        {/* <Paper> */}
-        {/* </Paper> */}
-        {/* <Paper className={classes.paper} elevation={1}> */}
           <Typography component="p" className={classes.typography}>
-            {incident.content}
+          {
+          incident.category.includes('__private-use') ? incident.content.substring(0, Math.min(64,incident.content.length))+'(snip)' : incident.content
+        }
           </Typography>
-        {/* </Paper> */}
         <Paper className={classes.paper} elevation={1}>
         <Table>
           <TableBody>
