@@ -29,11 +29,13 @@ interface IncidentTemplateProps extends WithStyles<typeof styles> {
   data: {
     incident: {
       source: string;
+      sourceName: string;
       url: string;
       title: string;
       content: string;
       date: string;
       publishedDate: string;
+      category: string[];
     }
   }
 }
@@ -70,7 +72,7 @@ class IncidentTemplate extends React.Component<IncidentTemplateProps> {
           <TableBody>
             <TableRow>
               <TableCell>source</TableCell>
-              <TableCell><a href={incident.url} ref="noopener">{incident.source}</a></TableCell>
+              <TableCell><a href={incident.url} ref="noopener">{incident.sourceName}</a></TableCell>
             </TableRow>
             <TableRow>
               <TableCell>date</TableCell>
@@ -79,6 +81,14 @@ class IncidentTemplate extends React.Component<IncidentTemplateProps> {
             <TableRow>
               <TableCell>published</TableCell>
               <TableCell>{moment(incident.publishedDate).format('YYYY-MM-DD')}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>tags</TableCell>
+              <TableCell>
+              {incident.category.map(( tag, i ) => (
+                <Typography component="span" key={tag}>{tag}</Typography>
+                ))}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -97,8 +107,10 @@ export const pageQuery = graphql`
       url,
       content,
       source,
+      sourceName,
       date,
-      publishedDate
+      publishedDate,
+      category
     }
   }
 `

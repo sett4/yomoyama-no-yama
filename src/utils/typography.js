@@ -1,7 +1,7 @@
 import Typography from "typography"
 import theme from "typography-theme-bootstrap"
 
-theme.overrideThemeStyles = ({ rhythm, scale }, options) => {
+theme.overrideThemeStyles = ({ scale }) => {
   return {
     "h1, h2, h3": {
       ...scale(1 / 6),

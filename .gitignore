@@ -68,5 +68,10 @@ yarn-error.log
 # Yarn Integrity file
 .yarn-integrity
 
+#typescript compiled
+dist/
+
 # credential
 mt-incident-*.json
+secret.yaml
+

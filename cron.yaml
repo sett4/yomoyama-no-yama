@@ -1,0 +1,4 @@
+cron:
+- description: "update Nagano Police 24 oclock"
+  url: /datasource/np24/update
+  schedule: every 24 hours

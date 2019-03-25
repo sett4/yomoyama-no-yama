@@ -45,6 +45,7 @@ module.exports = {
             map: doc => ({
               title: doc.subject,
               source: doc.source,
+              sourceName: doc.sourceName,
               content: doc.content,
               url: doc.url,
               date: doc.date,
