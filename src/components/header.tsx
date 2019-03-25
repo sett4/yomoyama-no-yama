@@ -26,7 +26,7 @@ const styles = {
   }
 };
 
-const Header = ({ siteTitle, classes }) => (
+const Header = ({ siteTitle, classes }: any) => (
   <header style={{ height: `5rem` }} className={classes.root}>
     <AppBar position="fixed">
       <Toolbar>

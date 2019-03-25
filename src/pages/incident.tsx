@@ -37,6 +37,7 @@ interface IncidentIndexProps extends WithStyles<typeof styles> {
         node: {
           id: string;
           source: string;
+          sourceName: string;
           url: string;
           title: string;
           content: string;
@@ -49,7 +50,7 @@ interface IncidentIndexProps extends WithStyles<typeof styles> {
 }
 
 
-const Incident = ({ node, classes }) => (
+const Incident = ({ node, classes }: any) => (
   <ListItem>
     <Link
       style={{ color: `inherit`, textDecoration: `none` }}
@@ -57,10 +58,10 @@ const Incident = ({ node, classes }) => (
     >
       <ListItemText primary={ moment(node.date).format('YYYY-MM-DD') + ' '+ node.title } secondary={
         <React.Fragment>
-          <Typography component="span" color="textPrimary">
-            
+          <Typography component="span" color="textSecondary">
+            {node.sourceName}
           </Typography>
-          {node.content}
+          {/* {node.content} */}
         </React.Fragment>
       }></ListItemText>
     </Link>
@@ -73,7 +74,7 @@ class IncidentIndexPage extends React.PureComponent<IncidentIndexProps> {
   }
   render() {
     const incidentEdges = this.props.data.incident.edges
-    const classes = this.props.data.classes
+    const classes = this.props.classes
     return (
       <Layout>
         <Helmet>
@@ -111,7 +112,9 @@ export const pageQuery = graphql`
           date,
           publishedDate,
           category,
-          content
+          content,
+          source,
+          sourceName
         }
       }
     }
