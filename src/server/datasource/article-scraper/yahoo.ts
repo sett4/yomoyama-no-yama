@@ -52,9 +52,11 @@ export class YahooArticleScraper implements ArticleScraper {
                     let publishedDateStr: string = date.format()
                     let dateStr = date.format()
                     let article = new IncidentArticle(this.source, this.sourceName, url, subject, content, dateStr, publishedDateStr, new Date(), author)
-
+                    
                     article.category.add('山岳事故')
                     article.category.add('__private-use')
+
+                    article.scraper = YahooArticleScraper.name
 
                     return article
                 }).get()
@@ -117,6 +119,8 @@ export class YahooVideoArticleScraper implements ArticleScraper {
 
                     article.category.add('山岳事故')
                     article.category.add('__private-use')
+
+                    article.scraper = YahooVideoArticleScraper.name
 
                     return article
                 }).get()

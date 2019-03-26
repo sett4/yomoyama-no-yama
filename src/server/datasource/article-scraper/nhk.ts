@@ -56,6 +56,8 @@ export class NhkLocalArticleScraper implements ArticleScraper {
                     article.category.add('山岳事故')
                     article.category.add('__private-use')
 
+                    article.scraper = NhkLocalArticleScraper.name
+
                     return article
                 }).get()
             });
@@ -100,6 +102,8 @@ export class NhkArticleScraper implements ArticleScraper {
 
                     article.category.add('山岳事故')
                     article.category.add('__private-use')
+
+                    article.scraper = NhkArticleScraper.name
 
                     return article
                 }).get()

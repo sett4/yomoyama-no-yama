@@ -68,10 +68,8 @@ export class IncidentArticle {
     date: string;
     sourceName: string;
     author: string;
-    _kc: ArticleKeyCreator;
-    set keyCreator(kc: ArticleKeyCreator) {
-        this._kc = kc
-    }
+    public scraper: string = '';
+    public keyCreator: ArticleKeyCreator;
 
     constructor(source: string, sourceName: string, url: string, subject: string, content: string, date: string, publishedDate: string, processedDate: Date, author: string) {
         this.source = source
@@ -83,11 +81,11 @@ export class IncidentArticle {
         this.processedDate = processedDate
         this.date = date
         this.author = author
-        this._kc = (a) => new SingleArticleKey(a.source, a.url);
+        this.keyCreator =(a) => new SingleArticleKey(a.source, a.url);
     }
 
     toKey(): ArticleKey {
-        return this._kc(this)
+        return this.keyCreator(this)
     }
 
 
@@ -105,7 +103,8 @@ export class IncidentArticle {
             date: this.date,
             publishedDate: this.publishedDate,
             processedDate: this.processedDate,
-            category: category
+            category: category,
+            scraper: this.scraper
         }
     }
 }

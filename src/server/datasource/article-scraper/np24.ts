@@ -47,6 +47,8 @@ export class Np24ArticleScraper implements ArticleScraper {
                         article.category.add('山岳事故')
                     }
 
+                    article.scraper = Np24ArticleScraper.name
+
                     return article
                 }).get()
             });
