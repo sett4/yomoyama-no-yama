@@ -1,4 +1,4 @@
-import { ArticleScraper } from ".";
+import { ArticleScraper, asJst } from ".";
 import { AxiosInstance } from "axios";
 import { IncidentArticle } from "..";
 import moment from "moment-timezone";
@@ -43,8 +43,8 @@ export class YahooArticleScraper implements ArticleScraper {
                         return undefined;
                     }
 
-                    let now = moment()
-                    let date = moment.tz(moment(now.year() + '-' + matchedDate[0].replace('/', '-') + ' '+ matchedTime[0], 'YYYY-M-D HH:mm'), 'Asia/Tokyo')
+                    let now = moment().tz('Asia/Tokyo')
+                    let date = asJst(moment(now.year() + '-' + matchedDate[0].replace('/', '-') + ' '+ matchedTime[0], 'YYYY-M-D HH:mm'))
                     // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
                     if (date.isAfter(now)) {
                         date.subtract(1, 'year')
@@ -107,8 +107,8 @@ export class YahooVideoArticleScraper implements ArticleScraper {
                         return undefined;
                     }
 
-                    let now = moment()
-                    let date = moment.tz(moment(now.year() + '-' + matchedDate[0].replace('/', '-') + ' '+ matchedTime[0], 'YYYY-M-D HH:mm'), 'Asia/Tokyo')
+                    let now = moment().tz('Asia/Tokyo')
+                    let date = asJst(moment(now.year() + '-' + matchedDate[0].replace('/', '-') + ' '+ matchedTime[0], 'YYYY-M-D HH:mm'))
                     // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
                     if (date.isAfter(now)) {
                         date.subtract(1, 'year')

@@ -21,6 +21,14 @@ import { ArticleScrapers } from "./datasource/article-scraper";
 import YahooIndexScraper from "./datasource/yahoo";
 const app = express();
 
+let repository: ArticleRepository;
+if (process.env.NODE_ENV !== 'development') {
+  repository = new FirestoreArticleRepository();
+} else {
+  repository = new EmptyArticleRepository();
+}
+
+
 app.get("/", (req, res) => {
   res.send("🎉 Hello TypeScript! 🎉");
 });
@@ -35,7 +43,7 @@ app.get("/datasource/np24/update", async (req, res) => {
   }
   console.info("updateing np24")
   let indexScraper = new YahooIndexScraper()
-  await update(indexScraper)
+  await update(repository, indexScraper)
   await notifyToNetlify()
   res.send("OK")
 })
@@ -50,18 +58,12 @@ app.get("/datasource/yahoo/update", async (req, res) => {
   }
   console.info("updateing yahoo")
   let indexScraper = new YahooIndexScraper()
-  await update(indexScraper)
+  await update(repository, indexScraper)
   await notifyToNetlify()
   res.send("OK")
 })
 
-async function update(indexScraper: IndexScraper): Promise<void> {
-  let repository: ArticleRepository;
-  if (process.env.NODE_ENV !== 'development') {
-    repository = new FirestoreArticleRepository();
-  } else {
-    repository = new EmptyArticleRepository();
-  }
+async function update(repository: ArticleRepository, indexScraper: IndexScraper): Promise<void> {
   console.info("updateing yahoo")
   let articleScrapers = new ArticleScrapers()
   let articleUrls = await indexScraper.getArticleUrls()
