@@ -31,14 +31,20 @@ export class YahooArticleScraper implements ArticleScraper {
                     let content: string = $('#ym_newsarticle div.articleMain div p.ynDetailText').text()
                     let author: string = $('.ynCpName a').text()
 
-                    let m = tmpUpdatedDate.match(/\d\d?\/\d\d?/);
-                    if (!m) {
+                    let matchedDate = tmpUpdatedDate.match(/\d\d?\/\d\d?/);
+                    if (!matchedDate) {
                         console.error(`cannot parse ${tmpUpdatedDate} on scraping ${url}.`)
                         return undefined;
                     }
                     
+                    let matchedTime = tmpUpdatedDate.match(/\d\d?\:\d\d?/);
+                    if (!matchedTime) {
+                        console.error(`cannot parse ${tmpUpdatedDate} on scraping ${url}.`)
+                        return undefined;
+                    }
+
                     let now = moment().startOf('day')
-                    let date = moment(now.year() + '-' + m[0].replace('/', '-'), 'YYYY-M-D').tz('Asia/Tokyo').startOf('day')
+                    let date = moment.tz(moment(now.year() + '-' + matchedDate[0].replace('/', '-') + ' '+ matchedTime[0], 'YYYY-M-D HH:mm'), 'Asia/Tokyo')
                     // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
                     if (date.isAfter(now)) {
                         date.subtract(1, 'year')
@@ -87,14 +93,20 @@ export class YahooVideoArticleScraper implements ArticleScraper {
                     let content: string = $('#ym_newsarticle div.articleMain div.yjDirectSLinkTarget').text()
                     let author: string = $('.ynCpName a').text()
 
-                    let m = tmpUpdatedDate.match(/\d\d?\/\d\d?/);
-                    if (!m) {
+                    let matchedDate = tmpUpdatedDate.match(/\d\d?\/\d\d?/);
+                    if (!matchedDate) {
                         console.error(`cannot parse ${tmpUpdatedDate} on scraping ${url}.`)
                         return undefined;
                     }
-                    
+
+                    let matchedTime = tmpUpdatedDate.match(/\d\d?\:\d\d?/);
+                    if (!matchedTime) {
+                        console.error(`cannot parse ${tmpUpdatedDate} on scraping ${url}.`)
+                        return undefined;
+                    }
+
                     let now = moment().startOf('day')
-                    let date = moment(now.year() + '-' + m[0].replace('/', '-'), 'YYYY-M-D').tz('Asia/Tokyo').startOf('day')
+                    let date = moment.tz(moment(now.year() + '-' + matchedDate[0].replace('/', '-') + ' '+ matchedTime[0], 'YYYY-M-D HH:mm'), 'Asia/Tokyo')
                     // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
                     if (date.isAfter(now)) {
                         date.subtract(1, 'year')
