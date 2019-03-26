@@ -17,7 +17,7 @@ import express from "express";
 import Np24Scraper from './datasource/np24'
 import { EmptyArticleRepository, FirestoreArticleRepository, ArticleRepository, IndexScraper } from './datasource'
 import axios from "axios";
-import { ArticleScrapers } from "./datasource/articleScraper";
+import { ArticleScrapers } from "./datasource/article-scraper";
 import YahooIndexScraper from "./datasource/yahoo";
 const app = express();
 
