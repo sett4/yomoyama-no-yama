@@ -1,4 +1,4 @@
-import { ArticleScraper, parseAsJst } from "./index";
+import { ArticleScraper, asJst } from "./index";
 import { AxiosInstance } from "axios";
 import { IncidentArticle, MultipleArticleKey } from "..";
 import moment from "moment-timezone";
@@ -44,7 +44,7 @@ export class NhkLocalArticleScraper implements ArticleScraper {
                     }
 
                     let now = moment().tz('Asia/Tokyo')
-                    let date = parseAsJst(moment(now.year() + '-' + matchedDate[0].replace('月', '-')+' '+matchedTime[0].replace('時', ':'), 'YYYY-M-D HH:mm'))
+                    let date = asJst(moment(now.year() + '-' + matchedDate[0].replace('月', '-')+' '+matchedTime[0].replace('時', ':'), 'YYYY-M-D HH:mm'))
                     // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
                     if (date.isAfter(now)) {
                         date.subtract(1, 'year')
