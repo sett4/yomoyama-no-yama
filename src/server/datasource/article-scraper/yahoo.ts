@@ -43,7 +43,7 @@ export class YahooArticleScraper implements ArticleScraper {
                         return undefined;
                     }
 
-                    let now = moment().startOf('day')
+                    let now = moment()
                     let date = moment.tz(moment(now.year() + '-' + matchedDate[0].replace('/', '-') + ' '+ matchedTime[0], 'YYYY-M-D HH:mm'), 'Asia/Tokyo')
                     // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
                     if (date.isAfter(now)) {
@@ -107,7 +107,7 @@ export class YahooVideoArticleScraper implements ArticleScraper {
                         return undefined;
                     }
 
-                    let now = moment().startOf('day')
+                    let now = moment()
                     let date = moment.tz(moment(now.year() + '-' + matchedDate[0].replace('/', '-') + ' '+ matchedTime[0], 'YYYY-M-D HH:mm'), 'Asia/Tokyo')
                     // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
                     if (date.isAfter(now)) {
