@@ -74,11 +74,11 @@ class IncidentTemplate extends React.Component<IncidentTemplateProps> {
             </TableRow>
             <TableRow>
               <TableCell>date</TableCell>
-              <TableCell>{moment(incident.date).format('YYYY-MM-DD')}</TableCell>
+              <TableCell>{moment(incident.date).format()}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>published</TableCell>
-              <TableCell>{moment(incident.publishedDate).format('YYYY-MM-DD')}</TableCell>
+              <TableCell>{moment(incident.publishedDate).format()}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>tags</TableCell>
