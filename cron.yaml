@@ -4,4 +4,4 @@ cron:
   schedule: every 24 hours
 - description: "update Yahoo News"
   url: /datasource/yahoo/update
-  schedule: every 2 hours
+  schedule: every 6 hours
