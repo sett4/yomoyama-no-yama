@@ -70,8 +70,8 @@ export class YahooArticleScraper implements ArticleScraper {
 }
 
 export class YahooVideoArticleScraper implements ArticleScraper {
-    readonly source: string = 'yahoo-mt-incident'
-    readonly sourceName: string = '山岳事故の関連情報 Yahoo! JAPAN'
+    readonly source: string = 'yj-news'
+    readonly sourceName: string = 'Yahoo! JAPAN ニュース'
 
     readonly articleCssSelector: string = "div.yjDirectSLinkTarget"
     readonly axios: AxiosInstance;
