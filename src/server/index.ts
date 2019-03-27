@@ -42,7 +42,7 @@ app.get("/datasource/np24/update", async (req, res) => {
     }
   }
   console.info("updateing np24")
-  let indexScraper = new YahooIndexScraper()
+  let indexScraper = new Np24Scraper()
   await update(repository, indexScraper)
   await notifyToNetlify()
   res.send("OK")
