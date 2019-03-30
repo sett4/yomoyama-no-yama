@@ -57,6 +57,7 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-prettier": "^3.0.1",
     "gatsby-cli": "^2.4.17",
+    "nodemon": "^1.18.10",
     "prettier": "^1.16.4"
   },
   "keywords": [
@@ -75,7 +76,7 @@
     "gcp-build": "tsc -p ./ --outDir ./dist --noEmit false",
     "deploy": "gcloud app deploy",
     "watch": "tsc -w -p ./",
-    "dev": "npm run watch && nodemon ./dist/server/index.js"
+    "dev": "nodemon ./dist/server/index.js"
   },
   "repository": {
     "type": "git",

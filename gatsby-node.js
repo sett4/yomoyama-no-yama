@@ -22,7 +22,7 @@ exports.createPages = ({ graphql, actions }) => {
   return graphql(
     `
       {
-        allIncident(limit: 1000, filter: { category: { in: "山岳事故"}}) {
+        allIncident(limit: 1000, filter: { tags: { in: "山岳事故"}}) {
           edges {
             node {
               id
@@ -55,9 +55,11 @@ exports.createPages = ({ graphql, actions }) => {
           context: {
             id: edge.node.id,
             source: edge.node.source,
+            author: edge.node.author,
             title: edge.node.subject,
             content: edge.node.content,
-            publishedDate: edge.node.publishedDate
+            publishedDate: edge.node.publishedDate,
+            tags: edge.node.tags
           },
         })
       })

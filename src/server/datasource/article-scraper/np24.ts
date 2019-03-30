@@ -44,7 +44,7 @@ export class Np24ArticleScraper implements ArticleScraper {
                     article.keyCreator = (a) => new MultipleArticleKey(a.source, a.url, a.subject);
 
                     if (this.isMountainIncident(article)) {
-                        article.category.add('山岳事故')
+                        article.tags.add('山岳事故')
                     }
 
                     article.scraper = Np24ArticleScraper.name

@@ -37,6 +37,7 @@ interface IncidentIndexProps extends WithStyles<typeof styles> {
         node: {
           id: string;
           source: string;
+          author: string;
           sourceName: string;
           url: string;
           title: string;
@@ -102,7 +103,7 @@ export const pageQuery = graphql`
   query {
     incident: allIncident(
       limit: 1000, 
-      filter: { category: { in: "山岳事故"}},
+      filter: { tags: { in: "山岳事故"}},
       sort: {fields: [date, publishedDate], order: DESC}) {
       edges {
         node {
@@ -111,7 +112,7 @@ export const pageQuery = graphql`
           url,
           date,
           publishedDate,
-          category,
+          tags,
           content,
           source,
           sourceName

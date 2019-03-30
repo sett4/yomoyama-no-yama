@@ -29,8 +29,14 @@ export class FirestoreArticleRepository implements ArticleRepository {
     readonly COLLECTION_ARTICLE: string = 'incident';
 
     constructor() {
+        var credential = admin.credential.applicationDefault() 
+        // if (!credential) {
+            const c = require('../../../mt-incident-2847996a3e43.json');
+            console.log(c)
+            credential = admin.credential.cert(c);
+        // }
         admin.initializeApp({
-        credential: admin.credential.applicationDefault()
+            credential: credential
         });
 
         this.db = admin.firestore();
@@ -48,7 +54,26 @@ export class FirestoreArticleRepository implements ArticleRepository {
         throw new Error("Method not implemented.");
     }
     findAll(source: string): Promise<IncidentArticle[]> {
-        throw new Error("Method not implemented.");
+       return this.db.collection(this.COLLECTION_ARTICLE)
+       .listDocuments()
+       .then( (refs) => {
+           return Promise.all(refs.map( r => r.get()))
+       })
+       .then( snapshots => {
+           return snapshots.map( s => {
+               const d = s.data();
+               if (d === undefined) {
+                   throw Error("document data is undefined.")
+               }
+               const article: IncidentArticle = new IncidentArticle(d.source, d.sourceName, d.url, d.subject, d.content, d.date, d.publishedDate, d.processedDate, d.author);
+               if (d.category) {
+                   article.tags = d.category
+               } else {
+                   article.tags = d.tags
+               }
+               return article;
+           })
+       })
     }
 
     
@@ -64,7 +89,7 @@ export class IncidentArticle {
     content: string;
     publishedDate: string;
     processedDate: Date;
-    category: Set<string> = new Set<string>();
+    tags: Set<string> = new Set<string>();
     date: string;
     sourceName: string;
     author: string;
@@ -91,8 +116,8 @@ export class IncidentArticle {
 
 
     toData(): any {
-        let category: string[] = [];
-        this.category.forEach(v => category.push(v))
+        let tags: string[] = [];
+        this.tags.forEach(v => tags.push(v))
 
         return {
             source: this.source,
@@ -103,8 +128,9 @@ export class IncidentArticle {
             date: this.date,
             publishedDate: this.publishedDate,
             processedDate: this.processedDate,
-            category: category,
-            scraper: this.scraper
+            tags: tags,
+            scraper: this.scraper,
+            author: this.author || ''
         }
     }
 }

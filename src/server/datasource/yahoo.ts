@@ -12,8 +12,6 @@ export default class YahooIndexScraper implements IndexScraper {
     articleCssSelector: string = "#tmp_readcontents h2"
     baseUrl: string
     origin: string
-    source: string = 'yahoo-mt-incident'
-    sourceName: string = '山岳事故の関連情報 Yahoo! JAPAN'
     axios: AxiosInstance;
 
     constructor(baseUrl?: string) {

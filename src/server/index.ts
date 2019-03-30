@@ -19,6 +19,7 @@ import { EmptyArticleRepository, FirestoreArticleRepository, ArticleRepository, 
 import axios from "axios";
 import { ArticleScrapers } from "./datasource/article-scraper";
 import YahooIndexScraper from "./datasource/yahoo";
+import { firestore } from "firebase-admin";
 const app = express();
 
 let repository: ArticleRepository;
@@ -97,6 +98,8 @@ app.get("/datasource/yahoo/detail", async (req, res) => {
   res.send(allArticle)
 })
 
+
+
 app.get("/datasource/yahoo", async (req, res) => {
   let indexScraper = new YahooIndexScraper();
   let articleUrls = await indexScraper.getArticleUrls()
@@ -113,6 +116,16 @@ app.get("/datasource/yahoo", async (req, res) => {
   res.send(allArticle)
 })
 
+app.get("/datasource/update-1", async (req, res) => {
+
+  const all = await repository.findAll('yj-news');
+  await Promise.all(all.map( async article => {
+    console.log(`saving ${article.toKey().getId()}`)
+   return  repository.save(article);
+  }))
+
+  res.send("UPDATED")
+})
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

@@ -50,7 +50,8 @@ module.exports = {
               url: doc.url,
               date: doc.date,
               publishedDate: doc.publishedDate,
-              category: doc.category
+              tags: doc.tags,
+              author: doc.author
               // author___NODE: doc.author.id,
             }),
           },

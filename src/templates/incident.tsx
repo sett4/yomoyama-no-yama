@@ -35,7 +35,8 @@ interface IncidentTemplateProps extends WithStyles<typeof styles> {
       content: string;
       date: string;
       publishedDate: string;
-      category: string[];
+      tags: string[];
+      author: string;
     }
   }
 }
@@ -62,7 +63,7 @@ class IncidentTemplate extends React.Component<IncidentTemplateProps> {
         <h2>{incident.title}</h2>
           <Typography component="p" className={classes.typography}>
           {
-          incident.category.includes('__private-use') ? incident.content.substring(0, Math.min(64,incident.content.length))+'(snip)' : incident.content
+          incident.tags.includes('__private-use') ? incident.content.substring(0, Math.min(64,incident.content.length))+'(snip)' : incident.content
         }
           </Typography>
         <Paper className={classes.paper} elevation={1}>
@@ -83,7 +84,7 @@ class IncidentTemplate extends React.Component<IncidentTemplateProps> {
             <TableRow>
               <TableCell>tags</TableCell>
               <TableCell>
-              {incident.category.map(( tag, i ) => (
+              {incident.tags.map(( tag, i ) => (
                 <Typography component="span" key={tag}>{tag}</Typography>
                 ))}
               </TableCell>
@@ -108,7 +109,7 @@ export const pageQuery = graphql`
       sourceName,
       date,
       publishedDate,
-      category
+      tags
     }
   }
 `
