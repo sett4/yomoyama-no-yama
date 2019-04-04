@@ -36,7 +36,7 @@ const Header = ({ siteTitle, classes }: any) => (
         <Typography variant="h6" color="inherit" className={classes.grow}>
           {siteTitle}
         </Typography>
-        <Link to={ `/about/`} className={classes.link} ><Button color="inherit">About</Button></Link>
+        <Link to={ `/`} className={classes.link} ><Button color="inherit">Home</Button></Link>
         <Link to={ `/incident/`} className={classes.link} ><Button color="inherit">Incident</Button></Link>
       </Toolbar>
     </AppBar>

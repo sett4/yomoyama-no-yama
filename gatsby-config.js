@@ -3,7 +3,7 @@ module.exports = {
     title: `よもやまごとのやま`,
     description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
     author: `@sett4`,
-    siteUrl: `https://yomoyama-no-yama.netlify.com`,
+    siteUrl: `https://yomoyama-no-yama.netlify.com`
   },
   plugins: [
     `gatsby-plugin-typescript`,
@@ -82,10 +82,10 @@ module.exports = {
         // siteSpeedSampleRate: 10,
         // cookieDomain: "example.com",
       },
-    }     
+    },
+    'gatsby-plugin-sitemap'
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // 'gatsby-plugin-offline',
-  ],
-  `gatsby-plugin-sitemap`
+  ]
 }

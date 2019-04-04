@@ -39,12 +39,13 @@ class AboutPage extends React.PureComponent<AboutPageProps> {
     render() {
         return (
             <Layout>
-                <div>
+                <article>
                     <h2>よもやまごとのやま</h2>
                     <Typography component="p">
-                        問題にならない範囲で山に関することを集めていきたい。
+                        山にまつわることを集めていきます。
+                        contact <a href="https://twitter.com/sett4">https://twitter.com/sett4</a>
                     </Typography>
-                </div>
+                </article>
             </Layout>
         )
     }
