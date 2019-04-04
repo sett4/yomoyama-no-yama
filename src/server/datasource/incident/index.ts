@@ -30,10 +30,11 @@ export class FirestoreArticleRepository implements ArticleRepository {
 
     constructor() {
         var credential = admin.credential.applicationDefault() 
+        // console.log(credential)
         // if (!credential) {
-            const c = require('../../../mt-incident-2847996a3e43.json');
-            console.log(c)
-            credential = admin.credential.cert(c);
+        //     const c = require('../../../mt-incident-2847996a3e43.json');
+        //     console.log(c)
+        //     credential = admin.credential.cert(c);
         // }
         admin.initializeApp({
             credential: credential

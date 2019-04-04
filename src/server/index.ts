@@ -14,11 +14,11 @@
 
 const PORT = Number(process.env.PORT) || 8080;
 import express from "express";
-import Np24Scraper from './datasource/np24'
-import { EmptyArticleRepository, FirestoreArticleRepository, ArticleRepository, IndexScraper } from './datasource'
+import Np24Scraper from './datasource/incident/np24'
+import { EmptyArticleRepository, FirestoreArticleRepository, ArticleRepository, IndexScraper } from './datasource/incident'
 import axios from "axios";
-import { ArticleScrapers } from "./datasource/article-scraper";
-import YahooIndexScraper from "./datasource/yahoo";
+import { ArticleScrapers } from "./datasource/incident/scraper";
+import YahooIndexScraper from "./datasource/incident/yahoo";
 import { firestore } from "firebase-admin";
 const app = express();
 

@@ -11,6 +11,7 @@ import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/wit
 import createStyles from '@material-ui/core/styles/createStyles';
 import withRoot from '../withRoot'
 
+
 const styles = (theme: Theme) => {
   return createStyles({
     paper: {
