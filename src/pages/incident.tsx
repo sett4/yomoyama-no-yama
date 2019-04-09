@@ -1,102 +1,72 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
-import * as PropTypes from "prop-types"
 import Img from "gatsby-image"
-import { rhythm } from "../utils/typography"
 import Layout from "../components/layout"
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { Theme } from '@material-ui/core/styles/createMuiTheme';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import createStyles from '@material-ui/core/styles/createStyles';
-import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
 import { Helmet } from "react-helmet"
-import withRoot from '../withRoot'
+import { List, Header } from 'semantic-ui-react'
 
 
-const styles = (theme: Theme) => {
-  return createStyles({
-    root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
-    },
-    inline: {
-      display: 'inline',
-    }
-  })
-};
-
-interface IncidentIndexProps extends WithStyles<typeof styles> {
-  classes: any,
+type Props = {
   data: {
-    incident: {
-      edges: [{
-        node: {
-          id: string;
-          source: string;
-          author: string;
-          sourceName: string;
-          url: string;
-          title: string;
-          content: string;
-          date: string;
-          publishedDate: string;
-        }
-      }]
-    }
-  };
+  incident: {
+    edges: [{
+      node: {
+        id: string;
+        source: string;
+        author: string;
+        sourceName: string;
+        url: string;
+        title: string;
+        content: string;
+        date: string;
+        publishedDate: string;
+      }
+    }]
+  }
+}
 }
 
 
-const Incident = ({ node, classes }: any) => (
-  <ListItem>
-    <Link
+const Incident = ({ node }: any) => (
+  <List.Item>
+     <List.Icon name='marker' />
+      <List.Content>
+      <Link
       style={{ color: `inherit`, textDecoration: `none` }}
       to={`/incident/${node.id}/`}
     >
-      <ListItemText primary={ moment(node.date).format('YYYY-MM-DD') + ' '+ node.title } secondary={
-        <React.Fragment>
-          <Typography component="span" color="textSecondary">
-            {node.sourceName}
-          </Typography>
-          {/* {node.content} */}
-        </React.Fragment>
-      }></ListItemText>
-    </Link>
-  </ListItem>
+        <List.Header as="span">{moment(node.date).format('YYYY-MM-DD')} {node.title}</List.Header>
+        </Link>
+        {/* <List.Description>
+        {node.sourceName}
+        </List.Description> */}
+      </List.Content>
+
+  </List.Item>
 )
 
-class IncidentIndexPage extends React.PureComponent<IncidentIndexProps> {
-  constructor(props: IncidentIndexProps) {
-    super(props);
-  }
-  render() {
-    const incidentEdges = this.props.data.incident.edges
-    const classes = this.props.classes
+const IncidentIndexPage: React.FC<Props> = (props) => {
+    const incidentEdges = props.data.incident.edges
     return (
       <Layout>
         <Helmet>
           <title>Mountain Incidents</title>
         </Helmet>
-        <div style={{ marginBottom: rhythm(2) }}>
-          <h2>Mountain Incidents</h2>
-          <List>
+          <Header as="h2" >Mountain Incidents</Header>
+          <List relaxed='very'>
             {incidentEdges.map(({ node }, i) => (
-              <Incident node={node} classes={classes} key={node.id} />
+              <Incident node={node} key={node.id} />
             ))}
           </List>
-        </div>
       </Layout>
     )
   }
-}
 
 
 
-export default withRoot(withStyles(styles)(IncidentIndexPage));
+
+export default IncidentIndexPage;
 
 
 export const pageQuery = graphql`
