@@ -18,7 +18,8 @@
     "url": "git+https://github.com/sett4/yomoyama-no-yama.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "format": "prettier --write src/**/*.{ts,tsx}"
   },
   "bugs": {
     "url": "https://github.com/sett4/yomoyama-no-yama/issues"
@@ -26,6 +27,9 @@
   "devDependencies": {
     "@types/node": "^11.13.4",
     "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@types/react": "^16.8.8",
+    "@types/react-helmet": "^5.0.8",
+    "@types/react-jss": "^8.6.3",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-node": "^8.0.1",
