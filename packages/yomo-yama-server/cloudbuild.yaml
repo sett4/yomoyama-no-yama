@@ -1,0 +1,9 @@
+steps:
+- name: 'alpine'
+  args: ['echo', '${_ENVIRONMENT}']
+- name: 'gcr.io/cloud-builders/yarn'
+  args: ['install']
+  dir: 'packages/yomo-yama-server'
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy', '--project=$PROJECT_ID', 'app.yaml']
+  dir: 'packages/yomo-yama-server'
