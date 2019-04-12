@@ -12,34 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const PORT = Number(process.env.PORT) || 8080;
-import express from "express";
-import Np24Scraper from './datasource/incident/np24'
-import { EmptyArticleRepository, FirestoreArticleRepository, ArticleRepository, IndexScraper } from './datasource/incident'
-import axios from "axios";
-import { ArticleScrapers } from "./datasource/incident/scraper";
-import YahooIndexScraper from "./datasource/incident/yahoo";
-import { firestore } from "firebase-admin";
-const app = express();
+const PORT = Number(process.env.PORT) || 8080
+import express from "express"
+import Np24Scraper from "./datasource/incident/np24"
+import {
+  EmptyArticleRepository,
+  FirestoreArticleRepository,
+  ArticleRepository,
+  IndexScraper,
+} from "./datasource/incident"
+import axios from "axios"
+import { ArticleScrapers } from "./datasource/incident/scraper"
+import YahooIndexScraper from "./datasource/incident/yahoo"
+import { firestore } from "firebase-admin"
+const app = express()
 
-let repository: ArticleRepository;
-if (process.env.NODE_ENV !== 'development') {
-  repository = new FirestoreArticleRepository();
+let repository: ArticleRepository
+if (process.env.NODE_ENV !== "development") {
+  repository = new FirestoreArticleRepository()
 } else {
-  repository = new EmptyArticleRepository();
+  repository = new EmptyArticleRepository()
 }
 
-
 app.get("/", (req, res) => {
-  res.send("🎉 Hello TypeScript! 🎉");
-});
+  res.send("🎉 Hello TypeScript! 🎉")
+})
 
 app.get("/datasource/np24/update", async (req, res) => {
-  if (process.env.NODE_ENV !== 'development') {
-    if (req.header('X-Appengine-Cron') !== 'true') {
-      res.send('NG')
+  if (process.env.NODE_ENV !== "development") {
+    if (req.header("X-Appengine-Cron") !== "true") {
+      res.send("NG")
       res.status(401)
-      return;
+      return
     }
   }
   console.info("updateing np24")
@@ -50,11 +54,11 @@ app.get("/datasource/np24/update", async (req, res) => {
 })
 
 app.get("/datasource/yahoo/update", async (req, res) => {
-  if (process.env.NODE_ENV !== 'development') {
-    if (req.header('X-Appengine-Cron') !== 'true') {
-      res.send('NG')
+  if (process.env.NODE_ENV !== "development") {
+    if (req.header("X-Appengine-Cron") !== "true") {
+      res.send("NG")
       res.status(401)
-      return;
+      return
     }
   }
   console.info("updateing yahoo")
@@ -64,7 +68,10 @@ app.get("/datasource/yahoo/update", async (req, res) => {
   res.send("OK")
 })
 
-async function update(repository: ArticleRepository, indexScraper: IndexScraper): Promise<void> {
+async function update(
+  repository: ArticleRepository,
+  indexScraper: IndexScraper
+): Promise<void> {
   console.info("updateing yahoo")
   let articleScrapers = new ArticleScrapers()
   let articleUrls = await indexScraper.getArticleUrls()
@@ -72,44 +79,52 @@ async function update(repository: ArticleRepository, indexScraper: IndexScraper)
   let articlePromise = articleUrls.map(url => {
     return articleScrapers.scrape(url)
   })
-  let allPromise = (await Promise.all(articlePromise))
-  let allArticle = allPromise.reduce((acc, curr) => acc.concat(curr), []).filter(a => a)
+  let allPromise = await Promise.all(articlePromise)
+  let allArticle = allPromise
+    .reduce((acc, curr) => acc.concat(curr), [])
+    .filter(a => a)
 
   console.info(`extract ${allArticle.length} articles.`)
 
-  Promise.all(allArticle.map(article => {
-    return repository.save(article)
-  }));
+  Promise.all(
+    allArticle.map(article => {
+      return repository.save(article)
+    })
+  )
 }
-
 
 app.get("/datasource/yahoo/detail", async (req, res) => {
   let articleScrapers = new ArticleScrapers()
-  let articleUrls = ['https://headlines.yahoo.co.jp/videonews/nnn?a=20190325-00000138-nnn-soci', 'https://headlines.yahoo.co.jp/hl?a=20190325-00349046-sbcv-l20']
+  let articleUrls = [
+    "https://headlines.yahoo.co.jp/videonews/nnn?a=20190325-00000138-nnn-soci",
+    "https://headlines.yahoo.co.jp/hl?a=20190325-00349046-sbcv-l20",
+  ]
 
   let articlePromise = articleUrls.map(url => {
     return articleScrapers.scrape(url)
   })
-  let allPromise = (await Promise.all(articlePromise))
-  let allArticle = allPromise.reduce((acc, curr) => acc.concat(curr), []).filter(a => a)
+  let allPromise = await Promise.all(articlePromise)
+  let allArticle = allPromise
+    .reduce((acc, curr) => acc.concat(curr), [])
+    .filter(a => a)
 
   console.info(`extract ${allArticle.length} articles.`)
 
   res.send(allArticle)
 })
 
-
-
 app.get("/datasource/yahoo", async (req, res) => {
-  let indexScraper = new YahooIndexScraper();
+  let indexScraper = new YahooIndexScraper()
   let articleUrls = await indexScraper.getArticleUrls()
 
   let articleScrapers = new ArticleScrapers()
   let articlePromise = articleUrls.map(url => {
     return articleScrapers.scrape(url)
   })
-  let allPromise = (await Promise.all(articlePromise))
-  let allArticle = allPromise.reduce((acc, curr) => acc.concat(curr), []).filter(a => a)
+  let allPromise = await Promise.all(articlePromise)
+  let allArticle = allPromise
+    .reduce((acc, curr) => acc.concat(curr), [])
+    .filter(a => a)
 
   console.info(`extract ${allArticle.length} articles.`)
 
@@ -117,19 +132,20 @@ app.get("/datasource/yahoo", async (req, res) => {
 })
 
 app.get("/datasource/update-1", async (req, res) => {
-
-  const all = await repository.findAll('yj-news');
-  await Promise.all(all.map( async article => {
-    console.log(`saving ${article.toKey().getId()}`)
-   return  repository.save(article);
-  }))
+  const all = await repository.findAll("yj-news")
+  await Promise.all(
+    all.map(async article => {
+      console.log(`saving ${article.toKey().getId()}`)
+      return repository.save(article)
+    })
+  )
 
   res.send("UPDATED")
 })
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-});
+  console.log(`App listening on port ${PORT}`)
+})
 
 async function notifyToNetlify() {
   if (process.env.NETLIFY_HOOK_URL) {
@@ -137,6 +153,8 @@ async function notifyToNetlify() {
     await axios.post(hookUrl, {})
     console.info(`nofity to netlify ${hookUrl}`)
   } else {
-    console.info("netlify rebuild hook skipped. due to process.env.NETLIFY_HOOK_URL is empty.")
+    console.info(
+      "netlify rebuild hook skipped. due to process.env.NETLIFY_HOOK_URL is empty."
+    )
   }
 }
