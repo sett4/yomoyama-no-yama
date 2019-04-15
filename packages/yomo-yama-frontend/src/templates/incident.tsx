@@ -23,6 +23,7 @@ import withStyles, {
 } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
 import withRoot from "../withRoot"
+import { rhythm } from "../utils/typography";
 
 const styles = (theme: Theme) => {
   return createStyles({
@@ -66,22 +67,21 @@ class IncidentTemplate extends React.Component<IncidentTemplateProps> {
         <Helmet>
           <title>{incident.title} - Mountain Incident</title>
         </Helmet>
-        <div
-          style={{
-            display: `flex`,
-            alignItems: `center`,
-          }}
-        />
-        <h2>{incident.title}</h2>
-        <Typography component="p" className={classes.typography}>
-          {incident.tags.includes("__private-use")
-            ? incident.content.substring(
-                0,
-                Math.min(64, incident.content.length)
-              ) + "(snip)"
-            : incident.content}
-        </Typography>
-        <Paper className={classes.paper} elevation={1}>
+        <Paper
+          style={{padding: rhythm(1), margin: rhythm(0.4)}}
+        >
+          <Typography variant="h2">{incident.title}</Typography>
+          <Typography component="p" className={classes.typography}>
+            {incident.tags.includes("__private-use")
+              ? incident.content.substring(
+                  0,
+                  Math.min(64, incident.content.length)
+                ) + "(snip)"
+              : incident.content}
+          </Typography>
+          </Paper>
+        <Paper style={{padding: rhythm(1), margin: rhythm(0.4)}}>
+        <Typography variant="h2">Metadata</Typography>
           <Table>
             <TableBody>
               <TableRow>

@@ -1,9 +1,10 @@
+const moment = require("moment")
 module.exports = {
   siteMetadata: {
     title: `よもやまごとのやま`,
     description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
     author: `@sett4`,
-    siteUrl: `https://yomoyama-no-yama.netlify.com`
+    siteUrl: `https://yomoyama-no-yama.netlify.com`,
   },
   plugins: [
     `gatsby-plugin-typescript`,
@@ -36,13 +37,13 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-source-firestore',
+      resolve: "gatsby-source-firestore",
       options: {
-        credential: JSON.parse(process.env['FIRESTORE_CREDENTIAL_JSON']),
+        credential: JSON.parse(process.env["FIRESTORE_CREDENTIAL_JSON"]),
         types: [
           {
-            type: 'Incident',
-            collection: 'incident',
+            type: "Incident",
+            collection: "incident",
             map: doc => ({
               title: doc.subject,
               source: doc.source,
@@ -50,15 +51,16 @@ module.exports = {
               content: doc.content,
               url: doc.url,
               date: doc.date,
+              month: moment(doc.date).format("YYYY-MM"),
               publishedDate: doc.publishedDate,
               tags: doc.tags,
-              author: doc.author
+              author: doc.author,
               // author___NODE: doc.author.id,
             }),
           },
         ],
       },
-    },   
+    },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
@@ -83,9 +85,9 @@ module.exports = {
         // cookieDomain: "example.com",
       },
     },
-    'gatsby-plugin-sitemap'
+    "gatsby-plugin-sitemap",
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // 'gatsby-plugin-offline',
-  ]
+  ],
 }

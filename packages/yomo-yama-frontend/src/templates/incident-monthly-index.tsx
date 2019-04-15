@@ -14,11 +14,10 @@ import withStyles, {
 } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
 import Typography from "@material-ui/core/Typography"
-import moment, { months } from "moment"
+import moment from "moment"
 import { Helmet } from "react-helmet"
 import withRoot from "../withRoot"
-import { Divider, Paper } from "@material-ui/core";
-import IncidentMonthlyFragment from "../components/IncidentMonthlyFragment";
+import { Paper } from "@material-ui/core";
 
 const styles = (theme: Theme) => {
   return createStyles({
@@ -33,7 +32,7 @@ const styles = (theme: Theme) => {
   })
 }
 
-interface IncidentIndexProps extends WithStyles<typeof styles> {
+interface IncidentMonthlyIndexProps extends WithStyles<typeof styles> {
   classes: any
   data: {
     incident: {
@@ -53,18 +52,11 @@ interface IncidentIndexProps extends WithStyles<typeof styles> {
         }
       ]
     },
-    month: {
-      edges: [
-        { 
-          node: {
-            month: string
-            started: Date
-            ended: Date
-          }
-        }
-      ]
-    }
-  }
+    month: string
+  },
+  pageContext: {
+      month: string
+  },
 }
 
 const Incident = ({ node, classes }: any) => (
@@ -88,64 +80,48 @@ const Incident = ({ node, classes }: any) => (
   </ListItem>
 )
 
-class IncidentIndexPage extends React.PureComponent<IncidentIndexProps> {
-  constructor(props: IncidentIndexProps) {
+class IncidentMonthlyIndexPage extends React.PureComponent<IncidentMonthlyIndexProps> {
+  constructor(props: IncidentMonthlyIndexProps) {
     super(props)
   }
   render() {
     const incidentEdges = this.props.data.incident.edges
-    const monthList = this.props.data.month
+    const pageContext = this.props.pageContext
     const classes = this.props.classes
     return (
       <Layout>
         <Helmet>
-          <title>Mountain Incidents</title>
+          <title>Mountain Incidents { pageContext.month }</title>
         </Helmet>
         <Paper style={{ padding: rhythm(1), margin: rhythm(0.4) }}>
-          <Typography variant="h2" component="h2">Mountain Incidents</Typography>
+          <Typography variant="h2">Mountain Incidents { pageContext.month }</Typography>
           <List>
             {incidentEdges.map(({ node }, i) => (
               <Incident node={node} classes={classes} key={node.id} />
             ))}
           </List>
         </Paper>
-
-        <IncidentMonthlyFragment month={monthList} classes={classes} />
       </Layout>
     )
   }
 }
 
-export default withRoot(withStyles(styles)(IncidentIndexPage))
+export default withRoot(withStyles(styles)(IncidentMonthlyIndexPage))
 
 export const pageQuery = graphql`
-  query {
-    incident: allIncident(
-      limit: 50
-      filter: { tags: { in: "山岳事故" } }
-      sort: { fields: [date, publishedDate], order: DESC }
-    ) {
+  query($started: Date, $ended: Date) {
+    incident: allIncident(filter: {tags: {in: "山岳事故"}, date: {gte: $started, lte: $ended}}, sort: {fields: [date, publishedDate]}) {
       edges {
         node {
-          id
-          title
-          url
-          date
-          publishedDate
-          tags
-          content
-          source
-          sourceName
-        }
-      }
-    }
-    month: allIncidentMonthly(sort: { fields: [month], order: [DESC]}) {
-      edges {
-        node {
-          id
-          month
-          started
-          ended
+            id
+            title
+            url
+            content
+            source
+            sourceName
+            date
+            publishedDate
+            tags
         }
       }
     }
