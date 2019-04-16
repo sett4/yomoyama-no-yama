@@ -49,7 +49,6 @@ app.get("/datasource/np24/update", async (req, res) => {
   console.info("updateing np24")
   let indexScraper = new Np24Scraper()
   await update(repository, indexScraper)
-  await notifyToNetlify()
   res.send("OK")
 })
 
@@ -64,7 +63,6 @@ app.get("/datasource/yahoo/update", async (req, res) => {
   console.info("updateing yahoo")
   let indexScraper = new YahooIndexScraper()
   await update(repository, indexScraper)
-  await notifyToNetlify()
   res.send("OK")
 })
 
@@ -131,15 +129,8 @@ app.get("/datasource/yahoo", async (req, res) => {
   res.send(allArticle)
 })
 
-app.get("/datasource/update-1", async (req, res) => {
-  const all = await repository.findAll("yj-news")
-  await Promise.all(
-    all.map(async article => {
-      console.log(`saving ${article.toKey().getId()}`)
-      return repository.save(article)
-    })
-  )
-
+app.get("/generate", async (req, res) => {
+  await notifyToNetlify()
   res.send("UPDATED")
 })
 
