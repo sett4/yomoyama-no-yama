@@ -31,6 +31,7 @@ class AboutPage extends React.PureComponent<AboutPageProps> {
           />
         </Helmet>
         <Paper>
+          {/* http://liberty-life-blog.com/wordpress/privacy-policy/ */}
           <Typography variant="h2">Privacy Policy</Typography>
 
           <Typography variant="h3">広告の配信について</Typography>
