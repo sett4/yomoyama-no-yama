@@ -99,7 +99,8 @@ class IncidentIndexPage extends React.PureComponent<IncidentIndexProps> {
     return (
       <Layout>
         <Helmet>
-          <title>Mountain Incidents</title>
+          <title>山岳事故: よもやまごとのやま</title>
+          <meta name="description" content="日本の山岳事故ニュースの収集" />
         </Helmet>
         <Paper>
           <Typography variant="h2" component="h2">
