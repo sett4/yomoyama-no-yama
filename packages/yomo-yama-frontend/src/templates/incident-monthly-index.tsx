@@ -1,23 +1,18 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
-import * as PropTypes from "prop-types"
-import Img from "gatsby-image"
 import { rhythm } from "../utils/typography"
 import Layout from "../components/layout"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
-import withStyles, {
-  WithStyles,
-  StyleRules,
-} from "@material-ui/core/styles/withStyles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
 import Typography from "@material-ui/core/Typography"
 import moment from "moment"
 import { Helmet } from "react-helmet"
 import withRoot from "../withRoot"
-import { Paper } from "@material-ui/core";
+import { Paper } from "@material-ui/core"
 
 const styles = (theme: Theme) => {
   return createStyles({
@@ -51,12 +46,12 @@ interface IncidentMonthlyIndexProps extends WithStyles<typeof styles> {
           }
         }
       ]
-    },
+    }
     month: string
-  },
+  }
   pageContext: {
-      month: string
-  },
+    month: string
+  }
 }
 
 const Incident = ({ node, classes }: any) => (
@@ -80,7 +75,9 @@ const Incident = ({ node, classes }: any) => (
   </ListItem>
 )
 
-class IncidentMonthlyIndexPage extends React.PureComponent<IncidentMonthlyIndexProps> {
+class IncidentMonthlyIndexPage extends React.PureComponent<
+  IncidentMonthlyIndexProps
+> {
   constructor(props: IncidentMonthlyIndexProps) {
     super(props)
   }
@@ -91,10 +88,12 @@ class IncidentMonthlyIndexPage extends React.PureComponent<IncidentMonthlyIndexP
     return (
       <Layout>
         <Helmet>
-          <title>Mountain Incidents { pageContext.month }</title>
+          <title>Mountain Incidents {pageContext.month}</title>
         </Helmet>
         <Paper style={{ padding: rhythm(1), margin: rhythm(0.4) }}>
-          <Typography variant="h2">Mountain Incidents { pageContext.month }</Typography>
+          <Typography variant="h2">
+            Mountain Incidents {pageContext.month}
+          </Typography>
           <List>
             {incidentEdges.map(({ node }, i) => (
               <Incident node={node} classes={classes} key={node.id} />
@@ -110,18 +109,21 @@ export default withRoot(withStyles(styles)(IncidentMonthlyIndexPage))
 
 export const pageQuery = graphql`
   query($started: Date, $ended: Date) {
-    incident: allIncident(filter: {tags: {in: "山岳事故"}, date: {gte: $started, lte: $ended}}, sort: {fields: [date, publishedDate]}) {
+    incident: allIncident(
+      filter: { tags: { in: "山岳事故" }, date: { gte: $started, lte: $ended } }
+      sort: { fields: [date, publishedDate] }
+    ) {
       edges {
         node {
-            id
-            title
-            url
-            content
-            source
-            sourceName
-            date
-            publishedDate
-            tags
+          id
+          title
+          url
+          content
+          source
+          sourceName
+          date
+          publishedDate
+          tags
         }
       }
     }

@@ -10,8 +10,10 @@ import MenuIcon from "@material-ui/icons/Menu"
 import { Link } from "gatsby"
 
 const styles = {
-  root: {
+  appBar: {
     flexGrow: 1,
+    padding: 0,
+    margin: 0,
   },
   grow: {
     flexGrow: 1,
@@ -28,7 +30,7 @@ const styles = {
 
 const Header = ({ siteTitle, classes }: any) => (
   <header style={{ height: `5rem` }} className={classes.root}>
-    <AppBar position="fixed">
+    <AppBar position="fixed" style={{ padding: 0, margin: 0 }}>
       <Toolbar>
         <IconButton
           className={classes.menuButton}

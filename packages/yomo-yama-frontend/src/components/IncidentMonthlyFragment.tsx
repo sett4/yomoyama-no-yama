@@ -1,5 +1,5 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { Link as GatsbyLink, graphql } from "gatsby"
 import * as PropTypes from "prop-types"
 import Img from "gatsby-image"
 import { rhythm } from "../utils/typography"
@@ -17,7 +17,7 @@ import Typography from "@material-ui/core/Typography"
 import moment from "moment"
 import { Helmet } from "react-helmet"
 import withRoot from "../withRoot"
-import { Paper } from "@material-ui/core";
+import { Paper, Link } from "@material-ui/core"
 
 const styles = (theme: Theme) => {
   return createStyles({
@@ -33,41 +33,41 @@ const styles = (theme: Theme) => {
 }
 
 interface IncidentMonthlyFragmentProps extends WithStyles<typeof styles> {
-    month: {
-      edges: [
-        { 
-          node: {
-            month: string
-            started: Date
-            ended: Date
-          }
+  month: {
+    edges: [
+      {
+        node: {
+          month: string
+          started: Date
+          ended: Date
         }
-      ]
-    }
+      }
+    ]
+  }
 }
 
-
-const IncidentMonthlyFragment: React.FC<IncidentMonthlyFragmentProps> = ({ month }) => {
+const IncidentMonthlyFragment: React.FC<IncidentMonthlyFragmentProps> = ({
+  month,
+}) => {
   return (
-    <Paper style={{ padding: rhythm(1), margin: rhythm(0.4) }}>
-    <Typography variant="h2">Monthly Archive</Typography>
-    <List>
-      {month.edges.map(({ node }, i) => (
-        <ListItem>
-        <Link
-          style={{ color: `inherit`, textDecoration: `none` }}
-          to={`/incident/${node.month}/`}
-        >
-          <ListItemText
-            primary={node.month}
-          />
-        </Link>
-      </ListItem>
-      ))}
-    </List>
-  </Paper>
+    <Paper>
+      <Typography variant="h2">Monthly Archive</Typography>
+      <List>
+        {month.edges.map(({ node }, i) => (
+          <ListItem>
+            <Link underline="hover">
+              <GatsbyLink
+                style={{ color: `inherit`, textDecoration: `none` }}
+                to={`/incident/${node.month}/`}
+              >
+                <ListItemText primary={node.month} />
+              </GatsbyLink>
+            </Link>
+          </ListItem>
+        ))}
+      </List>
+    </Paper>
   )
 }
 
 export default IncidentMonthlyFragment
-

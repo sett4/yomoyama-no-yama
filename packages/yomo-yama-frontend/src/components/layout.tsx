@@ -18,7 +18,8 @@ import createStyles from "@material-ui/core/styles/createStyles"
 
 import Header from "./header"
 import "./layout.css"
-import { Typography } from "@material-ui/core"
+import { Typography, Link } from "@material-ui/core"
+import GatsbyLink from "gatsby-link"
 
 const styles = (theme: Theme) => {
   return createStyles({
@@ -61,7 +62,12 @@ const Layout: React.SFC = ({ children }) => (
         >
           <main>{children}</main>
           <footer style={{ marginTop: rhythm(1) }}>
-            <Typography component="p">build with Gatsby.</Typography>
+            <Typography>
+              <Link underline="hover">
+                <GatsbyLink to="/privacy/">Privacy Policy</GatsbyLink>
+              </Link>
+            </Typography>
+            <Typography>build with Gatsby.</Typography>
           </footer>
         </div>
       </>

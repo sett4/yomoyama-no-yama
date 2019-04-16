@@ -1,42 +1,26 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
-import * as PropTypes from "prop-types"
+import { Link as GatsbyLink, graphql } from "gatsby"
 import Img from "gatsby-image"
 import Layout from "../components/layout"
 import { Helmet } from "react-helmet"
 import {
   Paper,
-  List,
-  ListItem,
-  ListItemText,
   TableBody,
   TableRow,
   Table,
   TableCell,
   Typography,
+  Divider,
+  Link,
 } from "@material-ui/core"
 import moment from "moment"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
-import withStyles, {
-  WithStyles,
-  StyleRules,
-} from "@material-ui/core/styles/withStyles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
 import withRoot from "../withRoot"
-import { rhythm } from "../utils/typography";
 
 const styles = (theme: Theme) => {
-  return createStyles({
-    paper: {
-      ...theme.mixins.gutters(),
-      paddingTop: theme.spacing.unit * 1,
-      paddingBottom: theme.spacing.unit * 1,
-    },
-    typography: {
-      marginTop: theme.spacing.unit * 1,
-      marginBottom: theme.spacing.unit * 2,
-    },
-  })
+  return createStyles({})
 }
 
 interface IncidentTemplateProps extends WithStyles<typeof styles> {
@@ -67,11 +51,9 @@ class IncidentTemplate extends React.Component<IncidentTemplateProps> {
         <Helmet>
           <title>{incident.title} - Mountain Incident</title>
         </Helmet>
-        <Paper
-          style={{padding: rhythm(1), margin: rhythm(0.4)}}
-        >
+        <Paper>
           <Typography variant="h2">{incident.title}</Typography>
-          <Typography component="p" className={classes.typography}>
+          <Typography>
             {incident.tags.includes("__private-use")
               ? incident.content.substring(
                   0,
@@ -79,29 +61,30 @@ class IncidentTemplate extends React.Component<IncidentTemplateProps> {
                 ) + "(snip)"
               : incident.content}
           </Typography>
-          </Paper>
-        <Paper style={{padding: rhythm(1), margin: rhythm(0.4)}}>
-        <Typography variant="h2">Metadata</Typography>
+
+          <Divider className="section-divider" />
+
+          <Typography variant="h2">Metadata</Typography>
           <Table>
             <TableBody>
               <TableRow>
-                <TableCell>source</TableCell>
+                <TableCell variant="head">source</TableCell>
                 <TableCell>
-                  <a href={incident.url} ref="noopener">
+                  <Link underline="hover" href={incident.url} rel="noopener">
                     {incident.sourceName}
-                  </a>
+                  </Link>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>date</TableCell>
+                <TableCell variant="head">date</TableCell>
                 <TableCell>{moment(incident.date).format()}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>published</TableCell>
+                <TableCell variant="head">published</TableCell>
                 <TableCell>{moment(incident.publishedDate).format()}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>tags</TableCell>
+                <TableCell variant="head">tags</TableCell>
                 <TableCell>
                   {incident.tags.map((tag, i) => (
                     <Typography component="span" key={tag}>

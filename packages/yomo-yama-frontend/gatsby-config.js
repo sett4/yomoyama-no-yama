@@ -85,6 +85,23 @@ module.exports = {
         // cookieDomain: "example.com",
       },
     },
+    {
+      resolve: `gatsby-plugin-material-ui`,
+      options: {
+        theme: {
+          overrides: {
+            Typography: {
+              h2: {
+                fontSize: "10rem",
+              },
+            },
+          },
+          // typography: {
+          //   fontSize: 30,
+          // },
+        },
+      },
+    },
     "gatsby-plugin-sitemap",
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
