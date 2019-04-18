@@ -137,7 +137,7 @@ export async function sourceNodes({
     ended: Date
     count: number
   }
-  const m = moment("2019-01-01")
+  const m = moment("2019-02-01")
   const l = []
   do {
     const md: MonthData = {
