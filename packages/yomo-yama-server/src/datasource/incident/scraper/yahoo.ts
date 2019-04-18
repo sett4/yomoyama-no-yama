@@ -13,6 +13,8 @@ export class YahooArticleScraper implements ArticleScraper {
     "#ym_newsarticle div.articleMain div p.ynDetailText"
   readonly axios: AxiosInstance
 
+  readonly NOT_INCIDENT_REGEXP: RegExp = /(指名式|追悼|指定式|発隊式|開始式|祈願|訓練を|開設|会議|ワニ)/
+
   constructor() {
     this.axios = axios.create({
       headers: {
@@ -82,7 +84,10 @@ export class YahooArticleScraper implements ArticleScraper {
             author
           )
 
-          article.tags.add("山岳事故")
+          const tmp = "" + article.content + article.subject
+          if (tmp.match(this.NOT_INCIDENT_REGEXP) === null) {
+            article.tags.add("山岳事故")
+          }
           article.tags.add("__private-use")
 
           article.scraper = YahooArticleScraper.name
