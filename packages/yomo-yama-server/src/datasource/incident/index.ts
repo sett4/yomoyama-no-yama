@@ -1,6 +1,7 @@
 import * as admin from "firebase-admin"
 import * as Url from "url"
 import crypto from "crypto"
+import { identifier } from "@babel/types"
 
 export interface ArticleRepository {
   exists(key: ArticleKey): boolean
@@ -82,13 +83,27 @@ export class FirestoreArticleRepository implements ArticleRepository {
             d.author
           )
           if (d.category) {
-            article.tags = d.category
+            article.tags = new Set<string>(d.category)
           } else {
-            article.tags = d.tags
+            article.tags = new Set<string>(d.tags)
+          }
+          if (s.id) {
+            article.keyCreator = article => new StaticKey(s.id)
           }
           return article
         })
       })
+  }
+}
+
+class StaticKey implements ArticleKey {
+  id: string
+  constructor(id: string) {
+    this.id = id
+  }
+
+  getId(): string {
+    return this.id
   }
 }
 
