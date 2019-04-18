@@ -62,12 +62,25 @@ const Layout: React.SFC = ({ children }) => (
         >
           <main>{children}</main>
           <footer style={{ marginTop: rhythm(1) }}>
-            <Typography>
+            <Typography
+              variant="subtitle1"
+              align="center"
+              color="textSecondary"
+              component="p"
+            >
               <Link underline="hover">
                 <GatsbyLink to="/privacy/">Privacy Policy</GatsbyLink>
               </Link>
             </Typography>
-            <Typography>build with Gatsby.</Typography>
+            <Typography />
+            <Typography
+              variant="subtitle1"
+              align="center"
+              color="textSecondary"
+              component="p"
+            >
+              build with Gatsby.
+            </Typography>
           </footer>
         </div>
       </>
