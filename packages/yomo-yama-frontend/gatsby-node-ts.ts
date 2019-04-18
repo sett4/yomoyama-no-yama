@@ -20,7 +20,7 @@ export async function createPages({
   const incidentDetailPages = graphql(
     `
       {
-        allIncident(limit: 1000, filter: { tags: { in: "山岳事故" } }) {
+        allIncident(filter: { tags: { in: "山岳事故" } }) {
           edges {
             node {
               id
