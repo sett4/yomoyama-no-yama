@@ -17,7 +17,7 @@ export async function createPages({
   // it like the site has a built-in database constructed
   // from the fetched data that you can run queries against.
 
-  const incidentDetailPages = graphql(
+  const incidentDetailPages = await graphql(
     `
       {
         allIncident(filter: { tags: { in: "山岳事故" } }) {
@@ -52,7 +52,7 @@ export async function createPages({
 
     // We want to create a detailed page for each
     // product node. We'll just use the Contentful id for the slug.
-    _.each(result.data.allIncident.edges, edge => {
+    _.each(result.data.allIncident.edges, async edge => {
       // Gatsby uses Redux to manage its internal state.
       // Plugins and sites can use functions like "createPage"
       // to interact with Gatsby.
@@ -76,7 +76,7 @@ export async function createPages({
         monthDataMap.set(month, m)
       }
 
-      createPage({
+      await createPage({
         // Each page is required to have a `path` as well
         // as a template component. The `context` is
         // optional but is often necessary so the template
@@ -113,7 +113,7 @@ export async function createPages({
       const node = Object.assign({}, e, nodeMeta)
       await createNode(node)
       console.log(`create ${e.month}`)
-      createPage({
+      await createPage({
         path: `/incident/${e.month}/`,
         component: slash(incidentMonthlyTemplate),
         context: e,
