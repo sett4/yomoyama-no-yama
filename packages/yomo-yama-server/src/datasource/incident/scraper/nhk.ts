@@ -12,7 +12,7 @@ export class NhkLocalArticleScraper implements ArticleScraper {
   readonly articleCssSelector: string = "div.content--detail-body"
   readonly axios: AxiosInstance
 
-  readonly NOT_INCIDENT_REGEXP: RegExp = /(指名式|追悼|指定式|発隊式|開始式|祈願|訓練を|開設|会議|ワニ)/
+  readonly NOT_INCIDENT_REGEXP: RegExp = /(指名式|追悼|指定式|発隊式|開始式|祈願|訓練を|開設|会議|ワニ|政府|地震|ヨット|訓示|注意点|約束|観光)/
 
   constructor() {
     this.axios = axios.create({

@@ -7,8 +7,7 @@ import moment from "moment-timezone"
 import { IncidentArticle, ArticleRepository, ArticleKey, IndexScraper } from "."
 
 export default class YahooIndexScraper implements IndexScraper {
-  indexCssSelector: string = "li a.detailFeed__wrap"
-  articleCssSelector: string = "#tmp_readcontents h2"
+  indexCssSelector: string = "li a.detailBody__wrap"
   baseUrl: string
   origin: string
   axios: AxiosInstance
