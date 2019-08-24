@@ -70,7 +70,7 @@ async function update(
   repository: ArticleRepository,
   indexScraper: IndexScraper
 ): Promise<void> {
-  console.info("updateing yahoo")
+  console.info("updateing " + indexScraper.constructor.name)
   let articleScrapers = new ArticleScrapers()
   let articleUrls = await indexScraper.getArticleUrls()
 
