@@ -91,27 +91,40 @@ async function update(
   )
 }
 
-app.get("/datasource/yahoo/detail", async (req, res) => {
-  let articleScrapers = new ArticleScrapers()
-  let articleUrls = [
-    "https://headlines.yahoo.co.jp/videonews/nnn?a=20190325-00000138-nnn-soci",
-    "https://headlines.yahoo.co.jp/hl?a=20190325-00349046-sbcv-l20",
-  ]
+app.get("/datasource/modify", async (req, res) => {
+  console.info("updateing...")
+  const articles = await repository.findAll("yj-news")
+  console.log(`loaded ${articles.length} articles`)
+  const modifiedArticles = articles
+    .filter(a => a.tags.has("山岳事故"))
+    .filter(a => {
+      if (
+        // (a.content + a.subject).match(/遭難/)
+        a.content.match(
+          /(指名式|追悼|指定式|発隊式|開始式|祈願|訓練を|開設|会議|ワニ|政府|地震|ヨット|訓示|注意点|観光|約束)/
+        )
+      ) {
+        return true
+      } else {
+        return false
+      }
+    })
+    // .filter(a => idList.includes(a.toKey().getId()))
+    .map(a => {
+      a.tags.add("山岳事故")
+      console.log("deleted 山岳事故 ", a.toKey().getId())
+      return a
+    })
 
-  let articlePromise = articleUrls.map(url => {
-    return articleScrapers.scrape(url)
-  })
-  let allPromise = await Promise.all(articlePromise)
-  let allArticle = allPromise
-    .reduce((acc, curr) => acc.concat(curr), [])
-    .filter(a => a)
-
-  console.info(`extract ${allArticle.length} articles.`)
-
-  res.send(allArticle)
+  await Promise.all(
+    modifiedArticles.map(article => {
+      return repository.save(article)
+    })
+  )
+  res.send(modifiedArticles)
 })
 
-app.get("/datasource/yahoo", async (req, res) => {
+app.get("/datasource/yahoo/show", async (req, res) => {
   let indexScraper = new YahooIndexScraper()
   let articleUrls = await indexScraper.getArticleUrls()
 
@@ -123,6 +136,7 @@ app.get("/datasource/yahoo", async (req, res) => {
   let allArticle = allPromise
     .reduce((acc, curr) => acc.concat(curr), [])
     .filter(a => a)
+    .map(a => a.toData())
 
   console.info(`extract ${allArticle.length} articles.`)
 
