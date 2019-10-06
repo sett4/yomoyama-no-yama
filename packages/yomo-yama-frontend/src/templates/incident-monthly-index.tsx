@@ -13,6 +13,7 @@ import moment from "moment"
 import { Helmet } from "react-helmet"
 import withRoot from "../withRoot"
 import { Paper } from "@material-ui/core"
+import IncidentMonthlyFragment from "../components/IncidentMonthlyFragment"
 
 const styles = (theme: Theme) => {
   return createStyles({
@@ -85,6 +86,7 @@ class IncidentMonthlyIndexPage extends React.PureComponent<
     const incidentEdges = this.props.data.incident.edges
     const pageContext = this.props.pageContext
     const classes = this.props.classes
+    const monthList = this.props.data.month
     return (
       <Layout>
         <Helmet>
@@ -100,6 +102,7 @@ class IncidentMonthlyIndexPage extends React.PureComponent<
             ))}
           </List>
         </Paper>
+        <IncidentMonthlyFragment month={monthList} classes={classes} />
       </Layout>
     )
   }
@@ -124,6 +127,16 @@ export const pageQuery = graphql`
           date
           publishedDate
           tags
+        }
+      }
+    }
+    month: allIncidentMonthly(sort: { fields: [month], order: [DESC] }) {
+      edges {
+        node {
+          id
+          month
+          started
+          ended
         }
       }
     }

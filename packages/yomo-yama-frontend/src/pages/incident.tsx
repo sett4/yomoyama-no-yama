@@ -1,5 +1,5 @@
 import React from "react"
-import { Link as GatsbyLink, graphql } from "gatsby"
+import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography"
 import moment, { months } from "moment"
 import { Helmet } from "react-helmet"
 import withRoot from "../withRoot"
-import { Paper, Link } from "@material-ui/core"
+import { Paper } from "@material-ui/core"
 import IncidentMonthlyFragment from "../components/IncidentMonthlyFragment"
 
 const styles = (theme: Theme) => {
@@ -63,28 +63,24 @@ interface IncidentIndexProps extends WithStyles<typeof styles> {
 
 const Incident = ({ node, classes }: any) => (
   <ListItem>
-    <Link underline="hover">
-      <GatsbyLink
-        style={{
-          color: `inherit`,
-          textDecoration: `none`,
-          ":hover": { textDecoration: `underline` },
-        }}
-        to={`/incident/${node.id}/`}
-      >
-        <ListItemText
-          primary={moment(node.date).format("YYYY-MM-DD") + " " + node.title}
-          secondary={
-            <React.Fragment>
-              <Typography component="span" color="textSecondary">
-                {node.sourceName}
-              </Typography>
-              {/* {node.content} */}
-            </React.Fragment>
-          }
-        />
-      </GatsbyLink>
+    {/* <Link underline="hover"> */}
+    <Link
+      style={{ color: `inherit`, textDecoration: `none` }}
+      to={`/incident/${node.id}/`}
+    >
+      <ListItemText
+        primary={moment(node.date).format("YYYY-MM-DD") + " " + node.title}
+        secondary={
+          <React.Fragment>
+            <Typography component="span" color="textSecondary">
+              {node.sourceName}
+            </Typography>
+            {/* {node.content} */}
+          </React.Fragment>
+        }
+      />
     </Link>
+    {/* </Link> */}
   </ListItem>
 )
 

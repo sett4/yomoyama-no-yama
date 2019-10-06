@@ -40,12 +40,11 @@
     "jest": "^24.7.1",
     "prettier": "^1.16.4",
     "ts-jest": "^24.0.2",
-    "ts-node": "^8.0.3",
-    "typescript": "^3.4.3"
+    "ts-node": "^8.0.3"
   },
   "dependencies": {
-    "@material-ui/core": "^3.9.2",
-    "@material-ui/icons": "^3.0.2",
+    "@material-ui/core": "^4.5.0",
+    "@material-ui/icons": "^4.4.3",
     "axios": "^0.18.1",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
@@ -79,7 +78,7 @@
     "react-typography": "^0.16.19",
     "sharp": "^0.23.0",
     "styled-components": "^4.2.0",
-    "typescript": "^3.0.1",
+    "typescript": "^3.4.3",
     "typography": "^0.16.19",
     "typography-theme-bootstrap": "^0.16.19",
     "url-parse": "^1.4.4"

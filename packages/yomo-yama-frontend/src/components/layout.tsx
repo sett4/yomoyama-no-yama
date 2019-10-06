@@ -88,4 +88,4 @@ const Layout: React.SFC = ({ children }) => (
   />
 )
 
-export default Layout
+export default withStyles(styles)(Layout)

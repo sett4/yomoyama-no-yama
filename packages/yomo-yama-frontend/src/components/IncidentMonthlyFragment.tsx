@@ -54,7 +54,7 @@ const IncidentMonthlyFragment: React.FC<IncidentMonthlyFragmentProps> = ({
       <Typography variant="h2">Monthly Archive</Typography>
       <List>
         {month.edges.map(({ node }, i) => (
-          <ListItem>
+          <ListItem key={node.month}>
             <Link underline="hover">
               <GatsbyLink
                 style={{ color: `inherit`, textDecoration: `none` }}

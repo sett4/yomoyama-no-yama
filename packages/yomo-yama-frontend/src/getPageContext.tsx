@@ -25,7 +25,6 @@ const theme = createMuiTheme({
     },
   },
   typography: {
-    useNextVariants: true,
     h2: {
       fontSize: 30,
       marginTop: 20,
@@ -44,22 +43,15 @@ const theme = createMuiTheme({
   },
   overrides: {
     MuiPaper: {
-      elevation2: {
+      root: {
+        padding: rhythm(1),
+      },
+      elevation1: {
         padding: rhythm(1),
         margin: rhythm(0.2),
       },
     },
-    GatsbyLink: {
-      textDecoration: "none",
-    },
   },
-  // overrides: {
-  //   MuiPaper: {
-  //     root: {
-  //       padding: rhythm(1),
-  //     },
-  //   },
-  // },
 })
 
 function createPageContext() {
