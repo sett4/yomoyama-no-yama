@@ -57,8 +57,8 @@ class IncidentTemplate extends React.Component<IncidentTemplateProps> {
             {incident.tags.includes("__private-use")
               ? incident.content.substring(
                   0,
-                  Math.min(64, incident.content.length)
-                ) + "(snip)"
+                  Math.min(120, incident.content.length)
+                ) + "..."
               : incident.content}
           </Typography>
 
