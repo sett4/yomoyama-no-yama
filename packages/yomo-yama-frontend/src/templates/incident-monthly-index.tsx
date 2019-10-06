@@ -90,7 +90,7 @@ class IncidentMonthlyIndexPage extends React.PureComponent<
         <Helmet>
           <title>Mountain Incidents {pageContext.month}</title>
         </Helmet>
-        <Paper style={{ padding: rhythm(1), margin: rhythm(0.4) }}>
+        <Paper>
           <Typography variant="h2">
             Mountain Incidents {pageContext.month}
           </Typography>
