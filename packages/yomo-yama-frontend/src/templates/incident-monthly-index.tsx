@@ -90,12 +90,10 @@ class IncidentMonthlyIndexPage extends React.PureComponent<
     return (
       <Layout>
         <Helmet>
-          <title>Mountain Incidents {pageContext.month}</title>
+          <title>山岳事故・遭難 {pageContext.month}</title>
         </Helmet>
         <Paper>
-          <Typography variant="h2">
-            Mountain Incidents {pageContext.month}
-          </Typography>
+          <Typography variant="h2">山岳事故 {pageContext.month}</Typography>
           <List>
             {incidentEdges.map(({ node }, i) => (
               <Incident node={node} classes={classes} key={node.id} />

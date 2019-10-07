@@ -72,7 +72,7 @@ const Header = ({ siteTitle, classes, children, window }: any) => (
           <Button color="inherit">Home</Button>
         </Link> */}
           <Link to={`/incident/`} className={classes.link}>
-            <Button color="inherit">Incident</Button>
+            <Button color="inherit">山岳事故</Button>
           </Link>
         </Toolbar>
       </AppBar>

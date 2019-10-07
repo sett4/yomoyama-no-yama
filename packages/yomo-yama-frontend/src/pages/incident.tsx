@@ -96,11 +96,14 @@ class IncidentIndexPage extends React.PureComponent<IncidentIndexProps> {
       <Layout>
         <Helmet>
           <title>山岳事故: よもやまごとのやま</title>
-          <meta name="description" content="日本の山岳事故ニュースの収集" />
+          <meta
+            name="description"
+            content="日本の山岳事故や遭難ニュースの収集"
+          />
         </Helmet>
         <Paper>
           <Typography variant="h2" component="h2">
-            Mountain Incidents
+            山岳事故
           </Typography>
           <List>
             {incidentEdges.map(({ node }, i) => (
