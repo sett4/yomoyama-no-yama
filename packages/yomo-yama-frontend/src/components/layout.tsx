@@ -7,7 +7,7 @@
 
 import React from "react"
 import PropTypes from "prop-types"
-import { StaticQuery, graphql } from "gatsby"
+import { StaticQuery, graphql, Link } from "gatsby"
 import { rhythm } from "../utils/typography"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import withStyles, {
@@ -18,8 +18,7 @@ import createStyles from "@material-ui/core/styles/createStyles"
 
 import Header from "./header"
 import "./layout.css"
-import { Typography, Link } from "@material-ui/core"
-import GatsbyLink from "gatsby-link"
+import { Typography } from "@material-ui/core"
 
 const styles = (theme: Theme) => {
   return createStyles({
@@ -68,9 +67,7 @@ const Layout: React.SFC = ({ children }) => (
               color="textSecondary"
               component="p"
             >
-              <Link underline="hover">
-                <GatsbyLink to="/privacy/">Privacy Policy</GatsbyLink>
-              </Link>
+              <Link to="/privacy/">Privacy Policy</Link>
             </Typography>
             <Typography />
             <Typography

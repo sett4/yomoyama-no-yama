@@ -1,9 +1,5 @@
 import React from "react"
-import { Link as GatsbyLink, graphql } from "gatsby"
-import * as PropTypes from "prop-types"
-import Img from "gatsby-image"
-import { rhythm } from "../utils/typography"
-import Layout from "./layout"
+import { Link } from "gatsby"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
@@ -14,10 +10,7 @@ import withStyles, {
 } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
 import Typography from "@material-ui/core/Typography"
-import moment from "moment"
-import { Helmet } from "react-helmet"
-import withRoot from "../withRoot"
-import { Paper, Link } from "@material-ui/core"
+import { Paper } from "@material-ui/core"
 
 const styles = (theme: Theme) => {
   return createStyles({
@@ -55,13 +48,11 @@ const IncidentMonthlyFragment: React.FC<IncidentMonthlyFragmentProps> = ({
       <List>
         {month.edges.map(({ node }, i) => (
           <ListItem key={node.month}>
-            <Link underline="hover">
-              <GatsbyLink
-                style={{ color: `inherit`, textDecoration: `none` }}
-                to={`/incident/${node.month}/`}
-              >
-                <ListItemText primary={node.month} />
-              </GatsbyLink>
+            <Link
+              style={{ color: `inherit`, textDecoration: `underline` }}
+              to={`/incident/${node.month}/`}
+            >
+              <ListItemText primary={node.month} />
             </Link>
           </ListItem>
         ))}
