@@ -28,21 +28,19 @@ export async function createPages({
             }
           }
         }
+        allIncidentMonthly(sort: { fields: month, order: ASC }) {
+          nodes {
+            ended
+            started
+            month
+          }
+        }
       }
     `
   ).then(result => {
     if (result.errors) {
       throw result.errors
     }
-
-    type MonthPageData = {
-      month: string
-      started: string
-      ended: string
-      count: number
-      children: Node[]
-    }
-    const monthDataMap: Map<string, MonthPageData> = new Map()
 
     // Create Product pages
     const incidentTemplate = path.resolve(`./src/templates/incident.tsx`)
@@ -56,25 +54,6 @@ export async function createPages({
       // Gatsby uses Redux to manage its internal state.
       // Plugins and sites can use functions like "createPage"
       // to interact with Gatsby.
-      const month: string = moment(edge.node.date).format(`YYYY-MM`)
-      if (!monthDataMap.has(month)) {
-        monthDataMap.set(month, {
-          month: month,
-          started: moment(edge.node.date)
-            .startOf("month")
-            .format(),
-          ended: moment(edge.node.date)
-            .endOf("month")
-            .format(),
-          count: 1,
-          children: [],
-        })
-      } else {
-        const m = Object.assign({}, monthDataMap.get(month))
-        m.count++
-        m.children.push(edge.node.id)
-        monthDataMap.set(month, m)
-      }
 
       await createPage({
         // Each page is required to have a `path` as well
@@ -95,24 +74,34 @@ export async function createPages({
         },
       })
     })
+  })
 
-    // ここで月別のデータを入れる
-    monthDataMap.forEach(async e => {
+  const incidentMonthlyPages = await graphql(
+    `
+      {
+        allIncidentMonthly(sort: { fields: month, order: ASC }) {
+          nodes {
+            ended
+            started
+            month
+          }
+        }
+      }
+    `
+  ).then(result => {
+    if (result.errors) {
+      throw result.errors
+    }
+
+    // Create Product pages
+    const incidentMonthlyTemplate = path.resolve(
+      `./src/templates/incident-monthly-index.tsx`
+    )
+
+    result.data.allIncidentMonthly.nodes.forEach(async e => {
       const nodeContent = JSON.stringify(e)
 
-      const nodeMeta = {
-        id: createNodeId(`incidentMonthly-${e.month}`),
-        parent: null,
-        children: [],
-        internal: {
-          type: `incidentMonthly`,
-          content: nodeContent,
-          contentDigest: createContentDigest(e),
-        },
-      }
-      const node = Object.assign({}, e, nodeMeta)
-      await createNode(node)
-      console.log(`create ${e.month}`)
+      console.log(`create monthly incident index ${e.month}`)
       await createPage({
         path: `/incident/${e.month}/`,
         component: slash(incidentMonthlyTemplate),
@@ -120,51 +109,70 @@ export async function createPages({
       })
     })
   })
-
-  return incidentDetailPages
 }
 
 export async function sourceNodes({
   actions,
   createNodeId,
   createContentDigest,
+  getNodesByType,
 }) {
   const { createNode } = actions
 
-  type MonthData = {
+  type MonthPageData = {
     month: string
-    started: Date
-    ended: Date
+    started: string
+    ended: string
     count: number
+    children: Node[]
   }
-  const m = moment("2019-02-01")
-  const l = []
-  do {
-    const md: MonthData = {
-      month: m.format("YYYY-MM"),
-      started: moment(m)
-        .startOf("month")
-        .toDate(),
-      ended: moment(m)
-        .endOf("month")
-        .toDate(),
-      count: 0,
+  const monthDataMap: Map<string, MonthPageData> = new Map()
+
+  // 全記事から月別のノードを作る
+  const allIncidentNodes = getNodesByType(`Incident`).filter(
+    n => n.tags && n.tags.includes("山岳事故")
+  )
+  _.each(allIncidentNodes, async node => {
+    // Gatsby uses Redux to manage its internal state.
+    // Plugins and sites can use functions like "createPage"
+    // to interact with Gatsby.
+    const month: string = moment(node.date).format(`YYYY-MM`)
+    if (!monthDataMap.has(month)) {
+      monthDataMap.set(month, {
+        month: month,
+        started: moment(node.date)
+          .startOf("month")
+          .format(),
+        ended: moment(node.date)
+          .endOf("month")
+          .format(),
+        count: 1,
+        children: [],
+      })
+    } else {
+      const m = Object.assign({}, monthDataMap.get(month))
+      m.count++
+      m.children.push(node.id)
+      monthDataMap.set(month, m)
     }
-    const nodeContent = JSON.stringify(md)
+  })
+
+  // ここで月別のデータを入れる
+  monthDataMap.forEach(async e => {
+    const nodeContent = JSON.stringify(e)
+
     const nodeMeta = {
-      id: createNodeId(`incidentMonthly-${md.month}`),
+      id: createNodeId(`incidentMonthly-${e.month}`),
       parent: null,
-      children: [],
+      children: e.children,
       internal: {
         type: `incidentMonthly`,
         content: nodeContent,
-        contentDigest: createContentDigest(md),
+        contentDigest: createContentDigest(e),
       },
     }
-
-    const node = Object.assign({}, md, nodeMeta)
+    const node = Object.assign({}, e, nodeMeta)
     await createNode(node)
-
-    m.add(1, "month")
-  } while (m.isAfter(moment()))
+    console.log(`create node ${e.month}`)
+  })
 }
