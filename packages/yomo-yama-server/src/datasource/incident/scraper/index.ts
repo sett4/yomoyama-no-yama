@@ -35,6 +35,11 @@ export class ArticleScrapers {
       })
     }
 
-    return scraper.scrape(url)
+    return scraper.scrape(url).catch(err => {
+      console.error(`error on ${url} `, err)
+      return new Promise<IncidentArticle[]>((resolve, reject) => {
+        resolve([])
+      })
+    })
   }
 }
