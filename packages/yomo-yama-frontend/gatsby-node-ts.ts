@@ -11,11 +11,18 @@ export async function createPages({
   createNodeId,
   createContentDigest,
 }) {
-  const { createPage, createNode } = actions
+  const { createPage, createRedirect } = actions
   // The “graphql” function allows us to run arbitrary
   // queries against the local Contentful graphql schema. Think of
   // it like the site has a built-in database constructed
   // from the fetched data that you can run queries against.
+
+  createRedirect({
+    fromPath: "https://yomoyama-no-yama.netlify.com/*",
+    toPath: "https://yama.4dir.com/:splat",
+    isPermanent: true,
+    force: true,
+  })
 
   const incidentDetailPages = await graphql(
     `

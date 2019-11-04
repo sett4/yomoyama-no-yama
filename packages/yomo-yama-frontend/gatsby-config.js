@@ -2,9 +2,9 @@ const moment = require("moment")
 module.exports = {
   siteMetadata: {
     title: `よもやまごとのやま`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+    description: `山にまつわることをあつめるサイト`,
     author: `@sett4`,
-    siteUrl: `https://yomoyama-no-yama.netlify.com`,
+    siteUrl: `https://yama.4dir.com`,
   },
   plugins: [
     `gatsby-plugin-typescript`,
@@ -106,5 +106,6 @@ module.exports = {
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // 'gatsby-plugin-offline',
+    "gatsby-plugin-netlify",
   ],
 }
