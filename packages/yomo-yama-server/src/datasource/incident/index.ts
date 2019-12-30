@@ -31,19 +31,8 @@ export class FirestoreArticleRepository implements ArticleRepository {
   db: admin.firestore.Firestore
   readonly COLLECTION_ARTICLE: string = "incident"
 
-  constructor() {
-    var credential = admin.credential.applicationDefault()
-    // console.log(credential)
-    // if (!credential) {
-    //     const c = require('../../../mt-incident-2847996a3e43.json');
-    //     console.log(c)
-    //     credential = admin.credential.cert(c);
-    // }
-    admin.initializeApp({
-      credential: credential,
-    })
-
-    this.db = admin.firestore()
+  constructor(firestore: admin.firestore.Firestore) {
+    this.db = firestore
   }
 
   exists(key: ArticleKey): boolean {

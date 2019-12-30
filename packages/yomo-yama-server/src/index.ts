@@ -21,15 +21,25 @@ import {
   ArticleRepository,
   IndexScraper,
 } from "./datasource/incident"
+import { Yamdat14Scraper } from "./datasource/mountain/index"
 import axios from "axios"
 import { ArticleScrapers } from "./datasource/incident/scraper"
 import YahooIndexScraper from "./datasource/incident/yahoo"
-import { firestore } from "firebase-admin"
+import * as firebase from "firebase-admin"
 const app = express()
+
+var credential = firebase.credential.applicationDefault()
+const c = require("../mt-incident-2847996a3e43.json")
+credential = firebase.credential.cert(c)
+firebase.initializeApp({
+  credential: credential,
+})
+
+const firestore = firebase.firestore()
 
 let repository: ArticleRepository
 if (process.env.NODE_ENV !== "development") {
-  repository = new FirestoreArticleRepository()
+  repository = new FirestoreArticleRepository(firestore)
 } else {
   repository = new EmptyArticleRepository()
 }
@@ -146,6 +156,12 @@ app.get("/datasource/yahoo/show", async (req, res) => {
 app.get("/generate", async (req, res) => {
   await notifyToNetlify()
   res.send("UPDATED")
+})
+
+app.get("/name-of-place/yamdat14", async (req, res) => {
+  const scraper = new Yamdat14Scraper()
+  const mountains = scraper.load()
+  res.send("YAMDAT14 UPDATED.")
 })
 
 app.listen(PORT, () => {
