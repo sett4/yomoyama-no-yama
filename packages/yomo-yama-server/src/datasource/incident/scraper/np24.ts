@@ -26,7 +26,7 @@ export class Np24ArticleScraper implements ArticleScraper {
   }
 
   async scrape(url: string): Promise<IncidentArticle[]> {
-    console.info(`updating ${url}. source ${this.source}`)
+    console.info(`updating ${url} , source ${this.source}`)
     let articles: IncidentArticle[] = await this.axios.get(url).then(res => {
       let $ = cheerio.load(res.data)
       let tmpUpdatedDate = $("#tmp_update").text()

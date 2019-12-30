@@ -31,7 +31,7 @@ export class NhkLocalArticleScraper implements ArticleScraper {
   }
 
   async scrape(url: string): Promise<IncidentArticle[]> {
-    console.info(`updating ${url}. source ${this.source}`)
+    console.info(`updating ${url} , source ${this.source}`)
     let articles: IncidentArticle[] = await this.axios.get(url).then(res => {
       let $ = cheerio.load(res.data)
       return $(this.articleCssSelector)
@@ -123,7 +123,7 @@ export class NhkArticleScraper implements ArticleScraper {
   }
 
   async scrape(url: string): Promise<IncidentArticle[]> {
-    console.info(`updating ${url}. source ${this.source}`)
+    console.info(`updating ${url} , source ${this.source}`)
     let articles: IncidentArticle[] = await this.axios.get(url).then(res => {
       let $ = cheerio.load(res.data)
       return $(this.articleCssSelector)
