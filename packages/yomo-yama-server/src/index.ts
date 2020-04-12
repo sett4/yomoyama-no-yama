@@ -21,7 +21,10 @@ import {
   ArticleRepository,
   IndexScraper,
 } from "./datasource/incident"
-import { Yamdat14Scraper } from "./datasource/mountain/index"
+import {
+  Yamdat14Scraper,
+  MountainFirebaseRepository,
+} from "./datasource/mountain/index"
 import axios from "axios"
 import { ArticleScrapers } from "./datasource/incident/scraper"
 import YahooIndexScraper from "./datasource/incident/yahoo"
@@ -104,14 +107,17 @@ async function update(
 app.get("/datasource/modify", async (req, res) => {
   console.info("updateing...")
   const articles = await repository.findAll("yj-news")
-  console.log(`loaded ${articles.length} articles`)
+  console.info(`loaded ${articles.length} articles`)
   const modifiedArticles = articles
     .filter(a => a.tags.has("山岳事故"))
     .filter(a => {
       if (
         // (a.content + a.subject).match(/遭難/)
         a.content.match(
-          /(指名式|追悼|指定式|発隊式|開始式|祈願|訓練を|開設|会議|ワニ|政府|地震|ヨット|訓示|注意点|観光|約束)/
+          /(指名式|追悼|指定式|発隊式|開始式|祈願|訓練を|開設|会議|ワニ|政府|地震|ヨット|訓示|注意点|約束|観光|感謝状|思いやり|急増している|命名|激撮|設置|運転|リニア|報告|出発式|社会貢献|閉所式|気がかり|結隊式|祈り|祈る|献花|追悼式|開幕|冥福|授業|遺族)/
+        ) ||
+        a.subject.match(
+          /(指名式|追悼|指定式|発隊式|開始式|祈願|訓練を|開設|会議|ワニ|政府|地震|ヨット|訓示|注意点|約束|観光|感謝状|思いやり|急増している|命名|激撮|設置|運転|リニア|報告|出発式|社会貢献|閉所式|気がかり|結隊式|祈り|祈る|献花|追悼式|開幕|冥福|授業|遺族)/
         )
       ) {
         return true
@@ -121,8 +127,8 @@ app.get("/datasource/modify", async (req, res) => {
     })
     // .filter(a => idList.includes(a.toKey().getId()))
     .map(a => {
-      a.tags.add("山岳事故")
-      console.log("deleted 山岳事故 ", a.toKey().getId())
+      a.tags.delete("山岳事故")
+      console.info("deleted 山岳事故 ", a.toKey().getId(), a.subject, a.url)
       return a
     })
 
@@ -131,7 +137,7 @@ app.get("/datasource/modify", async (req, res) => {
       return repository.save(article)
     })
   )
-  res.send(modifiedArticles)
+  res.send(modifiedArticles.map(e => e.toData()))
 })
 
 app.get("/datasource/yahoo/show", async (req, res) => {
@@ -158,14 +164,24 @@ app.get("/generate", async (req, res) => {
   res.send("UPDATED")
 })
 
-app.get("/name-of-place/yamdat14", async (req, res) => {
+app.get("/datastore/name-of-place/yamdat14/update", async (req, res) => {
   const scraper = new Yamdat14Scraper()
-  const mountains = scraper.load()
+  const mountains = await scraper.load()
+  const repository = new MountainFirebaseRepository(firestore)
+  mountains.map(async m => {
+    await repository.save(m)
+  })
   res.send("YAMDAT14 UPDATED.")
 })
 
+app.get("/datastore/name-of-place/yamdat14", async (req, res) => {
+  const scraper = new Yamdat14Scraper()
+  const mountains = await scraper.load()
+  res.send(mountains.map(m => m.toData()))
+})
+
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`)
+  console.info(`App listening on port ${PORT}`)
 })
 
 async function notifyToNetlify() {
