@@ -128,9 +128,8 @@ export class NhkArticleScraper implements ArticleScraper {
       let $ = cheerio.load(res.data)
       return $(this.articleCssSelector)
         .map((i, el) => {
-          let tmpUpdatedDate: string = $(
-            "header.module--header p.title time"
-          ).attr("datetime")
+          let tmpUpdatedDate: string =
+            $("header.module--header p.title time").attr("datetime") || ""
           let subject: string = $(
             "header.module--header p.title span.contentTitle"
           ).text()
