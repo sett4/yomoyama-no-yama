@@ -21,9 +21,10 @@ class DateExtractor {
       }
 
       const date = asJst(
-        moment(
+        moment.tz(
           matchedDate[0].replace(/\//g, "-") + " " + matchedTime[0],
-          "YYYY-M-D HH:mm"
+          "YYYY-M-D HH:mm",
+          "Asia/Tokyo"
         )
       )
       return date
@@ -41,7 +42,7 @@ class DateExtractor {
         return null
       }
 
-      const now = moment().tz("Asia/Tokyo")
+      const now = moment.tz("Asia/Tokyo")
       const tmpDateStr: string =
         now.year() +
         "-" +
@@ -50,7 +51,11 @@ class DateExtractor {
         matchedTime[0]
       let date: moment.Moment
       try {
-        const m: moment.Moment | string = moment(tmpDateStr, "YYYY-M-D HH:mm")
+        const m: moment.Moment | string = moment.tz(
+          tmpDateStr,
+          "YYYY-M-D HH:mm",
+          "Asia/Tokyo"
+        )
         if (m.isValid() === false) {
           return null
         }
