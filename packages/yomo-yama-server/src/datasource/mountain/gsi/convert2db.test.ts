@@ -10,7 +10,6 @@ import zlib from "zlib"
 import { IndexImporter } from "./convert2db"
 
 const projectId = "mt-incident"
-const rules = "{}"
 
 describe("firestore-test", () => {
   test("hoge", () => {

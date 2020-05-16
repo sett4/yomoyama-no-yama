@@ -1,7 +1,5 @@
 import * as admin from "firebase-admin"
-import * as Url from "url"
 import crypto from "crypto"
-import { identifier } from "@babel/types"
 
 export interface ArticleRepository {
   exists(key: ArticleKey): boolean
@@ -15,7 +13,7 @@ export class EmptyArticleRepository implements ArticleRepository {
     throw new Error("Method not implemented.")
   }
   save(article: any): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<any>(resolve => {
       resolve()
     })
   }

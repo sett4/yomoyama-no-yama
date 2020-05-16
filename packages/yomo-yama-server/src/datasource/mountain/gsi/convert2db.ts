@@ -1,10 +1,7 @@
 import * as csv from "fast-csv"
-import { ReadStream } from "fs"
 import axios from "axios"
 import { Readable } from "stream"
-import { getHeapSnapshot } from "v8"
 import * as admin from "firebase-admin"
-import _ from "lodash"
 import { ValueObject } from "../../../value-object"
 import crypto from "crypto"
 
@@ -113,7 +110,6 @@ export class IndexImporter {
       new Promise(resolve => setTimeout(resolve, msec))
 
     console.info(`list finished. ${indexDocList.size} docs`)
-    let i = 0
     for (let doc of indexDocList.docs) {
       await sleep(100)
       await this.storeContent(doc.data().path)
@@ -140,13 +136,16 @@ export class IndexImporter {
       const mt = await this.storeMountain(doc.id, doc.data())
       if (i % 100 == 0) {
         console.info(`processing ${i} places`)
-        console.info(`sample ${mt.props}`)
+        console.info(`sample`)
+        console.info(mt[0].props)
       }
-      i++
+      i = i + mt.length
     }
   }
 
   async storeMountain(id: string, data: FirebaseFirestore.DocumentData) {
+    const mtList: Mountain[] = []
+
     for (let feature of data.features) {
       const mt = new Mountain({
         sourceType: this.type,
@@ -175,8 +174,10 @@ export class IndexImporter {
         .doc(docid)
         .set(mt.props)
 
-      return mt
+      mtList.push(mt)
     }
+
+    return mtList
   }
 }
 
