@@ -1,5 +1,6 @@
 {
   "include": ["./src/**/*"],
+  "exclude": ["node_modules", "dist", "lib"],
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
@@ -11,6 +12,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "outDir": "./dist"
   }
 }
