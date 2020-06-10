@@ -27,6 +27,28 @@ class IndexValueObject {
   }
 }
 
+interface PointOfPlaceProps {
+  sourceType: string
+  sourcePath: string
+  lat: number
+  long: number
+  klass: string
+  type: string
+  name: string
+  kana: string
+  rj: string
+  aname: string
+  akana: string
+  arj: string
+  lfSpanFr: string
+}
+
+export class Mountain extends ValueObject<PointOfPlaceProps> {
+  constructor(props: PointOfPlaceProps) {
+    super(props)
+  }
+}
+
 export class IndexImporter {
   db: admin.firestore.Firestore
   type: string
@@ -61,7 +83,7 @@ export class IndexImporter {
     })
   }
 
-  async storeIndex(d: IndexValueObject) {
+  async storeIndex(d: IndexValueObject): Promise<void> {
     console.info(d)
     await this.db
       .collection(this.getIndexCollectionName())
@@ -92,7 +114,7 @@ export class IndexImporter {
       })
   }
 
-  async storeContent(path: string) {
+  async storeContent(path: string): Promise<void> {
     const content = await this.fetch(path)
     await this.db
       .collection(this.COLLECTION_ARTICLE + this.type)
@@ -101,16 +123,16 @@ export class IndexImporter {
     console.info(`stored ${path}`)
   }
 
-  async updateAllContent() {
+  async updateAllContent(): Promise<number> {
     const indexDocList = await this.db
       .collection(this.getIndexCollectionName())
       .get()
 
-    const sleep = (msec: number) =>
+    const sleep = (msec: number): Promise<void> =>
       new Promise(resolve => setTimeout(resolve, msec))
 
     console.info(`list finished. ${indexDocList.size} docs`)
-    for (let doc of indexDocList.docs) {
+    for (const doc of indexDocList.docs) {
       await sleep(100)
       await this.storeContent(doc.data().path)
     }
@@ -126,13 +148,13 @@ export class IndexImporter {
     return `https://maps.gsi.go.jp/xyz/${this.type}/${path}`
   }
 
-  async updateAllMountain() {
+  async updateAllMountain(): Promise<void> {
     const indexDocList = await this.db
       .collection(this.COLLECTION_ARTICLE + this.type)
       .get()
 
     let i = 0
-    for (let doc of indexDocList.docs) {
+    for (const doc of indexDocList.docs) {
       const mt = await this.storeMountain(doc.id, doc.data())
       if (i % 100 == 0) {
         console.info(`processing ${i} places`)
@@ -143,10 +165,13 @@ export class IndexImporter {
     }
   }
 
-  async storeMountain(id: string, data: FirebaseFirestore.DocumentData) {
+  async storeMountain(
+    id: string,
+    data: FirebaseFirestore.DocumentData
+  ): Promise<Mountain[]> {
     const mtList: Mountain[] = []
 
-    for (let feature of data.features) {
+    for (const feature of data.features) {
       const mt = new Mountain({
         sourceType: this.type,
         sourcePath: id.split("__").join("/"),
@@ -178,27 +203,5 @@ export class IndexImporter {
     }
 
     return mtList
-  }
-}
-
-interface PointOfPlaceProps {
-  sourceType: string
-  sourcePath: string
-  lat: number
-  long: number
-  klass: string
-  type: string
-  name: string
-  kana: string
-  rj: string
-  aname: string
-  akana: string
-  arj: string
-  lfSpanFr: string
-}
-
-export class Mountain extends ValueObject<PointOfPlaceProps> {
-  constructor(props: PointOfPlaceProps) {
-    super(props)
   }
 }
