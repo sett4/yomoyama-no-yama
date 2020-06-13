@@ -1,7 +1,3 @@
-import fs from "fs"
-import path from "path"
-import csv from "fast-csv"
-const proj4 = require("proj4")
 import * as firebase from "firebase-admin"
 
 export type MountainName = {
@@ -15,30 +11,51 @@ export type Coordinates = {
 }
 
 export class Mountain {
-  klass: string = "mountain"
+  klass: string = "MOUNTAIN"
   name: string
   perfectures: string[] = []
+  coordinates: Coordinates
   elevation: number
-  position: Coordinates
-  alterneName: MountainName[] = []
+  alternateName: MountainName[] = []
   pronunciation: string
   dataSource: string
+  note: string = ""
   constructor(
     name: string,
     pronunciation: string,
-    position: Coordinates,
+    coordinates: Coordinates,
     elevation: number,
     dataSource: string
   ) {
     this.name = name
     this.pronunciation = pronunciation
-    this.position = position
+    this.coordinates = coordinates
     this.elevation = elevation
     this.dataSource = dataSource
   }
 
   getId() {
-    return this.name + "-" + this.perfectures.join("-")
+    return this.name + "-" + this.perfectures.sort().join("-")
+  }
+
+  toData(): any {
+    return {
+      klass: this.klass,
+      name: this.name,
+      perfectures: this.perfectures.reduceRight(
+        (acc: { [key: string]: boolean }, v: string) => {
+          acc[v] = true
+          return acc
+        },
+        {}
+      ),
+      elevation: this.elevation,
+      coordinates: this.coordinates,
+      alternateNames: this.alternateName,
+      pronunciation: this.pronunciation,
+      dataSource: this.dataSource,
+      note: this.note,
+    }
   }
 }
 
@@ -46,46 +63,9 @@ interface MountainScraper {
   load(): Promise<Mountain[]>
 }
 
-export class Yamdat14Scraper {
-  constructor() {
-    proj4.defs([
-      [
-        "EPSG:4301", //東京測地系/日本測地系 SRID=4301
-        "+proj=longlat +ellps=bessel +towgs84=-146.414,507.337,680.507,0,0,0,0 +no_defs",
-      ],
-    ])
-  }
-  load(): Promise<Mountain[]> {
-    return new Promise<Mountain[]>((resolve, reject) => {
-      const stream = fs.createReadStream(
-        path.join(__dirname, "yama.csv"),
-        "utf-8"
-      )
-      const list: Mountain[] = []
-      csv
-        .fromStream(stream)
-        .on("data", (data: any[]) => {
-          const [long, lat] = proj4("EPSG:4301", "EPSG:4326", [
-            data[15],
-            data[14],
-          ])
-          const p: Coordinates = { lat, long }
-          const m = new Mountain(data[1], data[2], p, data[5], "yamdat14")
-          list.push(m)
-        })
-        .on("end", () => {
-          resolve(list)
-        })
-        .on("error", err => {
-          reject(err)
-        })
-    })
-  }
-}
-
 export class MountainFirebaseRepository {
   db: firebase.firestore.Firestore
-  readonly COLLECTION_MOUNTAIN: string = "placeofname/mountain"
+  readonly COLLECTION_MOUNTAIN: string = "mountain"
 
   constructor(firestore: firebase.firestore.Firestore) {
     this.db = firestore
@@ -95,6 +75,6 @@ export class MountainFirebaseRepository {
     return this.db
       .collection(this.COLLECTION_MOUNTAIN)
       .doc(m.getId())
-      .set(m)
+      .set(m.toData())
   }
 }

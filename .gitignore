@@ -75,3 +75,4 @@ dist/
 mt-incident-*.json
 secret.yaml
 
+packages/yomo-yama-server/data/

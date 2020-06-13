@@ -38,20 +38,25 @@ export class Np24ArticleScraper implements ArticleScraper {
           let content: string = $(el)
             .next("p")
             .text()
-          let publishedDate = moment(
-            tmpUpdatedDate.replace(/更新日：|日/g, "").replace(/[年月]/g, "-"),
-            "YYYY-M-D"
-          )
+          let publishedDate = moment
+            .tz(
+              tmpUpdatedDate
+                .replace(/更新日：|日/g, "")
+                .replace(/[年月]/g, "-"),
+              "YYYY-M-D",
+              "Asia/Tokyo"
+            )
             .tz("Asia/Tokyo")
             .startOf("day")
           let publishedDateStr: string = publishedDate.format()
-          let date = moment(
-            publishedDate.year() +
-              "-" +
-              tmpDate.replace(/[月]/g, "-").replace(/[日]/g, ""),
-            "YYYY-M-D"
-          )
-            .tz("Asia/Tokyo")
+          let date = moment
+            .tz(
+              publishedDate.year() +
+                "-" +
+                tmpDate.replace(/[月]/g, "-").replace(/[日]/g, ""),
+              "YYYY-M-D",
+              "Asia/Tokyo"
+            )
             .startOf("day")
           // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
           if (date.isAfter(publishedDate)) {

@@ -1,7 +1,7 @@
 import { ArticleScraper, asJst } from "./index"
 import { AxiosInstance } from "axios"
 import { IncidentArticle, MultipleArticleKey } from ".."
-import moment from "moment-timezone"
+import * as moment from "moment-timezone"
 import axios from "axios"
 import * as cheerio from "cheerio"
 
@@ -53,15 +53,16 @@ export class NhkLocalArticleScraper implements ArticleScraper {
             return undefined
           }
 
-          let now = moment().tz("Asia/Tokyo")
+          let now = moment.tz("Asia/Tokyo")
           let date = asJst(
-            moment(
+            moment.tz(
               now.year() +
                 "-" +
                 matchedDate[0].replace("月", "-") +
                 " " +
                 matchedTime[0].replace("時", ":"),
-              "YYYY-M-D HH:mm"
+              "YYYY-M-D HH:mm",
+              "Asia/Tokyo"
             )
           )
           // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
@@ -128,9 +129,8 @@ export class NhkArticleScraper implements ArticleScraper {
       let $ = cheerio.load(res.data)
       return $(this.articleCssSelector)
         .map((i, el) => {
-          let tmpUpdatedDate: string = $(
-            "header.module--header p.title time"
-          ).attr("datetime")
+          let tmpUpdatedDate: string =
+            $("header.module--header p.title time").attr("datetime") || ""
           let subject: string = $(
             "header.module--header p.title span.contentTitle"
           ).text()
