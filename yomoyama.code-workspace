@@ -5,6 +5,9 @@
     },
     {
       "path": "packages/yomo-yama-server"
+    },
+    {
+      "path": "packages/yomo-yama-frontend2"
     }
   ],
   "settings": {
