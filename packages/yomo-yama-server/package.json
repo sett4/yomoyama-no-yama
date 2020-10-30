@@ -28,7 +28,7 @@
     "deploy": "gcloud app deploy",
     "watch": "tsc -w -p ./",
     "prefecture-wkt-csv": "ts-node -T ./src/cli/prefecture-wkt-csv.ts",
-    "dev": "nodemon --exec ts-node -T ./src/index.ts",
+    "dev": "NODE_ENV=development nodemon --exec ts-node -T ./src/index.ts"
     "preinstall": "npm install typescript"
   },
   "bugs": {
@@ -96,5 +96,11 @@
       "Uint8Array",
       "ArrayBuffer"
     ]
+  },
+  "nodemonConfig": {
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "verbose": true
   }
 }
