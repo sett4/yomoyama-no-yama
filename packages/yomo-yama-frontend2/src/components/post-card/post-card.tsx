@@ -82,11 +82,13 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
 
           {tags == null ? null : (
             <PostTags className="post_tags">
-              {tags.map((tag: string, index: number) => (
-                <Link key={index} to={`/tags/${_.kebabCase(tag)}/`}>
-                  {`#${tag}`}
-                </Link>
-              ))}
+              {tags
+                .filter((tag: string) => !tag.startsWith("__"))
+                .map((tag: string, index: number) => (
+                  // <Link key={index} to={`/incident/tags/${_.kebabCase(tag)}/`}>
+                  <span key={index}>{`#${tag}`}</span>
+                  // </Link>
+                ))}
             </PostTags>
           )}
         </PostContent>

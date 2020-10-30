@@ -34,8 +34,8 @@ const MenuItems = [
     url: "/contact",
   },
   {
-    label: "404 Page",
-    url: "/404",
+    label: "山岳事故",
+    url: "/incident",
   },
 ]
 
@@ -71,7 +71,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
         </DrawerProvider>
         <Logo>
           <Link to="/">
-            <img src={LogoImage} alt="logo" />
+            <img src={LogoImage} alt="よもやまの山" />
           </Link>
         </Logo>
         <MenuWrapper>

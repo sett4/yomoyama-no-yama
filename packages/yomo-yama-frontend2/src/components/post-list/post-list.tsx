@@ -65,9 +65,11 @@ const PostList: React.FunctionComponent<PostListProps> = ({
             )}
             {tags == null ? null : (
               <PostTags className="post_tags">
-                {tags.map((tag: string, index: number) => (
-                  <span key={index}>{`#${tag}`}</span>
-                ))}
+                {tags
+                  .filter((tag: string) => !tag.startsWith("__"))
+                  .map((tag: string, index: number) => (
+                    <span key={index}>{`#${tag}`}</span>
+                  ))}
               </PostTags>
             )}
           </PostMeta>

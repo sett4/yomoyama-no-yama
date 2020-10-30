@@ -38,6 +38,21 @@ function Search(): JSX.Element {
           }
         }
       }
+      incident: allIncident(filter: { tags: { in: "山岳事故" } }) {
+        edges {
+          node {
+            id
+            title
+            url
+            date(formatString: "DD [<span>] MMMM [</span>]")
+            publishedDate
+            tags
+            content
+            source
+            sourceName
+          }
+        }
+      }
     }
   `)
 

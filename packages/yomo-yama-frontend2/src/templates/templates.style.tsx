@@ -85,7 +85,7 @@ export const RelatedPostItem = styled.div`
     flex: 0 0 100%;
     max-width: 100%;
     &:nth-child(n + 2) {
-      margin-top: 50px;
+      // margin-top: 25px;
     }
   }
   .post_card {
@@ -239,6 +239,41 @@ export const BlogPostComment = styled.div`
   }
 `
 
+export const PostSource = styled.div`
+  display: block;
+  align: right;
+  text-align: right;
+  align-items: right;
+  > span {
+    flex-shrink: 0;
+  }
+  > div,
+  .react-share__ShareButton {
+    cursor: pointer;
+    margin-left: 25px;
+    font-size: 22px;
+    outline: 0;
+    color: ${themeGet("colors.textColor", "#292929")};
+    transition: 0.15s ease-in-out;
+    @media (max-width: 767px) {
+      font-size: 18px;
+      margin-left: 20px;
+    }
+    &:hover {
+      color: ${themeGet("colors.primary", "#D10068")};
+    }
+    svg {
+      display: block;
+    }
+  }
+  > a {
+    color: ${themeGet("colors.primary", "#D10068")};
+    &:hover {
+      color: ${themeGet("colors.primary", "#D10068")};
+    }
+  }
+`
+
 export const PostShare = styled.div`
   display: flex;
   align-items: center;
@@ -289,7 +324,7 @@ export const PostTags = styled.div`
   flex-wrap: wrap;
   align-items: center;
   @media (max-width: 575px) {
-    display: none;
+    // display: none;
   }
 
   a {
@@ -297,7 +332,7 @@ export const PostTags = styled.div`
     margin-right: 30px;
     font-size: 14px;
     font-weight: 400;
-    color: ${themeGet("primary", "#D10068")};
+    color: ${themeGet("colors.primary", "#D10068")};
     @media (max-width: 990px) {
       font-size: 13px;
       margin-right: 25px;

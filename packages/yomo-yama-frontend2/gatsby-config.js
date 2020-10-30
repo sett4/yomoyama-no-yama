@@ -1,15 +1,15 @@
-require('dotenv').config({
+require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
-});
+})
+const moment = require("moment")
 
 module.exports = {
   siteMetadata: {
-    title: `StoryHub`,
-    author: `Monnisa`,
-    about: `Breakfast procuring no end happiness allowance assurance frank. Met simplicity nor difficulty unreserved who. Entreaties mr conviction dissimilar me
-    astonished estimating cultivated.`,
-    description: `A Gatsby Blog`,
-    siteUrl: `https://storyhub-personal-tarex.redq.now.sh`,
+    title: `よもやまの山`,
+    author: `@sett4`,
+    about: `山に関する情報を集めています`,
+    description: `山の名前や山岳事故など山に関する情報を集めています。`,
+    siteUrl: `https://yama.4dir.com`,
   },
   plugins: [
     {
@@ -84,7 +84,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        //trackingId: `ADD YOUR TRACKING ID HERE`,
+        trackingId: `${process.env.GOOGLE_ANALYTICS_TRACKING_ID}`,
       },
     },
     {
@@ -93,10 +93,14 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `StoryHub - Personal Blog`,
-        short_name: `StoryHub`,
+        name: `よもやまの山`,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        short_name: `よも山`,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         start_url: `/`,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         background_color: `#ffffff`,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         theme_color: `#663399`,
         display: `minimal-ui`,
         icon: `content/assets/favicon.png`,
@@ -114,12 +118,12 @@ module.exports = {
     {
       resolve: `gatsby-plugin-lodash`,
     },
-    {
-      resolve: 'gatsby-plugin-mailchimp',
-      options: {
-        endpoint: '', // add your MC list endpoint here
-      },
-    },
+    // {
+    //   resolve: "gatsby-plugin-mailchimp",
+    //   options: {
+    //     endpoint: "", // add your MC list endpoint here
+    //   },
+    // },
     {
       resolve: `gatsby-source-instagram`,
       //add your instagram username, access_token and id below
@@ -144,5 +148,33 @@ module.exports = {
         ],
       },
     },
+    {
+      resolve: "gatsby-source-firestore",
+      options: {
+        credential: JSON.parse(process.env.FIRESTORE_CREDENTIAL_JSON),
+        types: [
+          {
+            type: "Incident",
+            collection: "incident",
+            map: (doc) => ({
+              title: doc.subject,
+              source: doc.source,
+              sourceName: doc.sourceName,
+              content: doc.content,
+              url: doc.url,
+              date: doc.date,
+              month: moment(doc.date).format("YYYY-MM"),
+              publishedDate: doc.publishedDate,
+              tags: doc.tags,
+              author: doc.author,
+              // author___NODE: doc.author.id,
+            }),
+          },
+        ],
+      },
+    },
+    {
+      resolve: "gatsby-plugin-netlify",
+    },
   ],
-};
+}

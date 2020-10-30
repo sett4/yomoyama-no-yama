@@ -11,6 +11,7 @@ import {
   PostDescription,
   PostTags,
 } from "./post-details.style"
+import { PostSource } from "../../templates/templates.style"
 
 type PostDetailsProps = {
   title: string
@@ -20,6 +21,8 @@ type PostDetailsProps = {
   tags?: []
   className?: string
   imagePosition?: "left" | "top"
+  url?: string
+  sourceName?: string
 }
 
 const PostDetails: React.FunctionComponent<PostDetailsProps> = ({
@@ -30,6 +33,8 @@ const PostDetails: React.FunctionComponent<PostDetailsProps> = ({
   tags,
   className,
   imagePosition,
+  url,
+  sourceName,
   ...props
 }) => {
   const addClass: string[] = ["post_details"]
@@ -85,19 +90,23 @@ const PostDetails: React.FunctionComponent<PostDetailsProps> = ({
         ) : (
           ""
         )}
-        <PostDescription
-          dangerouslySetInnerHTML={{ __html: description }}
-          className="post_des"
-        />
+        <PostDescription className="post_des">
+          <p>{description}</p>
+        </PostDescription>
         {tags == null ? null : (
           <PostTags>
-            {tags.map((tag, index) => (
-              <Link key={index} to={`/tags/${_.kebabCase(tag)}/`}>
-                {`#${tag}`}
-              </Link>
-            ))}
+            {tags
+              .filter((tag: string) => !tag.startsWith("__"))
+              .map((tag, index) => (
+                <Link key={index} to={`/tags/${_.kebabCase(tag)}/`}>
+                  {`#${tag}`}
+                </Link>
+              ))}
           </PostTags>
         )}
+        <PostSource>
+          source: <a href={url}>{sourceName}</a>
+        </PostSource>
       </PostDescriptionWrapper>
     </PostDetailsWrapper>
   )

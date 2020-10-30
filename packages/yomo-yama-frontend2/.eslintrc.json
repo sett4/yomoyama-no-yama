@@ -40,7 +40,7 @@
       "version": "detect"
     },
     "node": {
-      "tryExtensions": [".ts", ".tsx", ".js", ".json", ".node"]
+      "tryExtensions": [".ts", ".tsx", ".json", ".node"]
     }
   }
 }

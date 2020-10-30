@@ -10,14 +10,14 @@ const PersonalBlogPage = (props: any): JSX.Element => {
   return (
     <Layout>
       <SEO
-        title="Personal Blog"
+        title="よもやまの山"
         description={data.site.siteMetadata.description}
       />
       <PersonalBlog />
     </Layout>
   )
 }
-
+//#47a50d
 export default PersonalBlogPage
 
 export const pageQuery = graphql`
