@@ -85,7 +85,7 @@ export const pageQuery = graphql`
           id
           title
           url
-          date(formatString: "DD [<span>] MMMM [</span>]")
+          date(formatString: "YYYY-MM-DD")
           publishedDate
           tags
           content

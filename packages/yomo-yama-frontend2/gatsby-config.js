@@ -7,8 +7,8 @@ module.exports = {
   siteMetadata: {
     title: `よもやまの山`,
     author: `@sett4`,
-    about: `山に関する情報を集めています`,
-    description: `山の名前や山岳事故など山に関する情報を集めています。`,
+    about: `山にまつわることをちょっとづつ集めてます`,
+    description: `山にまつわることをちょっとづつ集めてます`,
     siteUrl: `https://yama.4dir.com`,
   },
   plugins: [
@@ -72,6 +72,21 @@ module.exports = {
           {
             resolve: `gatsby-remark-smartypants`,
           },
+          {
+            resolve: `gatsby-plugin-gdpr-cookies`,
+            options: {
+              googleAnalytics: {
+                trackingId: "UA-137755943-1",
+                // Setting this parameter is optional
+                anonymize: true,
+              },
+              facebookPixel: {
+                pixelId: "YOUR_FACEBOOK_PIXEL_ID",
+              },
+              // Defines the environments where the tracking should be available  - default is ["production"]
+              environments: ["production", "development"],
+            },
+          },
         ],
       },
     },
@@ -124,15 +139,15 @@ module.exports = {
     //     endpoint: "", // add your MC list endpoint here
     //   },
     // },
-    {
-      resolve: `gatsby-source-instagram`,
-      //add your instagram username, access_token and id below
-      options: {
-        // username: ,
-        // access_token: ,
-        // instagram_id: ,
-      },
-    },
+    // {
+    // resolve: `gatsby-source-instagram`,
+    //add your instagram username, access_token and id below
+    // options: {
+    // username: ,
+    // access_token: ,
+    // instagram_id: ,
+    // },
+    // },
     {
       resolve: `gatsby-plugin-prefetch-google-fonts`,
       options: {

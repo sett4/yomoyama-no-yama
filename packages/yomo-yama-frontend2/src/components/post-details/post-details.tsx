@@ -1,17 +1,15 @@
 import * as React from "react"
 import Img from "gatsby-image"
-import { Link } from "gatsby"
 import _ from "lodash"
 import {
   PostDetailsWrapper,
   PostTitle,
-  PostDate,
   PostPreview,
   PostDescriptionWrapper,
   PostDescription,
-  PostTags,
+  PostSource,
 } from "./post-details.style"
-import { PostSource } from "../../templates/templates.style"
+import { PostMetadata, PostDate } from "../post-card/post-card.style"
 
 type PostDetailsProps = {
   title: string
@@ -64,7 +62,6 @@ const PostDetails: React.FunctionComponent<PostDetailsProps> = ({
       {imagePosition == "top" ? (
         <>
           <PostTitle>{title}</PostTitle>
-          <PostDate>{date}</PostDate>
         </>
       ) : (
         ""
@@ -85,7 +82,6 @@ const PostDetails: React.FunctionComponent<PostDetailsProps> = ({
         {imagePosition == "left" ? (
           <>
             <PostTitle>{title}</PostTitle>
-            <PostDate>{date}</PostDate>
           </>
         ) : (
           ""
@@ -93,20 +89,23 @@ const PostDetails: React.FunctionComponent<PostDetailsProps> = ({
         <PostDescription className="post_des">
           <p>{description}</p>
         </PostDescription>
-        {tags == null ? null : (
-          <PostTags>
-            {tags
-              .filter((tag: string) => !tag.startsWith("__"))
-              .map((tag, index) => (
-                <Link key={index} to={`/tags/${_.kebabCase(tag)}/`}>
-                  {`#${tag}`}
-                </Link>
-              ))}
-          </PostTags>
-        )}
-        <PostSource>
-          source: <a href={url}>{sourceName}</a>
-        </PostSource>
+
+        <PostMetadata>
+          {date && (
+            <PostDate
+              dangerouslySetInnerHTML={{
+                __html: date,
+              }}
+              className="post_date"
+            />
+          )}
+          {sourceName == null ? null : (
+            <PostSource>
+              <span>sourceソース: </span>
+              <a href={url}>{sourceName}</a>
+            </PostSource>
+          )}
+        </PostMetadata>
       </PostDescriptionWrapper>
     </PostDetailsWrapper>
   )

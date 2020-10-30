@@ -94,8 +94,7 @@ export class YahooArticleScraper implements ArticleScraper {
   readonly source: string = "yj-news"
   readonly sourceName: string = "Yahoo! JAPAN ニュース"
 
-  readonly articleCssSelector: string =
-    "#ym_newsarticle div.articleMain div p.ynDetailText"
+  readonly articleCssSelector: string = "#uamods"
   readonly axios: AxiosInstance
 
   readonly NOT_INCIDENT_REGEXP: RegExp = /(指名式|追悼|指定式|発隊式|開始式|祈願|訓練を|開設|会議|ワニ|政府|地震|ヨット|訓示|注意点|約束|観光|感謝状|思いやり|急増している|命名|激撮|設置|運転|リニア|報告|出発式|社会貢献|閉所式|気がかり|結隊式|祈り|祈る|献花|追悼式|開幕|冥福|授業|遺族|復旧|慰霊)/
@@ -122,14 +121,10 @@ export class YahooArticleScraper implements ArticleScraper {
       let $ = cheerio.load(res.data)
       return $(this.articleCssSelector)
         .map((i, el) => {
-          let tmpUpdatedDate: string = $(
-            "#ym_newsarticle div div p.source"
-          ).text()
-          let subject: string = $("#ym_newsarticle div.hd h1").text()
-          let content: string = $(
-            "#ym_newsarticle div.articleMain div p.ynDetailText"
-          ).text()
-          let author: string = $(".ynCpName a").text()
+          let tmpUpdatedDate: string = $("#uamods footer time").text()
+          let subject: string = $("#uamods header h1").text()
+          let content: string = $("#uamods .article_body").text()
+          let author: string = $("#uamods .article_body > p").text()
 
           let date: moment.Moment
           try {

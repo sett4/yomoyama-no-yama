@@ -1,5 +1,5 @@
 import React from "react"
-import { graphql, Link } from "gatsby"
+import { graphql } from "gatsby"
 import _ from "lodash"
 import urljoin from "url-join"
 import { DiscussionEmbed } from "disqus-react"
@@ -7,6 +7,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PostDetails from "../components/post-details/post-details"
 import PostCard from "../components/post-card/post-card"
+
 import { FacebookShareButton, TwitterShareButton } from "react-share"
 import { IoLogoFacebook, IoLogoTwitter } from "react-icons/io"
 import {
@@ -54,6 +55,7 @@ const IncidentPostTemplate = (props: any): JSX.Element => {
           }
           url={post.url}
           sourceName={post.sourceName}
+          tags={post.tags}
         />
 
         <BlogPostFooter>
@@ -62,9 +64,7 @@ const IncidentPostTemplate = (props: any): JSX.Element => {
               {post.tags
                 .filter((tag: string) => !tag.startsWith("__"))
                 .map((tag: string, index: number) => (
-                  // <Link key={index} to={`/incident/tags/${_.kebabCase(tag)}/`}>
                   <span key={index}>{`#${tag}`}</span>
-                  // </Link>
                 ))}
             </PostTags>
           )}
@@ -118,7 +118,7 @@ export const pageQuery = graphql`
       content
       source
       sourceName
-      date
+      date(formatString: "YYYY-MM-DD")
       publishedDate
       tags
     }

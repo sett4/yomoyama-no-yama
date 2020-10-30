@@ -3,6 +3,9 @@ import { themeGet } from "@styled-system/theme-get"
 
 export const PostDetailsWrapper = styled.div`
   position: relative;
+  width: 870px;
+  margin-left: auto;
+  margin-right: auto;
 
   &.image_left {
     @media (min-width: 991px) {
@@ -56,20 +59,6 @@ export const PostTitle = styled.h1`
   }
 `
 
-export const PostDate = styled.span`
-  display: block;
-  font-size: ${themeGet("fontSizes.3", "15")}px;
-  color: ${themeGet("textColor", "#292929")};
-  font-weight: 400;
-  text-transform: uppercase;
-  @media (max-width: 990px) {
-    font-size: 14px;
-  }
-  @media (max-width: 575px) {
-    font-size: 13px;
-  }
-`
-
 export const PostPreview = styled.div`
   margin-top: 45px;
   position: relative;
@@ -97,7 +86,7 @@ export const PostPreview = styled.div`
 `
 
 export const PostDescriptionWrapper = styled.div`
-  margin-top: 90px;
+  margin-top: 40px;
   margin-left: auto;
   margin-right: auto;
   width: 870px;
@@ -251,17 +240,31 @@ export const PostDescription = styled.div`
   }
 `
 
-export const PostTags = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-top: 60px;
+// export const PostDate = styled.span`
+//   color: ${themeGet("textColor", "#292929")};
+//   margin-top: auto;
+//   margin-bottom: auto;
+// `
 
-  a {
-    display: block;
-    margin-right: 30px;
-    font-size: 14px;
-    font-weight: 400;
+// export const PostTags = styled.div`
+//   margin-top: auto;
+//   margin-bottom: auto;
+//   display: flex;
+
+//   a {
+//     display: block;
+//     margin-right: 30px;
+//     color: ${themeGet("colors.primary", "#D10068")};
+//   }
+// `
+
+export const PostSource = styled.div`
+  margin-top: 15px;
+  margin-bottom: auto;
+  > a {
     color: ${themeGet("colors.primary", "#D10068")};
+    &:hover {
+      color: ${themeGet("colors.primary", "#D10068")};
+    }
   }
 `

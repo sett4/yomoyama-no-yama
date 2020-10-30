@@ -98,7 +98,7 @@ export const pageQuery = graphql`
           content
           source
           sourceName
-          date(formatString: "DD [<span>] MMMM [</span>]")
+          date(formatString: "YYYY-MM-DD")
           publishedDate
           tags
         }

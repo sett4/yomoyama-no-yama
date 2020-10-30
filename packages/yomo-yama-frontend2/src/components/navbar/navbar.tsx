@@ -30,10 +30,6 @@ const MenuItems = [
     url: "/about",
   },
   {
-    label: "Contact",
-    url: "/contact",
-  },
-  {
     label: "山岳事故",
     url: "/incident",
   },

@@ -9,7 +9,7 @@ const PersonalBlog: React.FunctionComponent<PersonalBlogProps> = (props) => {
   return (
     <PersonalBlogWrapper {...props}>
       <Intro />
-      <Posts />
+      {/* <Posts /> */}
     </PersonalBlogWrapper>
   )
 }

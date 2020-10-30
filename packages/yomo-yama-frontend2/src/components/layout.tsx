@@ -6,9 +6,9 @@ import Navbar from "./navbar/navbar"
 // import Newsletter from "./newsletter/newsletter"
 import Footer from "./footer/footer"
 import ScrollUpButton from "./scroll-up-button/scroll-up-button"
-// import InstagramShowcase from "../containers/instagram-showcase"
 import ResetCss from "./reset-css"
 import { theme } from "../theme"
+import CookieConsent from "react-cookie-consent"
 
 type LayoutProps = {
   children: React.ReactNode
@@ -25,7 +25,6 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
 
         {children}
 
-        {/* <InstagramShowcase /> */}
         {/* <Newsletter /> */}
         <Footer>
           Copyright &copy; {new Date().getFullYear()}
@@ -39,6 +38,20 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
         >
           <ScrollUpButton />
         </ScrollToTop>
+        <CookieConsent
+          location="bottom"
+          buttonText="同意"
+          declineButtonText="却下"
+          style={{ background: "#2B373B" }}
+          buttonStyle={{ color: "#DDFFDD", background: "#367e0a" }}
+          cookieName="gatsby-gdpr-google-analytics"
+        >
+          当サイトはクッキーを利用しています。
+          <a style={{ color: "#8ff750" }} href="/about">
+            プライバシーポリシー
+          </a>
+          をご参照の上同意ボタンを押してください。
+        </CookieConsent>
       </>
     </ThemeProvider>
   )

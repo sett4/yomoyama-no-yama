@@ -3,12 +3,7 @@ import { useStaticQuery, graphql } from "gatsby"
 import Image from "gatsby-image"
 import SocialProfile from "../../../components/social-profile/social-profile"
 import { IntroWrapper, IntroImage, IntroTitle, Desciption } from "./style"
-import {
-  IoLogoFacebook,
-  IoLogoTwitter,
-  IoLogoInstagram,
-  IoLogoGithub,
-} from "react-icons/io"
+import { IoLogoTwitter, IoLogoInstagram, IoLogoGithub } from "react-icons/io"
 
 type IntroProps = {}
 

@@ -11,6 +11,7 @@ import {
   Excerpt,
   PostContent,
   PostTags,
+  PostMetadata,
 } from "./post-card.style"
 
 interface PostCardProps {
@@ -58,15 +59,6 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
       )}
 
       <PostDetails className="post_details">
-        {date && (
-          <PostDate
-            dangerouslySetInnerHTML={{
-              __html: date,
-            }}
-            className="post_date"
-          />
-        )}
-
         <PostContent className="post_content">
           <PostTitle className="post_title">
             <Link to={url}>{title}</Link>
@@ -80,17 +72,25 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
             />
           )}
 
-          {tags == null ? null : (
-            <PostTags className="post_tags">
-              {tags
-                .filter((tag: string) => !tag.startsWith("__"))
-                .map((tag: string, index: number) => (
-                  // <Link key={index} to={`/incident/tags/${_.kebabCase(tag)}/`}>
+          <PostMetadata>
+            {date && (
+              <PostDate
+                dangerouslySetInnerHTML={{
+                  __html: date,
+                }}
+                className="post_date"
+              />
+            )}
+            {tags == null ? null : (
+              <PostTags className="post_tags">
+                {tags
+                  .filter((tag: string) => !tag.startsWith("__"))
+                  .map((tag: string, index: number) => (
                   <span key={index}>{`#${tag}`}</span>
-                  // </Link>
                 ))}
-            </PostTags>
-          )}
+              </PostTags>
+            )}
+          </PostMetadata>
         </PostContent>
       </PostDetails>
     </PostCardWrapper>

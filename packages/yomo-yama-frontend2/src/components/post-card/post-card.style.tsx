@@ -28,40 +28,6 @@ export const PostDetails = styled.div`
   display: flex;
 `
 
-export const PostDate = styled.div`
-  font-size: 90px;
-  font-weight: 700;
-  text-align: center;
-  padding: 30px 35px 15px 35px;
-  margin-right: 20px;
-  line-height: 1;
-  color: ${themeGet("colors.textColor", "#292929")};
-  @media (max-width: 1200px) {
-    font-size: 70px;
-    padding: 25px 25px 15px 25px;
-    margin-right: 35px;
-  }
-  @media (max-width: 990px) {
-    font-size: 56px;
-    padding: 20px 20px 15px 20px;
-    margin-right: 25px;
-  }
-  @media (max-width: 575px) {
-    // display: none;
-    font-size: 26px;
-    padding: 10px 10px 7px 10px;
-    margin-right: 17px;
-  }
-
-  > span {
-    font-size: 13px;
-    font-weight: 400;
-    display: block;
-    margin-top: 12px;
-    text-transform: uppercase;
-  }
-`
-
 export const PostContent = styled.div`
   align-self: center;
 `
@@ -98,13 +64,42 @@ export const Excerpt = styled.p`
     font-size: 14px;
   }
 `
-
-export const PostTags = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+export const PostMetadata = styled.div`
+  // display: flex;
+  // @media (max-width: 575px) {
+  //   flex-direction: column;
+  // }
+`
+export const PostDate = styled.div`
+  display: block;
   align-items: center;
   margin-top: 15px;
+  margin-right: 15px;
+  font-size: 14px;
+  font-weight: 400;
+  color: ${themeGet("colors.textColor", "#292929")};
+  min-witth: 300px;
+  @media (max-width: 990px) {
+    font-size: 13px;
+    margin-right: 25px;
+  }
+`
+export const PostTags = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  flex: 1;
 
+  span {
+    display: block;
+    margin-right: 30px;
+    font-size: 14px;
+    font-weight: 400;
+    @media (max-width: 990px) {
+      font-size: 13px;
+      margin-right: 25px;
+    }
+  }
   a {
     display: block;
     margin-right: 30px;

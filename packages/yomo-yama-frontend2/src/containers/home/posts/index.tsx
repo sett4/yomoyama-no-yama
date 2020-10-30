@@ -34,7 +34,7 @@ const Posts: React.FunctionComponent<PostsProps> = () => {
               slug
             }
             frontmatter {
-              date(formatString: "DD [<span>] MMM [</span>]")
+              date(formatString: "YYYY-MM-DD")
               title
               description
               tags

@@ -74,5 +74,6 @@ dist/
 # credential
 mt-incident-*.json
 secret.yaml
+.env.*
 
 packages/yomo-yama-server/data/
