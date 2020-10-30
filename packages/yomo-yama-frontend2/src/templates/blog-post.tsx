@@ -84,7 +84,7 @@ const BlogPostTemplate = (props: any): JSX.Element => {
           </PostShare>
         </BlogPostFooter>
         <BlogPostComment>
-          <DiscussionEmbed {...disqusConfig} />
+          {/* <DiscussionEmbed {...disqusConfig} /> */}
         </BlogPostComment>
       </BlogPostDetailsWrapper>
 
