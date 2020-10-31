@@ -2,6 +2,7 @@ import * as React from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import Image from "gatsby-image"
 import SocialProfile from "../../components/social-profile/social-profile"
+// eslint-disable-next-line node/no-missing-import
 import { IoLogoTwitter, IoLogoInstagram, IoLogoGithub } from "react-icons/io"
 import {
   AboutWrapper,
