@@ -295,7 +295,8 @@ export const PostTags = styled.div`
     // display: none;
   }
 
-  a, span {
+  a,
+  span {
     display: block;
     margin-right: 30px;
     font-size: 14px;

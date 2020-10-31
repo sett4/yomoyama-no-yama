@@ -2,13 +2,13 @@ import React from "react"
 import { graphql } from "gatsby"
 import _ from "lodash"
 import urljoin from "url-join"
-import { DiscussionEmbed } from "disqus-react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PostDetails from "../components/post-details/post-details"
 import PostCard from "../components/post-card/post-card"
 
 import { FacebookShareButton, TwitterShareButton } from "react-share"
+// eslint-disable-next-line node/no-missing-import
 import { IoLogoFacebook, IoLogoTwitter } from "react-icons/io"
 import {
   BlogPostDetailsWrapper,
@@ -30,10 +30,10 @@ const IncidentPostTemplate = (props: any): JSX.Element => {
   const siteUrl = props.data.site.siteMetadata.siteUrl
   const shareUrl = urljoin(siteUrl, slug)
 
-  const disqusConfig = {
-    shortname: process.env.DISQUS_NAME,
-    config: { identifier: slug, title },
-  }
+  // const disqusConfig = {
+  //   shortname: process.env.DISQUS_NAME,
+  //   config: { identifier: slug, title },
+  // }
 
   const Months = props.data.month.edges
 
