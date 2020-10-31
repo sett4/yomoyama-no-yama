@@ -73,8 +73,8 @@ export const AboutImage = styled.div`
 `
 
 export const AboutDetails = styled.div`
-  width: 870px;
-  max-width: 100%;
+  max-width: 870px;
+  // max-width: 100%;
   margin: 0 auto;
 
   h2 {

@@ -3,6 +3,24 @@ import { themeGet } from "@styled-system/theme-get"
 
 export const PostCardWrapper = styled.div`
   position: relative;
+  margin: 0 auto;
+  padding: 30px 0 0 0;
+  max-width: 870px;
+  @media (min-width: 990px) {
+    width: 900px;
+  }
+  @media (min-width: 1200px) {
+    width: 1050px;
+  }
+  @media (min-width: 1400px) {
+    width: 1170px;
+  }
+  @media (max-width: 990px) {
+    padding: 25px 0 0 0;
+  }
+  @media (max-width: 575px) {
+    padding: 5px 0 0 0;
+  }
 `
 
 export const PostPreview = styled.div`

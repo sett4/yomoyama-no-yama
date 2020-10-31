@@ -3,7 +3,7 @@ import { themeGet } from "@styled-system/theme-get"
 
 export const PostDetailsWrapper = styled.div`
   position: relative;
-  width: 870px;
+  max-width: 870px;
   margin-left: auto;
   margin-right: auto;
 
@@ -89,7 +89,7 @@ export const PostDescriptionWrapper = styled.div`
   margin-top: 40px;
   margin-left: auto;
   margin-right: auto;
-  width: 870px;
+  max-width: 870px;
   max-width: 100%;
   @media (max-width: 1200px) {
     margin-top: 70px;
