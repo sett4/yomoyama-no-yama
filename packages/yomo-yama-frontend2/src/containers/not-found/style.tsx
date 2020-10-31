@@ -21,7 +21,7 @@ export const NotFoundWrapper = styled.div`
     padding: 80px 45px 0 45px;
   }
   @media (max-width: 575px) {
-    padding: 60px 25px 0 25px;
+    padding: 25px 25px 0 25px;
   }
 `
 

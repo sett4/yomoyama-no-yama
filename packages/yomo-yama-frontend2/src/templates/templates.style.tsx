@@ -164,11 +164,11 @@ export const TagPostsWrapper = styled.div`
     padding: 80px 45px 30px 45px;
   }
   @media (max-width: 575px) {
-    padding: 60px 25px 0 25px;
+    padding: 25px 25px 0 25px;
   }
 
   .post_card {
-    margin-bottom: 120px;
+    margin-bottom: 60px; // orig 120px
     &:last-child {
       margin-bottom: 0;
     }
@@ -184,7 +184,7 @@ export const TagPageHeading = styled.div`
   padding-left: 210px;
   font-size: 15px;
   font-weight: 400;
-  margin-bottom: 120px;
+  margin-bottom: 60px; // orig 120px
   position: relative;
   @media (max-width: 1200px) {
     padding-left: 160px;
@@ -270,7 +270,7 @@ export const PostShare = styled.div`
 `
 export const BlogPostDetailsWrapper = styled.div`
   margin: 0 auto;
-  padding: 90px 0 90px 0;
+  padding: 30px 0 0 0;
   @media (min-width: 990px) {
     width: 900px;
   }
@@ -284,7 +284,7 @@ export const BlogPostDetailsWrapper = styled.div`
     padding: 80px 45px 0 45px;
   }
   @media (max-width: 575px) {
-    padding: 60px 25px 0 25px;
+    padding: 25px 25px 0 25px;
   }
 `
 export const PostTags = styled.div`
