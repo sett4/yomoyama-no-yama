@@ -1,7 +1,8 @@
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
-const moment = require("moment")
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const dfns = require("date-fns")
 
 module.exports = {
   siteMetadata: {
@@ -130,6 +131,7 @@ module.exports = {
                     url:
                       site.siteMetadata.siteUrl + "/incident/" + edge.node.id,
                     guid: "/incident/" + edge.node.id,
+                    // eslint-disable-next-line @typescript-eslint/camelcase
                     custom_elements: [{ "content:encoded": edge.node.content }],
                   }
                 )
@@ -229,19 +231,28 @@ module.exports = {
           {
             type: "Incident",
             collection: "incident",
-            map: (doc) => ({
-              title: doc.subject,
-              source: doc.source,
-              sourceName: doc.sourceName,
-              content: doc.content,
-              url: doc.url,
-              date: doc.date,
-              month: moment(doc.date).format("YYYY-MM"),
-              publishedDate: doc.publishedDate,
-              tags: doc.tags,
-              author: doc.author,
-              // author___NODE: doc.author.id,
-            }),
+            map: (doc) => {
+              let month = null
+              try {
+                month = dfns.format(dfns.parseISO(doc.date), "yyyy-MM")
+              } catch (e) {
+                console.error(e)
+                console.error(`input value: ${doc.date} on ${doc.url}`)
+              }
+              return {
+                title: doc.subject,
+                source: doc.source,
+                sourceName: doc.sourceName,
+                content: doc.content,
+                url: doc.url,
+                date: doc.date,
+                month: month,
+                publishedDate: doc.publishedDate,
+                tags: doc.tags,
+                author: doc.author,
+                // author___NODE: doc.author.id,
+              }
+            },
           },
         ],
       },
