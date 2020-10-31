@@ -1,5 +1,5 @@
 import React from "react"
-import { graphql } from "gatsby"
+import { graphql, useStaticQuery } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import {
@@ -11,6 +11,7 @@ import {
 } from "../templates/templates.style"
 import { PostTitle } from "../components/post-card/post-card.style"
 import PostCard from "../components/post-card/post-card"
+import GatsbyImage from "gatsby-image"
 
 const IncidentPage = (props: any): JSX.Element => {
   const { data } = props
@@ -22,6 +23,7 @@ const IncidentPage = (props: any): JSX.Element => {
       <SEO title={`山岳事故 `} />
       <BlogPostsWrapper>
         <PostTitle className="post_title">{`山岳事故`}</PostTitle>
+        <GatsbyImage fluid={data.incidentImage.childImageSharp.fluid} />
         {Posts.map(({ node }: any) => {
           return (
             <PostCard
@@ -101,6 +103,13 @@ export const pageQuery = graphql`
           month
           started
           ended
+        }
+      }
+    }
+    incidentImage: file(absolutePath: { regex: "/incident.jpg/" }) {
+      childImageSharp {
+        fluid(maxWidth: 1770, quality: 90) {
+          ...GatsbyImageSharpFluid
         }
       }
     }
