@@ -129,8 +129,7 @@ module.exports = {
                     date: edge.node.date,
                     url:
                       site.siteMetadata.siteUrl + "/incident/" + edge.node.id,
-                    guid:
-                      site.siteMetadata.siteUrl + "/incident/" + edge.node.id,
+                    guid: "/incident/" + edge.node.id,
                     custom_elements: [{ "content:encoded": edge.node.content }],
                   }
                 )
@@ -151,13 +150,13 @@ module.exports = {
               }
             }
             `,
-            output: "/rss.xml",
-            title: "よもやまの山 RSS Feed",
+            output: "/incident-rss-feed.xml",
+            title: "よもやまの山 山岳事故",
             // optional configuration to insert feed reference in pages:
             // if `string` is used, it will be used to create RegExp and then test if pathname of
             // current page satisfied this regular expression;
             // if not provided or `undefined`, all pages will have feed reference inserted
-            // match: "^/",
+            match: "^/incident/",
             // optional configuration to specify external rss feed, such as feedburner
             // link: "https://feeds.feedburner.com/gatsby/blog",
           },
