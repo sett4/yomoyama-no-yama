@@ -245,7 +245,7 @@ module.exports = {
                 sourceName: doc.sourceName,
                 content: doc.content,
                 url: doc.url,
-                date: doc.date,
+                date: dfns.formatISO(dfns.parseISO(doc.date)),
                 month: month,
                 publishedDate: doc.publishedDate,
                 tags: doc.tags,

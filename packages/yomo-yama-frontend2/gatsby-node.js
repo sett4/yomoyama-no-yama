@@ -1,8 +1,9 @@
 const path = require(`path`)
 const _ = require("lodash")
 const { createFilePath } = require(`gatsby-source-filesystem`)
-const moment = require(`moment`)
+// const moment = require(`moment`)
 const slash = require(`slash`)
+const dfns = require("date-fns")
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage, createRedirect } = actions
@@ -234,12 +235,12 @@ exports.sourceNodes = ({
     // Gatsby uses Redux to manage its internal state.
     // Plugins and sites can use functions like "createPage"
     // to interact with Gatsby.
-    const month = moment(node.date).format(`YYYY-MM`)
+    const month = dfns.format(dfns.parseISO(node.date), `yyyy-MM`)
     if (!monthDataMap.has(month)) {
       monthDataMap.set(month, {
         month: month,
-        started: moment(node.date).startOf("month").format(),
-        ended: moment(node.date).endOf("month").format(),
+        started: dfns.formatISO(dfns.startOfMonth(dfns.parseISO(node.date))),
+        ended: dfns.formatISO(dfns.endOfMonth(dfns.parseISO(node.date))),
         count: 1,
         children: [],
       })
