@@ -87,7 +87,10 @@ export const pageQuery = graphql`
       path
     }
     incident: allIncident(
-      filter: { tags: { in: "山岳事故" }, date: { gte: $started, lte: $ended } }
+      filter: {
+        tags: { in: "山岳事故", ne: "hidden" }
+        date: { gte: $started, lte: $ended }
+      }
       sort: { fields: [date, publishedDate] }
     ) {
       edges {

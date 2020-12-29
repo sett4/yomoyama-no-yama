@@ -79,7 +79,7 @@ export const pageQuery = graphql`
     }
     incident: allIncident(
       limit: 50
-      filter: { tags: { in: "山岳事故" } }
+      filter: { tags: { in: "山岳事故", ne: "hidden" } }
       sort: { fields: [date, publishedDate], order: DESC }
     ) {
       edges {

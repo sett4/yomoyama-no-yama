@@ -38,7 +38,9 @@ function Search(): JSX.Element {
           }
         }
       }
-      incident: allIncident(filter: { tags: { in: "山岳事故" } }) {
+      incident: allIncident(
+        filter: { tags: { in: "山岳事故", ne: "hidden" } }
+      ) {
         edges {
           node {
             id

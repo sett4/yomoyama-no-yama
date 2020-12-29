@@ -139,7 +139,7 @@ module.exports = {
             },
             query: `
             {
-              allIncident(sort: {order: DESC, fields: [date]}, limit: 50, filter: { tags: { in: "山岳事故" } }) {
+              allIncident(sort: {order: DESC, fields: [date]}, limit: 50, filter: { tags: { in: "山岳事故", ne: "hidden" } }) {
                 edges {
                   node {
                     content

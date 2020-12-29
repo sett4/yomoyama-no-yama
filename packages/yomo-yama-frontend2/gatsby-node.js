@@ -23,7 +23,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const incidentList = await graphql(
     `
       {
-        allIncident(filter: { tags: { in: "山岳事故" } }) {
+        allIncident(filter: { tags: { in: "山岳事故", ne: "hidden" } }) {
           edges {
             node {
               id
@@ -229,7 +229,7 @@ exports.sourceNodes = ({
 
   // 全記事から月別のノードを作る
   const allIncidentNodes = getNodesByType(`Incident`).filter(
-    (n) => n.tags && n.tags.includes("山岳事故")
+    (n) => n.tags && n.tags.includes("山岳事故") && !n.tags.includes("hidden")
   )
   _.each(allIncidentNodes, async (node) => {
     // Gatsby uses Redux to manage its internal state.
