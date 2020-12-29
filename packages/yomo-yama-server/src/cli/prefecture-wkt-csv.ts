@@ -1,10 +1,12 @@
 import fs from "fs"
 import zlib from "zlib"
-import JSONStream from "JSONStream"
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const JSONStream = require("JSONStream")
 import { logger } from "../logger"
 import csv from "fast-csv"
 
-import minimist = require("minimist")
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const minimist = require("minimist")
 const argv = minimist(process.argv.slice(2))
 
 const csvStream = csv.format({ headers: true })
@@ -13,10 +15,10 @@ csvStream.pipe(process.stdout).on("end", process.exit)
 fs.createReadStream("./data/N03-19_190101.geojson.gz")
   .pipe(zlib.createGunzip())
   .pipe(JSONStream.parse("features.*"))
-  .on("data", chunk => {
+  .on("data", (chunk: any) => {
     const polygon: Array<number[]> = chunk.geometry.coordinates[0]
     const points = polygon
-      .map(coordinate => `${coordinate[0]} ${coordinate[1]}`)
+      .map((coordinate) => `${coordinate[0]} ${coordinate[1]}`)
       .join(",")
     const wkt = `POLYGON((${points}))`
     const line = {

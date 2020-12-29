@@ -8,18 +8,112 @@ export interface ArticleRepository {
   findAll(source: string): Promise<IncidentArticle[]>
 }
 
+class StaticKey implements ArticleKey {
+  id: string
+  constructor(id: string) {
+    this.id = id
+  }
+
+  getId(): string {
+    return this.id
+  }
+}
+
+export class SingleArticleKey {
+  source: string
+  url: string
+  constructor(source: string, url: string) {
+    this.source = source
+    this.url = url
+  }
+
+  getId(): string {
+    const hash = crypto.createHash("sha256")
+    hash.update(this.source)
+    hash.update(this.url)
+    return this.source + "." + hash.digest("hex")
+  }
+}
+
+export class IncidentArticle {
+  source: string
+  url: string
+  subject: string
+  content: string
+  publishedDate: string
+  processedDate: Date
+  tags: Set<string> = new Set<string>()
+  date: string
+  sourceName: string
+  author: string
+  public scraper = ""
+  public keyCreator: ArticleKeyCreator
+
+  constructor(
+    source: string,
+    sourceName: string,
+    url: string,
+    subject: string,
+    content: string,
+    date: string,
+    publishedDate: string,
+    processedDate: Date,
+    author: string
+  ) {
+    this.source = source
+    this.sourceName = sourceName
+    this.url = url
+    this.subject = subject
+    this.content = content
+    this.publishedDate = publishedDate
+    this.processedDate = processedDate
+    this.date = date
+    this.author = author
+    this.keyCreator = (a): SingleArticleKey =>
+      new SingleArticleKey(a.source, a.url)
+  }
+
+  toKey(): ArticleKey {
+    return this.keyCreator(this)
+  }
+
+  toData(): any {
+    const tags: string[] = []
+    this.tags.forEach(v => tags.push(v))
+
+    return {
+      source: this.source,
+      sourceName: this.sourceName,
+      url: this.url,
+      subject: this.subject,
+      content: this.content,
+      date: this.date,
+      publishedDate: this.publishedDate,
+      processedDate: this.processedDate,
+      tags: tags,
+      scraper: this.scraper,
+      author: this.author || "",
+    }
+  }
+}
+
 export class EmptyArticleRepository implements ArticleRepository {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   exists(key: ArticleKey): boolean {
     throw new Error("Method not implemented.")
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   save(article: any): Promise<any> {
     return new Promise<any>(resolve => {
-      resolve()
+      resolve(article)
     })
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load(key: ArticleKey): Promise<IncidentArticle> {
     throw new Error("Method not implemented.")
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   findAll(source: string): Promise<IncidentArticle[]> {
     throw new Error("Method not implemented.")
   }
@@ -33,18 +127,26 @@ export class FirestoreArticleRepository implements ArticleRepository {
     this.db = firestore
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   exists(key: ArticleKey): boolean {
     throw new Error("Method not implemented.")
   }
+
   save(article: IncidentArticle): Promise<any> {
+    const data = article.toData()
+    data.tags = admin.firestore.FieldValue.arrayUnion(...data.tags)
     return this.db
       .collection(this.COLLECTION_ARTICLE)
       .doc(article.toKey().getId())
-      .set(article.toData())
+      .update(data)
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load(key: ArticleKey): Promise<IncidentArticle> {
     throw new Error("Method not implemented.")
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   findAll(source: string): Promise<IncidentArticle[]> {
     return this.db
       .collection(this.COLLECTION_ARTICLE)
@@ -75,7 +177,7 @@ export class FirestoreArticleRepository implements ArticleRepository {
             article.tags = new Set<string>(d.tags)
           }
           if (s.id) {
-            article.keyCreator = article => new StaticKey(s.id)
+            article.keyCreator = (): StaticKey => new StaticKey(s.id)
           }
           return article
         })
@@ -83,79 +185,8 @@ export class FirestoreArticleRepository implements ArticleRepository {
   }
 }
 
-class StaticKey implements ArticleKey {
-  id: string
-  constructor(id: string) {
-    this.id = id
-  }
-
-  getId(): string {
-    return this.id
-  }
-}
-
 export interface IndexScraper {
   getArticleUrls(): Promise<string[]>
-}
-export class IncidentArticle {
-  source: string
-  url: string
-  subject: string
-  content: string
-  publishedDate: string
-  processedDate: Date
-  tags: Set<string> = new Set<string>()
-  date: string
-  sourceName: string
-  author: string
-  public scraper: string = ""
-  public keyCreator: ArticleKeyCreator
-
-  constructor(
-    source: string,
-    sourceName: string,
-    url: string,
-    subject: string,
-    content: string,
-    date: string,
-    publishedDate: string,
-    processedDate: Date,
-    author: string
-  ) {
-    this.source = source
-    this.sourceName = sourceName
-    this.url = url
-    this.subject = subject
-    this.content = content
-    this.publishedDate = publishedDate
-    this.processedDate = processedDate
-    this.date = date
-    this.author = author
-    this.keyCreator = a => new SingleArticleKey(a.source, a.url)
-  }
-
-  toKey(): ArticleKey {
-    return this.keyCreator(this)
-  }
-
-  toData(): any {
-    let tags: string[] = []
-    this.tags.forEach(v => tags.push(v))
-
-    return {
-      source: this.source,
-      sourceName: this.sourceName,
-      url: this.url,
-      subject: this.subject,
-      content: this.content,
-      date: this.date,
-      publishedDate: this.publishedDate,
-      processedDate: this.processedDate,
-      tags: tags,
-      scraper: this.scraper,
-      author: this.author || "",
-    }
-  }
 }
 
 export interface ArticleKey {
@@ -174,26 +205,10 @@ export class MultipleArticleKey {
   }
 
   getId(): string {
-    let hash = crypto.createHash("sha256")
+    const hash = crypto.createHash("sha256")
     hash.update(this.source)
     hash.update(this.url)
     hash.update(this.subject)
-    return this.source + "." + hash.digest("hex")
-  }
-}
-
-export class SingleArticleKey {
-  source: string
-  url: string
-  constructor(source: string, url: string) {
-    this.source = source
-    this.url = url
-  }
-
-  getId(): string {
-    let hash = crypto.createHash("sha256")
-    hash.update(this.source)
-    hash.update(this.url)
     return this.source + "." + hash.digest("hex")
   }
 }

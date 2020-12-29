@@ -24,12 +24,11 @@
     "posttest": "npm run lint",
     "lint": "eslint ./src/**.ts ./src/*.ts",
     "start": "node ./dist/index.js",
-    "gcp-build": "tsc -v -p ./ --outDir ./dist",
+    "gcp-build": "tsc -p tsconfig-prod.json",
     "deploy": "gcloud app deploy",
     "watch": "tsc -w -p ./",
     "prefecture-wkt-csv": "ts-node -T ./src/cli/prefecture-wkt-csv.ts",
     "dev": "NODE_ENV=development nodemon --exec ts-node -T ./src/index.ts"
-    "preinstall": "npm install typescript"
   },
   "bugs": {
     "url": "https://github.com/sett4/yomoyama-no-yama/issues"
@@ -75,9 +74,9 @@
     "proj4": "^2.5.0",
     "prop-types": "^15.7.2",
     "shallow-equal-object": "^1.1.1",
+    "typescript": "^3.9.7",
     "url-parse": "^1.4.4",
-    "winston": "^3.2.1",
-    "typescript": "^3.7.5"
+    "winston": "^3.2.1"
   },
   "jest": {
     "transform": {
