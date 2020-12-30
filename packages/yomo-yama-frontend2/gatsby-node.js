@@ -98,7 +98,7 @@ exports.createPages = async ({ graphql, actions }) => {
     result.data.allIncidentMonthly.nodes.forEach(async (e) => {
       const nodeContent = JSON.stringify(e)
 
-      console.log(`create monthly incident index ${e.month}`)
+      console.info(`create monthly incident index ${e.month}`)
       await createPage({
         path: `/incident/${e.month}/`,
         component: slash(incidentMonthlyTemplate),
@@ -268,7 +268,7 @@ exports.sourceNodes = ({
     }
     const node = Object.assign({}, e, nodeMeta)
     await createNode(node)
-    console.log(`create node ${e.month}`)
+    console.info(`create node ${e.month}`)
   })
 }
 

@@ -27,18 +27,18 @@ export class Np24ArticleScraper implements ArticleScraper {
 
   async scrape(url: string): Promise<IncidentArticle[]> {
     console.info(`updating ${url} , source ${this.source}`)
-    let articles: IncidentArticle[] = await this.axios.get(url).then(res => {
-      let $ = cheerio.load(res.data)
-      let tmpUpdatedDate = $("#tmp_update").text()
-      let tmpDate = $("#tmp_readcontents h1").text()
-      let author = "長野県警察"
+    const articles: IncidentArticle[] = await this.axios.get(url).then(res => {
+      const $ = cheerio.load(res.data)
+      const tmpUpdatedDate = $("#tmp_update").text()
+      const tmpDate = $("#tmp_readcontents h1").text()
+      const author = "長野県警察"
       return $(this.articleCssSelector)
         .map((i, el) => {
-          let subject: string = $(el).text()
-          let content: string = $(el)
+          const subject: string = $(el).text()
+          const content: string = $(el)
             .next("p")
             .text()
-          let publishedDate = moment
+          const publishedDate = moment
             .tz(
               tmpUpdatedDate
                 .replace(/更新日：|日/g, "")
@@ -48,8 +48,8 @@ export class Np24ArticleScraper implements ArticleScraper {
             )
             .tz("Asia/Tokyo")
             .startOf("day")
-          let publishedDateStr: string = publishedDate.format()
-          let date = moment
+          const publishedDateStr: string = publishedDate.format()
+          const date = moment
             .tz(
               publishedDate.year() +
                 "-" +
@@ -62,8 +62,8 @@ export class Np24ArticleScraper implements ArticleScraper {
           if (date.isAfter(publishedDate)) {
             date.subtract(1, "year")
           }
-          let dateStr = date.format()
-          let article = new IncidentArticle(
+          const dateStr = date.format()
+          const article = new IncidentArticle(
             this.source,
             this.sourceName,
             url,
@@ -74,7 +74,7 @@ export class Np24ArticleScraper implements ArticleScraper {
             new Date(),
             author
           )
-          article.keyCreator = a =>
+          article.keyCreator = (a): MultipleArticleKey =>
             new MultipleArticleKey(a.source, a.url, a.subject)
 
           if (this.isMountainIncident(article)) {

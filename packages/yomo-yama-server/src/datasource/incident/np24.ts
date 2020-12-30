@@ -1,18 +1,16 @@
 import * as cheerio from "cheerio"
-import axios, { AxiosStatic, AxiosInstance } from "axios"
-import * as Url from "url"
+import axios, { AxiosInstance } from "axios"
 import UrlParse from "url-parse"
-import moment from "moment-timezone"
 
-import { IncidentArticle, ArticleRepository, ArticleKey, IndexScraper } from "."
+import { IndexScraper } from "."
 
 export default class Np24Scraper implements IndexScraper {
-  indexCssSelector: string = "tr td p a"
-  articleCssSelector: string = "#tmp_readcontents h2"
+  indexCssSelector = "tr > td > span > a"
+  articleCssSelector = "#tmp_readcontents h2"
   baseUrl: string
   origin: string
-  source: string = "np24"
-  sourceName: string = "長野県警ニュース24時"
+  source = "np24"
+  sourceName = "長野県警ニュース24時"
   axios: AxiosInstance
 
   constructor(baseUrl?: string) {
@@ -29,8 +27,8 @@ export default class Np24Scraper implements IndexScraper {
     })
   }
   async getArticleUrls(): Promise<string[]> {
-    let urls: string[] = await this.axios
-      .get("https://www.pref.nagano.lg.jp/police/news24/index.html")
+    const urls: string[] = await this.axios
+      .get(this.baseUrl)
       .then(res => {
         const $ = cheerio.load(res.data)
         const urls = $(this.indexCssSelector)
@@ -45,7 +43,7 @@ export default class Np24Scraper implements IndexScraper {
       })
 
     return urls.map(url => {
-      var fullUrl: string
+      let fullUrl: string
       if (url.startsWith("/")) {
         fullUrl = this.origin + url
       } else {

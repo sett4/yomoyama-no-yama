@@ -132,13 +132,27 @@ export class FirestoreArticleRepository implements ArticleRepository {
     throw new Error("Method not implemented.")
   }
 
-  save(article: IncidentArticle): Promise<any> {
+  async save(article: IncidentArticle): Promise<any> {
     const data = article.toData()
-    data.tags = admin.firestore.FieldValue.arrayUnion(...data.tags)
-    return this.db
-      .collection(this.COLLECTION_ARTICLE)
-      .doc(article.toKey().getId())
-      .update(data)
+    if (data.tags && data.tags.length > 0) {
+      data.tags = admin.firestore.FieldValue.arrayUnion(...data.tags)
+    } else {
+      delete data.tags
+    }
+
+    try {
+      await this.db
+        .collection(this.COLLECTION_ARTICLE)
+        .doc(article.toKey().getId())
+        .update(data)
+    } catch (err) {
+      if (err.message.startsWith("5 NOT_FOUND")) {
+        await this.db
+          .collection(this.COLLECTION_ARTICLE)
+          .doc(article.toKey().getId())
+          .set(article.toData())
+      }
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
