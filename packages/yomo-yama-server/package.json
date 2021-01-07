@@ -67,7 +67,7 @@
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
-    "fast-csv": "^2.4.1",
+    "fast-csv": "^4.3.6",
     "firebase-admin": "^8.9.2",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.23",
