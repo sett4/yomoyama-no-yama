@@ -109,7 +109,7 @@ export class YahooArticleScraper implements ArticleScraper {
   }
 
   canAccept(url: string): boolean {
-    return url.startsWith("https://headlines.yahoo.co.jp/hl")
+    return url.startsWith("https://news.yahoo.co.jp/articles/")
   }
 
   async scrape(url: string): Promise<IncidentArticle[]> {
