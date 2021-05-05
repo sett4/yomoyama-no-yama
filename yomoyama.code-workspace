@@ -1,9 +1,6 @@
 {
   "folders": [
     {
-      "path": "packages/yomo-yama-frontend"
-    },
-    {
       "path": "packages/yomo-yama-server"
     },
     {

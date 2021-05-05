@@ -1,9 +1,9 @@
 cron:
   - description: "update Nagano Police 24 oclock"
-    url: /datasource/mountain/np24/update
+    url: /datasource/mountain/incident/np24/update
     schedule: every 12 hours
   - description: "update Yahoo News"
-    url: /datasource/mountain/yahoo/update
+    url: /datasource/mountain/incident/yahoo/update
     schedule: every 6 hours
   - description: "update netlify"
     url: /generate
