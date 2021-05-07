@@ -75,7 +75,7 @@
     "prop-types": "^15.7.2",
     "shallow-equal-object": "^1.1.1",
     "typescript": "^3.9.7",
-    "url-parse": "^1.4.4",
+    "url-parse": "^1.5.0",
     "winston": "^3.2.1"
   },
   "jest": {
