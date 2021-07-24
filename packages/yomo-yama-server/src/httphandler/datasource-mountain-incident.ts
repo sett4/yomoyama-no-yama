@@ -3,11 +3,13 @@ import { Express } from "express"
 import {
   ArticleRepository,
   FirestoreArticleRepository,
+  IncidentArticle,
   IndexScraper,
 } from "../datasource/incident"
 import Np24Scraper from "../datasource/incident/np24"
 import { ArticleScrapers } from "../datasource/incident/scraper"
 import YahooIndexScraper from "../datasource/incident/yahoo"
+import { log } from "../logger"
 
 const registerHandler = function(
   app: Express,
@@ -19,30 +21,27 @@ const registerHandler = function(
 
   async function update(
     repository: ArticleRepository,
-    indexScraper: IndexScraper,
-    logger: Logger
+    indexScraper: IndexScraper
   ): Promise<void> {
-    logger.info("updateing " + indexScraper.constructor.name)
+    log.info(`updateing ${indexScraper.constructor.name}`)
     const articleScrapers = new ArticleScrapers()
     const articleUrls = await indexScraper.getArticleUrls()
 
-    const articlePromise = articleUrls.map(url => {
-      return articleScrapers.scrape(url)
-    })
-    const allPromise = await Promise.all(articlePromise)
-    const allArticle = allPromise
-      .reduce((acc, curr) => acc.concat(curr), [])
-      .filter(a => a)
+    const allArticle: IncidentArticle[] = []
+    for (const url of articleUrls) {
+      const articles = await articleScrapers.scrape(url)
+      allArticle.push(...articles)
+    }
+    log.info(`extract ${allArticle.length} articles.`)
 
-    logger.info(`extract ${allArticle.length} articles.`)
     if (allArticle.length == 0) {
-      logger.error(`article extraction result is 0. something went wrong?`)
+      log.error(`article extraction result is 0. something went wrong?`)
     }
 
-    Promise.all(
-      allArticle.map(article => {
-        logger.info(`${article.url} ${article.toKey().getId()}`)
-        return repository.save(article)
+    await Promise.all(
+      allArticle.map(async article => {
+        log.info(`saving article ${article.url} ${article.toKey().getId()}`)
+        return await repository.save(article)
       })
     )
   }
@@ -61,7 +60,7 @@ const registerHandler = function(
     }
     req.log.info("updateing np24")
     const indexScraper = new Np24Scraper()
-    await update(repository, indexScraper, req.log)
+    await update(repository, indexScraper)
     res.send("OK")
   })
 
@@ -75,7 +74,7 @@ const registerHandler = function(
     }
     req.log.info("updateing yahoo")
     const indexScraper = new YahooIndexScraper()
-    await update(repository, indexScraper, req.log)
+    await update(repository, indexScraper)
     res.send("OK")
   })
 
@@ -120,7 +119,13 @@ const registerHandler = function(
     const articles = await repository.findAll("yj-news")
     req.log.info(`loaded ${articles.length} articles`)
 
-    const hiddenKeys: Array<String> = []
+    const hiddenKeys: Array<String> = [
+      "yj-news.e82b261f694b342b01e7934cfb642294c35334730b26fc6c9a80ee62d74137a2",
+      "yj-news.c46a3d58e0cd574533b9acad0589ed80bea09a7d80bc04b49d2bc1c669467afd",
+      "yj-news.4bcb43bf0d299931f76eb81527da1cd29c426153cf0f54b43d78c800fcdfd66f",
+      "yj-news.f047011becbc1c81f49b49da9021691fa5ed256392f80ce8c126a9b4067fad4e",
+      "yj-news.e50eecd9e545d3112e0a3dfef7d4d5be4df0b78f1fe54dfbb695066ef1979cdb",
+    ]
     const modifiedArticles = articles
       .filter(a => a.tags.has("山岳事故") && !a.tags.has("hidden"))
       .filter(a => hiddenKeys.includes(a.toKey().getId()))
@@ -144,18 +149,16 @@ const registerHandler = function(
     const articleUrls = await indexScraper.getArticleUrls()
 
     const articleScrapers = new ArticleScrapers()
-    const articlePromise = articleUrls.map(url => {
-      return articleScrapers.scrape(url)
-    })
-    const allPromise = await Promise.all(articlePromise)
-    const allArticle = allPromise
-      .reduce((acc, curr) => acc.concat(curr), [])
-      .filter(a => a)
-      .map(a => a.toData())
-
+    const allArticle: IncidentArticle[] = []
+    for (const url of articleUrls) {
+      const articles = await articleScrapers.scrape(url)
+      allArticle.push(...articles)
+    }
     req.log.info(`extract ${allArticle.length} articles.`)
 
-    res.send(allArticle)
+    const allArticleData = allArticle.map(a => a.toData())
+
+    res.send(allArticleData)
   })
 }
 

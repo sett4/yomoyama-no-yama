@@ -1,4 +1,4 @@
-import * as csv from "fast-csv"
+import { parseStream } from "@fast-csv/parse"
 import axios from "axios"
 import { Readable } from "stream"
 import * as admin from "firebase-admin"
@@ -62,8 +62,7 @@ export class IndexImporter {
 
   importIndex(stream: Readable): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      csv
-        .fromStream(stream)
+      parseStream(stream)
         .on("data", (data: any[]) => {
           const v = new IndexValueObject(
             this.type,
