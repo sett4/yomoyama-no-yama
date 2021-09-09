@@ -39,7 +39,7 @@ function Search(): JSX.Element {
         }
       }
       incident: allIncident(
-        filter: { tags: { in: "山岳事故", ne: "hidden" } }
+        filter: { tags: { in: "山岳事故", ne: "__hidden" } }
       ) {
         edges {
           node {

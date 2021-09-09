@@ -10,7 +10,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/nodemon/bin/nodemon.js",
       "args": ["--exec", "ts-node ", "-T", "./src/index.ts"],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "mt-incident-30a91a6f1de7.json"
+      }
     },
     {
       "type": "node",
