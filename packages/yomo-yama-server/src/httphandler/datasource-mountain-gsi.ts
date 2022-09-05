@@ -3,7 +3,7 @@ import fs from "fs"
 import zlib from "zlib"
 import { IndexImporter } from "../datasource/mountain/gsi/convert2db"
 
-const registerHandler = function(
+const registerHandler = async function(
   app: Express,
   firestore: FirebaseFirestore.Firestore
 ) {
