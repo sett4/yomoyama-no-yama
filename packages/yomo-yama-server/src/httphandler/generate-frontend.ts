@@ -1,18 +1,18 @@
-import { Logger } from "@google-cloud/logging-bunyan/build/src/middleware/express"
 import axios from "axios"
 import { Express } from "express"
+import { getLogger } from "../logger"
 
-const registerHandler = function(
+const registerHandler = async function(
   app: Express,
   firestore: FirebaseFirestore.Firestore
 ) {
-  async function notifyToNetlify(logger: Logger): Promise<void> {
+  async function notifyToNetlify(): Promise<void> {
     if (process.env.NETLIFY_HOOK_URL) {
       const hookUrl: string = process.env.NETLIFY_HOOK_URL
       await axios.post(hookUrl, {})
-      logger.info(`nofity to netlify ${hookUrl}`)
+      getLogger().info(`nofity to netlify ${hookUrl}`)
     } else {
-      logger.info(
+      getLogger().info(
         "netlify rebuild hook skipped. due to process.env.NETLIFY_HOOK_URL is empty."
       )
     }
@@ -20,7 +20,7 @@ const registerHandler = function(
   }
 
   app.get("/generate", async (req, res) => {
-    await notifyToNetlify(req.log)
+    await notifyToNetlify()
     res.send("UPDATED")
   })
 }

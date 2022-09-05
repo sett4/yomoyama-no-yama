@@ -3,13 +3,13 @@ import { registerHandler as registerMountainGsiHandler } from "./datasource-moun
 import { registerHandler as registerGenerateFrontend } from "./generate-frontend"
 import { Express } from "express"
 
-const registerHandler = function(
+const registerHandler = async function(
   app: Express,
   firestore: FirebaseFirestore.Firestore
 ) {
-  registerMountainGsiHandler(app, firestore)
-  registerMountainIncidentHandler(app, firestore)
-  registerGenerateFrontend(app, firestore)
+  await registerMountainGsiHandler(app, firestore)
+  await registerMountainIncidentHandler(app, firestore)
+  await registerGenerateFrontend(app, firestore)
 }
 
 export default { registerHandler }

@@ -1,24 +1,42 @@
-import bunyan from "bunyan"
-import * as lb from "@google-cloud/logging-bunyan"
-import { Express } from "express"
+import winston, { Logger } from "winston"
+import * as lw from "@google-cloud/logging-winston"
+import { Express, Request, RequestHandler, Response } from "express"
+import { createNamespace } from "cls-hooked"
 
-const useCloudLoggingBunyan = async function(app: Express) {
-  const md = await lb.express.middleware({
-    logName: "yomoyama-server",
-  })
-  app.use(md.mw)
-}
+const loggingWinston = new lw.LoggingWinston()
 
-// Creates a Bunyan Cloud Logging client
-const loggingBunyan = new lb.LoggingBunyan()
-
-const streams: bunyan.Stream[] = [loggingBunyan.stream("trace")]
-if (process.env.NODE_ENV == "development") {
-  streams.push({ stream: process.stdout, level: "trace" })
-}
-const log = bunyan.createLogger({
-  name: "yomoyama-server",
-  streams: streams,
+const log = winston.createLogger({
+  level: "debug",
+  transports: [
+    new winston.transports.Console(),
+    // Add Cloud Logging
+    loggingWinston,
+  ],
 })
 
-export { useCloudLoggingBunyan, log }
+const applicationNamespace = createNamespace("app-log-ctx")
+const useClsLogging = function(app: Express) {
+  const attachContext: RequestHandler = (req, res, next) => {
+    applicationNamespace.run(() => next())
+  }
+
+  const setLogger: RequestHandler = (req, res, next) => {
+    applicationNamespace.set("LOGGER", req.log)
+
+    next()
+  }
+
+  app.use(attachContext, setLogger)
+}
+
+const getLogger = (): Logger => {
+  return applicationNamespace.get("LOGGER") || log
+}
+
+const useCloudLogging = async function(app: Express) {
+  const mw = await lw.express.makeMiddleware(log)
+
+  app.use(mw)
+}
+
+export { useCloudLogging, log, useClsLogging, getLogger }

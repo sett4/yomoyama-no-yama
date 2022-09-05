@@ -4,7 +4,7 @@ import { IncidentArticle } from ".."
 import * as moment from "moment-timezone"
 import axios from "axios"
 import * as cheerio from "cheerio"
-import { log } from "../../../logger"
+import { getLogger } from "../../../logger"
 
 export class NhkLocalArticleScraper implements ArticleScraper {
   readonly source: string = "nhk-l"
@@ -32,7 +32,7 @@ export class NhkLocalArticleScraper implements ArticleScraper {
   }
 
   async scrape(url: string): Promise<IncidentArticle[]> {
-    log.info(`updating ${url} , source ${this.source}`)
+    getLogger().info(`updating ${url} , source ${this.source}`)
     let articles: IncidentArticle[] = await this.axios.get(url).then(res => {
       let $ = cheerio.load(res.data)
       return $(this.articleCssSelector)
@@ -44,13 +44,17 @@ export class NhkLocalArticleScraper implements ArticleScraper {
 
           let matchedDate = tmpUpdatedDate.match(/\d\d?月\d\d?/)
           if (!matchedDate) {
-            log.error(`cannot parse ${tmpUpdatedDate} on scraping ${url}.`)
+            getLogger().error(
+              `cannot parse ${tmpUpdatedDate} on scraping ${url}.`
+            )
             return undefined
           }
 
           let matchedTime = tmpUpdatedDate.match(/\d\d?時\d\d?/)
           if (!matchedTime) {
-            log.error(`cannot parse ${tmpUpdatedDate} on scraping ${url}.`)
+            getLogger().error(
+              `cannot parse ${tmpUpdatedDate} on scraping ${url}.`
+            )
             return undefined
           }
 
@@ -98,7 +102,7 @@ export class NhkLocalArticleScraper implements ArticleScraper {
     })
 
     if (articles.length == 0) {
-      log.error(`cannot scrape ${url}`)
+      getLogger().error(`cannot scrape ${url}`)
     }
     return articles
   }
@@ -125,7 +129,7 @@ export class NhkArticleScraper implements ArticleScraper {
   }
 
   async scrape(url: string): Promise<IncidentArticle[]> {
-    log.info(`updating ${url} , source ${this.source}`)
+    getLogger().info(`updating ${url} , source ${this.source}`)
     let articles: IncidentArticle[] = await this.axios.get(url).then(res => {
       let $ = cheerio.load(res.data)
       return $(this.articleCssSelector)
@@ -164,7 +168,7 @@ export class NhkArticleScraper implements ArticleScraper {
     })
 
     if (articles.length == 0) {
-      log.error(`cannot scrape ${url}`)
+      getLogger().error(`cannot scrape ${url}`)
     }
     return articles
   }

@@ -4,7 +4,7 @@ import { IncidentArticle, MultipleArticleKey } from ".."
 import moment from "moment-timezone"
 import axios from "axios"
 import * as cheerio from "cheerio"
-import { log } from "../../../logger"
+import { getLogger } from "../../../logger"
 
 export class Np24ArticleScraper implements ArticleScraper {
   readonly source: string = "np24"
@@ -27,7 +27,7 @@ export class Np24ArticleScraper implements ArticleScraper {
   }
 
   async scrape(url: string): Promise<IncidentArticle[]> {
-    log.info(`updating ${url} , source ${this.source}`)
+    getLogger().info(`updating ${url} , source ${this.source}`)
     const articles: IncidentArticle[] = await this.axios.get(url).then(res => {
       const $ = cheerio.load(res.data)
       const tmpUpdatedDate = $("#tmp_update").text()

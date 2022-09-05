@@ -4,7 +4,7 @@ import { IncidentArticle } from ".."
 import moment from "moment-timezone"
 import axios from "axios"
 import * as cheerio from "cheerio"
-import { log } from "../../../logger"
+import { getLogger } from "../../../logger"
 class DateExtractor {
   dateExtractors: Array<(dateBlock: string) => moment.Moment | null> = []
 
@@ -77,7 +77,7 @@ class DateExtractor {
       .filter(e => e !== null)
 
     if (dateList.length == 0) {
-      log.error(`cannot parse ${dateBlock}`)
+      getLogger().error(`cannot parse ${dateBlock}`)
       throw new Error(`cannot parse ${dateBlock}`)
     }
 
@@ -113,7 +113,7 @@ export class YahooArticleScraper implements ArticleScraper {
   }
 
   async scrape(url: string): Promise<IncidentArticle[]> {
-    log.info(`updating ${url} , source ${this.source}`)
+    getLogger().info(`updating ${url} , source ${this.source}`)
 
     const dateExtractor = new DateExtractor()
 
@@ -130,7 +130,7 @@ export class YahooArticleScraper implements ArticleScraper {
           try {
             date = dateExtractor.extract(tmpUpdatedDate)
           } catch (e) {
-            log.error(e)
+            getLogger().error(e)
             throw new Error(e + ` on ${url}`)
           }
 
@@ -162,7 +162,7 @@ export class YahooArticleScraper implements ArticleScraper {
     })
 
     if (articles.length == 0) {
-      log.error(`cannot scrape ${url}`)
+      getLogger().error(`cannot scrape ${url}`)
     }
     return articles
   }
@@ -191,7 +191,7 @@ export class YahooVideoArticleScraper implements ArticleScraper {
   async scrape(url: string): Promise<IncidentArticle[]> {
     const dateExtractor = new DateExtractor()
 
-    log.info(`updating ${url} , source ${this.source}`)
+    getLogger().info(`updating ${url} , source ${this.source}`)
     let articles: IncidentArticle[] = await this.axios.get(url).then(res => {
       let $ = cheerio.load(res.data)
       return $(this.articleCssSelector)
@@ -237,7 +237,7 @@ export class YahooVideoArticleScraper implements ArticleScraper {
     })
 
     if (articles.length == 0) {
-      log.error(`cannot scrape ${url}`)
+      getLogger().error(`cannot scrape ${url}`)
     }
     return articles
   }

@@ -146,7 +146,7 @@ export class FirestoreArticleRepository implements ArticleRepository {
         .doc(article.toKey().getId())
         .update(data)
     } catch (err) {
-      if (err.message.startsWith("5 NOT_FOUND")) {
+      if ((err as Error).message.startsWith("5 NOT_FOUND")) {
         await this.db
           .collection(this.COLLECTION_ARTICLE)
           .doc(article.toKey().getId())
