@@ -107,6 +107,44 @@ exports.createPages = async ({ graphql, actions }) => {
     })
   })
 
+  const mountainTagsPage = await graphql(
+    `
+      {
+        allIncident(sort: { fields: month, order: ASC }) {
+          nodes {
+            tags
+          }
+        }
+      }
+    `
+  ).then((result) => {
+    if (result.errors) {
+      throw result.errors
+    }
+
+    let tags = []
+    result.data.allIncident.nodes.forEach((node) => {
+      node.tags.forEach((tag) => tags.push(tag))
+    })
+    tags = _.uniq(tags)
+
+    // Create Product pages
+    const mountainPageTemplate = path.resolve(
+      `./src/templates/incident-by-mountain.tsx`
+    )
+
+    // tags.delete("__hidden")
+    // tags.delete("山岳事故")
+    tags.forEach(async (e) => {
+      // console.info(`create mountain page`)
+      await createPage({
+        path: `/incident/mountain/${e}/`,
+        component: slash(mountainPageTemplate),
+        context: { mountainName: e },
+      })
+    })
+  })
+
   return graphql(
     `
       {

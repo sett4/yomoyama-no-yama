@@ -84,10 +84,15 @@ const PostCard: React.FunctionComponent<PostCardProps> = ({
             {tags == null ? null : (
               <PostTags className="post_tags">
                 {tags
-                  .filter((tag: string) => !tag.startsWith("__"))
+                  .filter(
+                    (tag: string) =>
+                      !tag.startsWith("__") && !tag.startsWith("山岳事故")
+                  )
                   .map((tag: string, index: number) => (
-                  <span key={index}>{`#${tag}`}</span>
-                ))}
+                    <span key={index}>
+                      <Link to={`/incident/mountain/${tag}`}>{`#${tag}`}</Link>
+                    </span>
+                  ))}
               </PostTags>
             )}
           </PostMetadata>
