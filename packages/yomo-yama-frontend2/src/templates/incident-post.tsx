@@ -1,5 +1,5 @@
 import React from "react"
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 import _ from "lodash"
 import urljoin from "url-join"
 import Layout from "../components/layout"
@@ -62,9 +62,14 @@ const IncidentPostTemplate = (props: any): JSX.Element => {
           {post.tags == null ? null : (
             <PostTags className="post_tags">
               {post.tags
-                .filter((tag: string) => !tag.startsWith("__"))
+                .filter(
+                  (tag: string) =>
+                    !tag.startsWith("__") && !tag.startsWith("山岳事故")
+                )
                 .map((tag: string, index: number) => (
-                  <span key={index}>{`#${tag}`}</span>
+                  <span key={index}>
+                    <Link to={`/incident/mountain/${tag}`}>{`#${tag}`}</Link>
+                  </span>
                 ))}
             </PostTags>
           )}
