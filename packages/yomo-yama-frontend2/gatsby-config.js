@@ -77,12 +77,8 @@ module.exports = {
             resolve: `gatsby-plugin-gdpr-cookies`,
             options: {
               googleAnalytics: {
-                trackingId: "UA-137755943-1",
+                trackingId: `${process.env.GA4_TRACKING_ID}`,
                 // Setting this parameter is optional
-                anonymize: true,
-              },
-              facebookPixel: {
-                pixelId: "YOUR_FACEBOOK_PIXEL_ID",
               },
               // Defines the environments where the tracking should be available  - default is ["production"]
               environments: ["production", "development"],
@@ -96,12 +92,6 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-sharp`,
-    },
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        trackingId: `${process.env.GOOGLE_ANALYTICS_TRACKING_ID}`,
-      },
     },
     {
       resolve: `gatsby-plugin-feed`,
