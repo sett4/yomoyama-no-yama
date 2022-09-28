@@ -77,7 +77,7 @@
     "express": "^4.17.1",
     "firebase": "^9.8.2",
     "firebase-admin": "^9.8.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.23",
     "proj4": "^2.5.0",
     "prop-types": "^15.7.2",
