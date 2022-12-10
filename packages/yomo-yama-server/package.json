@@ -74,7 +74,7 @@
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.3",
     "cls-hooked": "^4.2.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "firebase": "^9.8.2",
     "firebase-admin": "^9.8.2",
     "moment": "^2.24.0",
