@@ -35,7 +35,7 @@
     "gatsby-source-filesystem": "^2.2.2",
     "gatsby-source-firestore": "^1.0.3",
     "gatsby-source-instagram": "^0.7.0",
-    "gatsby-transformer-remark": "^2.7.1",
+    "gatsby-transformer-remark": "^5.25.1",
     "gatsby-transformer-sharp": "^2.4.4",
     "js-search": "^2.0.0",
     "katex": "^0.11.1",
