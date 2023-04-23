@@ -8,7 +8,7 @@ export interface ErrorBaseConstructor {
   readonly prototype: ErrorBase
 }
 
-export const ErrorBase: ErrorBaseConstructor = class ErrorBase {
+export class ErrorBase {
   public constructor(message: string) {
     Object.defineProperty(this, "name", {
       get: () => (this.constructor as any).name,

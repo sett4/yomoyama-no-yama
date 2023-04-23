@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model incident {
+  id             String    @id @db.VarChar(26)
+  slug           String?   @db.VarChar(256)
+  source         String?   @db.VarChar(64)
+  source_name    String?   @db.VarChar(256)
+  subject        String?   @db.VarChar(1024)
+  published_date DateTime? @db.Date
+  processed_date DateTime? @db.Date
+  date           DateTime? @db.Date
+  author         String?   @db.VarChar(256)
+  scraper        String?   @db.VarChar(64)
+}
+
+model tag {
+  id      String    @id @db.VarChar(26)
+  name    String?   @db.VarChar(1024)
+  tagging tagging[]
+}
+
+model tagging {
+  id          String  @id @db.VarChar(26)
+  tag_id      String? @db.VarChar(26)
+  entity_type String? @db.VarChar(64)
+  entity_id   String? @db.VarChar(26)
+  tag         tag?    @relation(fields: [tag_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
