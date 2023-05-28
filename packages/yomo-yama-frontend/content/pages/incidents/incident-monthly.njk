@@ -1,0 +1,25 @@
+---
+pagination:
+    data: incidentMonthly
+    size: 1
+    alias: post
+    addAllPagesToCollections: true
+permalink: "/incident/{{ post.yearMonth }}"
+description: "{{ post.content }}"
+tags:
+  - incident monthly
+---
+
+{% for byDate in post.posts | groupByDate %}
+<h2>{{ byDate.date }}</h2>
+
+<div class="post-list">
+  <ul>
+  {% for post in byDate.posts %}
+    <li>
+      {% include "partials/single-post-excerpt.njk" %}
+    </li>
+  {% endfor %}
+  </ul>
+</div>
+{% endfor %}

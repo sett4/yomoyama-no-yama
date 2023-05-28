@@ -1,0 +1,38 @@
+---
+layout: base
+eleventyExcludeFromCollections: true
+pagination:
+  data: incidents
+  size: 10
+  alias: posts
+permalink: "/incident/{% if pagination.pageNumber > 0 %}/{{ pagination.pageNumber + 1 }}{% endif %}/index.html"
+---
+
+<div class="post-list">
+  <ul>
+  {% for post in posts %}
+    <li>
+      {% include "partials/single-post-excerpt.njk" %}
+    </li>
+  {% endfor %}
+  </ul>
+</div>
+
+{% include "partials/scroll-up-arrow.njk" %}
+
+{%- set totalPages = pagination.pages|length -%}
+{%- set currentPage = pagination.pageNumber + 1 -%}
+{%- set previousHref = pagination.href.previous -%}
+{%- set nextHref = pagination.href.next -%}
+
+{% include "partials/pagination.njk" %}
+
+
+<h2 id='chronological-archive'>アーカイブ</h2>
+
+<ul class="archive">
+  {% for monthlyArchive in collections['incident monthly'] %}
+    <li><a href="/incident/{{ monthlyArchive.data.post.yearMonth}}">{{ monthlyArchive.data.title }}</a></li>
+  {% endfor %}
+</ul>
+

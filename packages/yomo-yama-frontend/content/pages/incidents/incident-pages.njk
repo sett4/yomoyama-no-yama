@@ -1,0 +1,14 @@
+---
+layout: "layouts/incident.njk"
+pagination:
+    data: incidents
+    size: 1
+    alias: post
+    addAllPagesToCollections: true
+permalink: "/incident/{{ post.slug }}"
+description: "{{ post.content }}"
+tags:
+  - incident
+---
+
+{{ post.content }} 

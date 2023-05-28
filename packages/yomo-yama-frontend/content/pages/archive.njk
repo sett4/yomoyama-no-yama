@@ -1,0 +1,16 @@
+---
+title: Archive
+description: All posts published since the start of of the blog back in 2020.
+eleventyNavigation:
+  key: Archive
+  order: 2
+---
+
+<h2 id='chronological-archive'>Chronological archive</h2>
+
+<ul class="archive">
+  {% for monthlyArchive in collections['incident monthly'] %}
+    <li><a href="/incident/{{ monthlyArchive.data.post.yearMonth}}">{{ monthlyArchive.data.title }}</a></li>
+  {% endfor %}
+</ul>
+
