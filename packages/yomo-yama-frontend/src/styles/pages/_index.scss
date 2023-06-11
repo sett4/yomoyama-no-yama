@@ -1,3 +1,13 @@
+article {
+  a,
+  a:hover,
+  a:focus {
+    color: var(--text-color);
+    text-decoration: none;
+  }
+}
+
+
 .post-list {
   ul {
     list-style: none;

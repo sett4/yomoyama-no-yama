@@ -135,7 +135,7 @@ export class FirestoreArticleRepository implements ArticleRepository {
   async save(article: IncidentArticle): Promise<any> {
     const data = article.toData()
     if (data.tags && data.tags.length > 0) {
-      data.tags = admin.firestore.FieldValue.arrayUnion(...data.tags)
+      // data.tags = admin.firestore.FieldValue.arrayUnion(...data.tags)
     } else {
       delete data.tags
     }

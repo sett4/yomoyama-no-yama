@@ -1,4 +1,10 @@
 <div class="bottom-meta">
+  {% if post.sourceUrl %}
+  <div class="post-tags">
+    <p>{{ phrases.source_from }}:</p>
+        <a href="{{ post.sourceUrl }}">{% if phrases.sources[post.source] %}{{ phrases.sources[post.source] }}{% else %}{{ post.source }}{% endif %}</a>
+  </div>
+  {% endif %}
   {% include "partials/incident/tags.njk" %}
   {% include "partials/incident/share-buttons.njk" %}
 </div>

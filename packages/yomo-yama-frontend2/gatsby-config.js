@@ -211,7 +211,7 @@ module.exports = {
     {
       resolve: "gatsby-source-firestore",
       options: {
-        credential: JSON.parse(process.env.FIRESTORE_CREDENTIAL_JSON),
+        // credential: JSON.parse(process.env.FIRESTORE_CREDENTIAL_JSON),
         types: [
           {
             type: "Incident",

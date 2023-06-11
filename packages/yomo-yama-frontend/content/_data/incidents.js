@@ -1,7 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
+// const { createContext } = require('@sett4/yomo-yama-prisma-client');
 
 const prisma = new PrismaClient();
-
+//
 module.exports = async function main() {
   // ... you will write your Prisma Client queries here
   const incidents = await prisma.post.findMany({
@@ -25,7 +26,6 @@ module.exports = async function main() {
   });
 
   console.log('loaded', incidents.length, 'incidents');
-  // console.log(incidents[0]);
   prisma.$disconnect();
   return transformed;
 };

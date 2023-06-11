@@ -35,7 +35,14 @@ export class AddMountainTagProcessor {
     if (tags.length > 0) {
       log.info(`tags ${tags}`)
     }
-    tags.forEach(t => article.tags.add(t))
+    tags
+      .filter(
+        t =>
+          !t.match(
+            "[都道府県]$"
+          ) /* 富山県に富山をマッチさせないために富山県を辞書に入れてある。でも、都道府県名は要救助者の住んでいる県としてでることもあるので除外する*/
+      )
+      .forEach(t => article.tags.add(t))
     return article
   }
 

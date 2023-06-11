@@ -11,7 +11,9 @@ layout: base
   </header>
   {% include "partials/incident/top-meta.njk" %}
   {% include "disclaimers/disclaimer.njk" %}
+  <p>
   {{ content | safe }}
+  </p>
 </article>
 
 {% include "partials/incident/bottom-meta.njk" %}

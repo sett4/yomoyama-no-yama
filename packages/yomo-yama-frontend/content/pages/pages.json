@@ -1,5 +1,5 @@
 {
-  "language": "en",
+  "language": "ja",
   "layout": "page",
   "tags": ["page"],
   "permalink": "{% if customPermalink %}{{ customPermalink }}{% else %}{{ title | slugify }}/{% endif %}",

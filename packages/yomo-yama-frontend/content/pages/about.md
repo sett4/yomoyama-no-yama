@@ -15,7 +15,7 @@ customPermalink: /about
 
 ## プライバシーポリシー
 
-        {/* http://liberty-life-blog.com/wordpress/privacy-policy/ */}
+        <!-- {/* http://liberty-life-blog.com/wordpress/privacy-policy/ */} -->
 
 ### 広告の配信について
 

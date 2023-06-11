@@ -1,0 +1,12 @@
+---
+layout: "layouts/redirect.njk"
+pagination:
+    data: incidentTag
+    size: 1
+    alias: post
+permalink: "/incident/mountain/{{ post.tag }}"
+eleventyComputed:
+  redirect.from: "/incident/mountain/{{ post.tag }}"
+  redirect.to: "/incident/tags/{{ post.tag }}"
+eleventyExcludeFromCollections: true
+---

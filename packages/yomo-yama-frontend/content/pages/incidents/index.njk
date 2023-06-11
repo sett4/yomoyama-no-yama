@@ -1,16 +1,16 @@
 ---
 layout: base
-eleventyExcludeFromCollections: true
-pagination:
-  data: incidents
-  size: 10
-  alias: posts
-permalink: "/incident/{% if pagination.pageNumber > 0 %}/{{ pagination.pageNumber + 1 }}{% endif %}/index.html"
+permalink: "/incident/"
+title: "山岳事故"
+eleventyNavigation:
+  key: 山岳事故
+  order: 2
 ---
 
 <div class="post-list">
   <ul>
-  {% for post in posts %}
+  {% for postPage in collections.incident | limit(20) %}
+  {% set post = postPage.data.post %}
     <li>
       {% include "partials/single-post-excerpt.njk" %}
     </li>

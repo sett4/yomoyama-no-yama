@@ -56,4 +56,9 @@ module.exports = {
   share: 'Share',
   powered_by: 'Powered by',
   template: 'Template',
+  source_from: 'Source from',
+  sources: {
+    'yj-news': 'Yahoo!ニュース',
+    np24: '長野県警ニュース24時',
+  },
 };

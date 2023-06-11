@@ -9,7 +9,7 @@ const body = (article) => {
     return null;
   }
 
-  const content = article.templateContent;
+  let content = article.templateContent;
   const excerpt = content
     .slice(0, content.indexOf('\n'))
     .replace(/(<([^>]+)>)/gi, '');
