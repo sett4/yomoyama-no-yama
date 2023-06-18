@@ -2,6 +2,7 @@ import { Express } from "express"
 import {
   ArticleRepository,
   FirestoreArticleRepository,
+  PrismaArticleRepository,
   IncidentArticle,
   IndexScraper,
 } from "../datasource/incident"
@@ -11,13 +12,17 @@ import { ArticleScrapers } from "../datasource/incident/scraper"
 import YahooIndexScraper from "../datasource/incident/yahoo"
 import { DictionaryBuilder } from "../datasource/mountain/gsi-prefecture/buildDictionary"
 import { getLogger } from "../logger"
+import { PrismaClient } from "@prisma/client"
 
-const registerHandler = async function(
+const registerHandler = async function (
   app: Express,
   firestore: FirebaseFirestore.Firestore
 ) {
-  const repository: ArticleRepository = new FirestoreArticleRepository(
-    firestore
+  // const repository: ArticleRepository = new FirestoreArticleRepository(
+  //   firestore
+  // )
+  const repository: ArticleRepository = new PrismaArticleRepository(
+    new PrismaClient()
   )
   const articleScrapers: ArticleScrapers = new ArticleScrapers()
   const addMountainTagProcessor = new AddMountainTagProcessor()
@@ -44,7 +49,7 @@ const registerHandler = async function(
     }
 
     await Promise.all(
-      allArticle.map(async article => {
+      allArticle.map(async (article) => {
         getLogger().info(
           `saving article ${article.url} ${article.toKey().getId()}`
         )
@@ -91,8 +96,8 @@ const registerHandler = async function(
     const articles = await repository.findAll("yj-news")
     req.log.info(`loaded ${articles.length} articles`)
     const modifiedArticles = articles
-      .filter(a => a.tags.has("山岳事故"))
-      .filter(a => {
+      .filter((a) => a.tags.has("山岳事故"))
+      .filter((a) => {
         if (
           // (a.content + a.subject).match(/遭難/)
           a.content.match(
@@ -108,18 +113,18 @@ const registerHandler = async function(
         }
       })
       // .filter(a => idList.includes(a.toKey().getId()))
-      .map(a => {
+      .map((a) => {
         a.tags.delete("山岳事故")
         req.log.info("deleted 山岳事故 ", a.toKey().getId(), a.subject, a.url)
         return a
       })
 
     await Promise.all(
-      modifiedArticles.map(article => {
+      modifiedArticles.map((article) => {
         return repository.save(article)
       })
     )
-    res.send(modifiedArticles.map(e => e.toData()))
+    res.send(modifiedArticles.map((e) => e.toData()))
   })
 
   app.post("/datasource/mountain/incident/remove-tag", async (req, res) => {
@@ -128,11 +133,11 @@ const registerHandler = async function(
     const articles = await repository.findAll("yj-news")
     req.log.info(`loaded ${articles.length} articles`)
     const modifiedArticles = articles
-      .filter(a => a.tags.has("山岳事故"))
-      .filter(a => prefectureList.filter(p => a.tags.has(p)))
+      .filter((a) => a.tags.has("山岳事故"))
+      .filter((a) => prefectureList.filter((p) => a.tags.has(p)))
       // .filter(a => idList.includes(a.toKey().getId()))
-      .map(a => {
-        prefectureList.forEach(p => {
+      .map((a) => {
+        prefectureList.forEach((p) => {
           if (a.tags.has(p)) {
             a.tags.delete(p)
             req.log.info(`deleted ${p} from ${a.toKey().getId()}`)
@@ -142,18 +147,18 @@ const registerHandler = async function(
       })
 
     await Promise.all(
-      modifiedArticles.map(article => {
+      modifiedArticles.map((article) => {
         return repository.save(article)
       })
     )
-    res.send(modifiedArticles.map(e => e.toData()))
+    res.send(modifiedArticles.map((e) => e.toData()))
   })
 
   app.post("/datasource/mountain/incident/extract-tags", async (req, res) => {
     req.log.info("updateing...")
     const articles = await repository.findAll("yj-news")
     req.log.info(`loaded ${articles.length} articles`)
-    const filteredArticles = articles.filter(a => a.tags.has("山岳事故"))
+    const filteredArticles = articles.filter((a) => a.tags.has("山岳事故"))
 
     const modifiedArticles: IncidentArticle[] = []
     for (const a of filteredArticles) {
@@ -162,11 +167,11 @@ const registerHandler = async function(
     }
 
     await Promise.all(
-      modifiedArticles.map(article => {
+      modifiedArticles.map((article) => {
         return repository.save(article)
       })
     )
-    res.send(modifiedArticles.map(e => e.toData()))
+    res.send(modifiedArticles.map((e) => e.toData()))
   })
 
   app.post("/datasource/mountain/incident/hide", async (req, res) => {
@@ -213,21 +218,21 @@ const registerHandler = async function(
       "yj-news.bd4b7107a61f6368958ff2eb5b233ffc6d0da05cd23d06f3dcbcdd4fe383c0f2",
     ]
     const modifiedArticles = articles
-      .filter(a => a.tags.has("山岳事故") && !a.tags.has("__hidden"))
-      .filter(a => hiddenKeys.includes(a.toKey().getId()))
+      .filter((a) => a.tags.has("山岳事故") && !a.tags.has("__hidden"))
+      .filter((a) => hiddenKeys.includes(a.toKey().getId()))
       // .filter(a => idList.includes(a.toKey().getId()))
-      .map(a => {
+      .map((a) => {
         a.tags.add("__hidden")
         req.log.info("add hidden ", a.toKey().getId(), a.subject, a.url)
         return a
       })
 
     await Promise.all(
-      modifiedArticles.map(article => {
+      modifiedArticles.map((article) => {
         return repository.save(article)
       })
     )
-    res.send(modifiedArticles.map(e => e.toData()))
+    res.send(modifiedArticles.map((e) => e.toData()))
   })
 
   app.get("/datasource/mountain/incident/yahoo/show", async (req, res) => {
@@ -242,7 +247,7 @@ const registerHandler = async function(
     }
     req.log.info(`extract ${allArticle.length} articles.`)
 
-    const allArticleData = allArticle.map(a => a.toData())
+    const allArticleData = allArticle.map((a) => a.toData())
 
     res.send(allArticleData)
   })

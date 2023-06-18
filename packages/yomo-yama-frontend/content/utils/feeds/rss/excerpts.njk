@@ -8,7 +8,7 @@ eleventyExcludeFromCollections: true
 <?xml-stylesheet href="{{ siteConfig.feed.stylesheet.url | htmlBaseUrl }}" type="text/xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 {%- include "partials/feeds/rss/feed-meta.njk" %}
-{%- for post in collections.publishedPosts|limit(postLimit) -%}
+{%- for post in collections.publishedPages|limit(postLimit) -%}
 {%- set absolutePostUrl -%}{{ post.url | alwaysProductionUrl }}{%- endset -%}
 <entry>
 {%- include "partials/feeds/rss/entry-meta.njk" -%}

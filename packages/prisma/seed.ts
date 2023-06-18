@@ -36,11 +36,12 @@ function postObjectToPost(
   const j = postObj.post
   const published =
     j["tags"].includes("山岳事故") && !j["tags"].includes("hidden")
-  const content = j["tags"].includes("__private_use", "__private-use")
-    ? truncateString(j["content"], 280)
-    : j["content"]
+  const content =
+    j["tags"].includes("__private-use") || j["tags"].includes("__private_use")
+      ? truncateString(j["content"], 120)
+      : j["content"]
   const tags = (j["tags"] as string[])
-    .filter((o) => !["__private_use", "__private-use"].includes(o))
+    .filter((o) => !["hidden"].includes(o))
     .sort()
     .join(",")
   return {
@@ -78,11 +79,15 @@ async function loadIncidentFromJsonFile(prisma: PrismaClient) {
       return { key: key, post: json[key] }
     })
     .map((postObj) => {
-      const post = postObjectToPost(category, postObj)
+      const postForCreate = postObjectToPost(category, postObj)
+      const postForUpdate = postObjectToPost(category, postObj)
+      delete postForUpdate.published
       return prisma.post.upsert({
-        where: { postKey: { categoryId: category.id, slug: post.slug } },
-        update: post,
-        create: post,
+        where: {
+          postKey: { categoryId: category.id, slug: postForCreate.slug },
+        },
+        update: postForUpdate,
+        create: postForCreate,
       })
     })
   const chunkSize = 50

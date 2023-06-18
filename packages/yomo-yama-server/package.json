@@ -19,7 +19,7 @@
   },
   "scripts": {
     "format": "prettier --write src/**/*.{ts,tsx}",
-    "prepare": "npx prisma generate --schema=../prisma/schema.prisma --generator=serverClient && npm run gcp-build",
+    "prepare": "npx prisma generate --schema=prisma/schema.prisma --generator=serverClient && npm run gcp-build",
     "test": "jest ./src --watch",
     "posttest": "npm run lint",
     "lint": "eslint ./src/**.ts ./src/*.ts",
