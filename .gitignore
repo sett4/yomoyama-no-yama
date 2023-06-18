@@ -78,5 +78,6 @@ secret.yaml
 .env
 
 packages/yomo-yama-server/data/
+packages/prisma/seed-data
 
 datagrip-workspace
