@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "prebuild": "npm run clean",
-    "build:eleventy": "dotenv -- npx eleventy",
-    "build": "npm-run-all prepare build:*",
+    "build:eleventy": "dotenv -- npx eleventy --quiet",
+    "build": "npm-run-all prepare build:eleventy build:sass",
     "postbuild": "npm run minify:js",
     "clean": "rimraf _site",
     "predev": "npm run clean",
