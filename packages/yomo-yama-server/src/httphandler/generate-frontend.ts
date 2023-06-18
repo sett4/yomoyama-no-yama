@@ -2,7 +2,7 @@ import axios from "axios"
 import { Express } from "express"
 import { getLogger } from "../logger"
 
-const registerHandler = async function(
+const registerHandler = async function (
   app: Express,
   firestore: FirebaseFirestore.Firestore
 ) {
@@ -10,10 +10,10 @@ const registerHandler = async function(
     if (process.env.NETLIFY_HOOK_URL) {
       const hookUrl: string = process.env.NETLIFY_HOOK_URL
       await axios.post(hookUrl, {})
-      getLogger().info(`nofity to netlify ${hookUrl}`)
+      getLogger().info(`call build hook ${hookUrl}`)
     } else {
       getLogger().info(
-        "netlify rebuild hook skipped. due to process.env.NETLIFY_HOOK_URL is empty."
+        "calling build hook skipped. due to process.env.NETLIFY_HOOK_URL is empty."
       )
     }
     return
