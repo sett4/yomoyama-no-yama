@@ -1,0 +1,38 @@
+---
+layout: base
+permalink: "/incident/"
+title: "山岳事故"
+eleventyNavigation:
+  key: 山岳事故
+  order: 2
+---
+
+<div class="post-list">
+  <ul>
+  {% for postPage in collections.incident | limit(20) %}
+  {% set post = postPage.data.post %}
+    <li>
+      {% include "partials/single-post-excerpt.njk" %}
+    </li>
+  {% endfor %}
+  </ul>
+</div>
+
+{% include "partials/scroll-up-arrow.njk" %}
+
+{%- set totalPages = pagination.pages|length -%}
+{%- set currentPage = pagination.pageNumber + 1 -%}
+{%- set previousHref = pagination.href.previous -%}
+{%- set nextHref = pagination.href.next -%}
+
+{% include "partials/pagination.njk" %}
+
+
+<h2 id='chronological-archive'>アーカイブ</h2>
+
+<ul class="archive">
+  {% for monthlyArchive in collections['incident monthly'] %}
+    <li><a href="/incident/{{ monthlyArchive.data.post.yearMonth}}">{{ monthlyArchive.data.title }}</a></li>
+  {% endfor %}
+</ul>
+

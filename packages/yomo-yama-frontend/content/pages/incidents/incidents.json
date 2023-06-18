@@ -1,0 +1,7 @@
+{
+  "layout": "layouts/incident.njk",
+  "description": "{{ content|truncate(160) }}",
+  "permalink": "{% if customPermalink %}{{ customPermalink }}{% else %}/{{ title | slugify }}/{% endif %}",
+  "language": "ja",
+  "published": true
+}

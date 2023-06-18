@@ -1,0 +1,14 @@
+{% if siteConfig.tags.displayOnPostPage %}
+<div class="post-tags">
+{% if incidentTags and incidentTags|filterExcludedTags %}
+  <p>{{ phrases.tagged_as }}:</p>
+  <ul>
+  {% for tag in incidentTags|filterExcludedTags %}
+    <li>
+      <a title="{{ phrases.articles_tagged_as }} '{{ tag }}'" href="/incident/tags/{{ tag }}">{{ tag }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+{% endif %}
+</div>
+{% endif %}

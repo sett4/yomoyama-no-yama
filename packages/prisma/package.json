@@ -1,0 +1,43 @@
+{
+  "name": "@sett4/yomo-yama-prisma-client",
+  "version": "0.0.1",
+  "description": "Shared Prisma Client Example",
+  "scripts": {
+    "db:migrate": "npx prisma migrate",
+    "db:generate": "npx prisma generate --generator=prismaClient",
+    "db:seed": "npx prisma db seed ",
+    "prepare": "npm-run-all db:generate db:copy*",
+    "db:copy2server": "node -e \"require('fs').copyFileSync('./schema.prisma', '../yomo-yama-server/prisma/schema.prisma')\"",
+    "db:copy2front": "node -e \"require('fs').copyFileSync('./schema.prisma', '../yomo-yama-frontend/prisma/schema.prisma')\""
+  },
+  "dependencies": {
+    "@prisma/client": "*",
+    "prisma": "*"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.2.1",
+    "ms": "^3.0.0-canary.1",
+    "npm-run-all": "^4.1.5",
+    "prisma": "^4.14.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "prisma": {
+    "seed": "ts-node ./seed.ts"
+  },
+  "peerDependencies": {
+    "@prisma/client": "*",
+    "prisma": "*"
+  },
+  "bundledDependencies": [
+    "@prisma/client",
+    "prisma",
+    ".prisma"
+  ],
+  "author": "sett4",
+  "bundleDependencies": [
+    "@prisma/client",
+    "prisma",
+    ".prisma"
+  ]
+}

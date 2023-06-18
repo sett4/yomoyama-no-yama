@@ -1,0 +1,21 @@
+---
+layout: "layouts/incident.njk"
+pagination:
+    data: incidentTag
+    size: 1
+    alias: post
+permalink: "/incident/tags/{{ post.tag }}"
+eleventyComputed:
+  title: "{{ post.tag }}"
+  description: "Incidents tagged with {{ post.tag }}"
+---
+{% set tagPage = post %}
+<div class="post-list">
+  <ul>
+  {% for post in tagPage.posts %}
+    <li>
+      {% include "partials/single-post-excerpt.njk" %}
+    </li>
+  {% endfor %}
+  </ul>
+</div>

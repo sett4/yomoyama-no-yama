@@ -1,0 +1,64 @@
+generator prismaClient {
+    provider = "prisma-client-js"
+}
+
+generator serverClient {
+    provider = "prisma-client-js"
+    output   = "../yomo-yama-server/node_modules/.prisma/client"
+}
+
+generator frontendClient {
+    provider = "prisma-client-js"
+    output   = "../yomo-yama-frontend/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Post {
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    publishedAt DateTime
+    title       String   @db.VarChar(1024)
+    content     String?
+    contentType String
+    categoryId  String
+    category    Category @relation(fields: [categoryId], references: [id])
+    rawContent  String?
+    published   Boolean  @default(false)
+    author      String
+    source      String
+    sourceUrl   String
+    slug        String
+    scraper     String
+    tags        String
+
+    // Tagging     Tagging[]
+    @@unique(fields: [categoryId, slug], name: "postKey")
+}
+
+model Category {
+    id   String @id @default(cuid())
+    name String @unique
+    // Tag  Tag[]
+    Post Post[]
+}
+
+// model Tag {
+//     id         String    @id @default(cuid())
+//     name       String    @unique
+//     categoryId String
+//     category   Category  @relation(fields: [categoryId], references: [id])
+//     Tagging    Tagging[]
+// }
+
+// model Tagging {
+//     id     String @id @default(cuid())
+//     tagId  String
+//     tag    Tag    @relation(fields: [tagId], references: [id])
+//     postId String
+//     post   Post   @relation(fields: [postId], references: [id])
+// }

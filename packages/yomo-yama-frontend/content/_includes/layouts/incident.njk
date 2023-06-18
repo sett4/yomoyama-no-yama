@@ -1,0 +1,21 @@
+---
+layout: base
+---
+
+<article class="single-article">
+
+  {% include "partials/incident/image.njk" %}
+
+  <header>
+    <h1>{{ title }}</h1>
+  </header>
+  {% include "partials/incident/top-meta.njk" %}
+  {% include "disclaimers/disclaimer.njk" %}
+  <p>
+  {{ content | safe }}
+  </p>
+</article>
+
+{% include "partials/incident/bottom-meta.njk" %}
+{% include "partials/incident/navigation.njk" %}
+{% include "partials/scroll-up-arrow.njk" %}

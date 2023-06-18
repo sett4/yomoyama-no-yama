@@ -1,5 +1,6 @@
 import * as admin from "firebase-admin"
 import crypto from "crypto"
+import { Post, PrismaClient } from "@prisma/client"
 
 export interface ArticleRepository {
   exists(key: ArticleKey): boolean
@@ -17,6 +18,13 @@ class StaticKey implements ArticleKey {
   getId(): string {
     return this.id
   }
+}
+
+function truncateString(str: string, num: number): string {
+  if (str.length <= num) {
+    return str
+  }
+  return str.slice(0, num) + "..."
 }
 
 export class SingleArticleKey {
@@ -79,7 +87,7 @@ export class IncidentArticle {
 
   toData(): any {
     const tags: string[] = []
-    this.tags.forEach(v => tags.push(v))
+    this.tags.forEach((v) => tags.push(v))
 
     return {
       source: this.source,
@@ -104,7 +112,7 @@ export class EmptyArticleRepository implements ArticleRepository {
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   save(article: any): Promise<any> {
-    return new Promise<any>(resolve => {
+    return new Promise<any>((resolve) => {
       resolve(article)
     })
   }
@@ -135,7 +143,7 @@ export class FirestoreArticleRepository implements ArticleRepository {
   async save(article: IncidentArticle): Promise<any> {
     const data = article.toData()
     if (data.tags && data.tags.length > 0) {
-      data.tags = admin.firestore.FieldValue.arrayUnion(...data.tags)
+      // data.tags = admin.firestore.FieldValue.arrayUnion(...data.tags)
     } else {
       delete data.tags
     }
@@ -165,11 +173,11 @@ export class FirestoreArticleRepository implements ArticleRepository {
     return this.db
       .collection(this.COLLECTION_ARTICLE)
       .listDocuments()
-      .then(refs => {
-        return Promise.all(refs.map(r => r.get()))
+      .then((refs) => {
+        return Promise.all(refs.map((r) => r.get()))
       })
-      .then(snapshots => {
-        return snapshots.map(s => {
+      .then((snapshots) => {
+        return snapshots.map((s) => {
           const d = s.data()
           if (d === undefined) {
             throw Error("document data is undefined.")
@@ -196,6 +204,89 @@ export class FirestoreArticleRepository implements ArticleRepository {
           return article
         })
       })
+  }
+}
+
+export class PrismaArticleRepository implements ArticleRepository {
+  prisma: PrismaClient
+  readonly COLLECTION_ARTICLE: string = "incident"
+
+  constructor(prisma: PrismaClient) {
+    this.prisma = prisma
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  exists(key: ArticleKey): boolean {
+    throw new Error("Method not implemented.")
+  }
+
+  async save(article: IncidentArticle): Promise<any> {
+    const data = article.toData()
+    if (data.tags && data.tags.length > 0) {
+      // data.tags = admin.firestore.FieldValue.arrayUnion(...data.tags)
+    } else {
+      delete data.tags
+    }
+
+    try {
+      const category = await this.prisma.category.findFirstOrThrow({
+        where: { name: "incident" },
+      })
+      const published =
+        article.tags.has("山岳事故") && !article.tags.has("hidden")
+      const post = {
+        publishedAt: new Date(article.publishedDate),
+        title: article.subject,
+        content: truncateString(article.content, 120),
+        contentType: "incident",
+        categoryId: category.id,
+        rawContent: article.content,
+        // published: published,
+        author: "",
+        source: article.source,
+        sourceUrl: article.url,
+        slug: article.toKey().getId(),
+        scraper: article.scraper,
+        tags: [...article.tags].join(","),
+      }
+      await this.prisma.post.upsert({
+        where: {
+          postKey: { categoryId: category.id, slug: article.toKey().getId() },
+        },
+        update: post,
+        create: post,
+      })
+    } catch (err) {
+      throw err
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  load(key: ArticleKey): Promise<IncidentArticle> {
+    throw new Error("Method not implemented.")
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async findAll(source: string): Promise<IncidentArticle[]> {
+    const posts = await this.prisma.post.findMany({
+      where: { published: true, category: { name: "incident" } },
+      orderBy: { publishedAt: "desc" },
+    })
+    return posts.map((p) => {
+      const article: IncidentArticle = new IncidentArticle(
+        p.source,
+        p.source,
+        p.sourceUrl,
+        p.title,
+        p.rawContent || "",
+        p.publishedAt.toISOString(),
+        p.publishedAt.toISOString(),
+        p.publishedAt,
+        p.author
+      )
+      article.tags = new Set<string>(p.tags.split(","))
+      return article
+    })
   }
 }
 
