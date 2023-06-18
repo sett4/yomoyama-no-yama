@@ -24,7 +24,7 @@
     "build:sass": "sass --no-source-map src/styles:_site/css --style compressed",
     "sort-package-json": "sort-package-json",
     "start": "npm run dev",
-    "prepare": "npx prisma generate --schema=./prisma/schema.prisma --generator=frontendClient"
+    "prepare": "prisma generate --schema=./prisma/schema.prisma --generator=prismaClient"
   },
   "devDependencies": {
     "dotenv-cli": "^7.2.1",
