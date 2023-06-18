@@ -7,5 +7,5 @@
 ```
 const yomoYamaServer = require('yomo-yama-server');
 
-// TODO: DEMONSTRATE API
+// TODO: DEMONSTRATE
 ```
