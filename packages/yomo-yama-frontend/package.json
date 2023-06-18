@@ -6,7 +6,7 @@
     "prebuild": "npm run clean",
     "build:eleventy": "dotenv -- npx eleventy --quiet",
     "build": "npm-run-all -l -s prepare build:eleventy build:sass",
-    "postbuild": "npm run minify:js",
+    "postbuild": "npm-run-all -l minify:js",
     "clean": "rimraf _site",
     "predev": "npm run clean",
     "dev": "npm-run-all build:sass --parallel watch:*",
