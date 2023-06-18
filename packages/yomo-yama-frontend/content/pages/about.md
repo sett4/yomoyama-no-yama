@@ -4,7 +4,7 @@ description: 山にまつわることをちょっとづつ集めています。
 eleventyNavigation:
   key: About
   order: 1
-customPermalink: /about
+customPermalink: /about.html
 ---
 
 <img src="/images/about.jpg" alt="猫又山" class="about" />

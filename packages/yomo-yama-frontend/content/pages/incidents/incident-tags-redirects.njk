@@ -4,7 +4,7 @@ pagination:
     data: incidentTag
     size: 1
     alias: post
-permalink: "/incident/mountain/{{ post.tag }}"
+permalink: "/incident/mountain/{{ post.tag }}.html"
 eleventyComputed:
   redirect.from: "/incident/mountain/{{ post.tag }}"
   redirect.to: "/incident/tags/{{ post.tag }}"
