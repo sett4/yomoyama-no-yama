@@ -48,6 +48,7 @@ export class IncidentArticle {
   url: string
   subject: string
   content: string
+  rawContent: string
   publishedDate: string
   processedDate: Date
   tags: Set<string> = new Set<string>()
@@ -63,6 +64,7 @@ export class IncidentArticle {
     url: string,
     subject: string,
     content: string,
+    rawContent: string,
     date: string,
     publishedDate: string,
     processedDate: Date,
@@ -73,6 +75,7 @@ export class IncidentArticle {
     this.url = url
     this.subject = subject
     this.content = content
+    this.rawContent = rawContent
     this.publishedDate = publishedDate
     this.processedDate = processedDate
     this.date = date
@@ -95,6 +98,7 @@ export class IncidentArticle {
       url: this.url,
       subject: this.subject,
       content: this.content,
+      rawContent: this.rawContent,
       date: this.date,
       publishedDate: this.publishedDate,
       processedDate: this.processedDate,
@@ -188,6 +192,7 @@ export class FirestoreArticleRepository implements ArticleRepository {
             d.url,
             d.subject,
             d.content,
+            d.content,
             d.date,
             d.publishedDate,
             d.processedDate,
@@ -237,11 +242,10 @@ export class PrismaArticleRepository implements ArticleRepository {
       const post = {
         publishedAt: new Date(article.publishedDate),
         title: article.subject,
-        content: truncateString(article.content, 120),
+        content: article.content,
         contentType: "incident",
         categoryId: category.id,
-        rawContent: article.content,
-        // published: published,
+        rawContent: article.rawContent,
         author: "",
         source: article.source,
         sourceUrl: article.url,
@@ -254,7 +258,7 @@ export class PrismaArticleRepository implements ArticleRepository {
           postKey: { categoryId: category.id, slug: article.toKey().getId() },
         },
         update: post,
-        create: post,
+        create: { ...post, published: published },
       })
     } catch (err) {
       throw err
@@ -269,7 +273,11 @@ export class PrismaArticleRepository implements ArticleRepository {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async findAll(source: string): Promise<IncidentArticle[]> {
     const posts = await this.prisma.post.findMany({
-      where: { published: true, category: { name: "incident" } },
+      where: {
+        published: true,
+        category: { name: "incident" },
+        source: source,
+      },
       orderBy: { publishedAt: "desc" },
     })
     return posts.map((p) => {
@@ -278,6 +286,7 @@ export class PrismaArticleRepository implements ArticleRepository {
         p.source,
         p.sourceUrl,
         p.title,
+        p.content || "",
         p.rawContent || "",
         p.publishedAt.toISOString(),
         p.publishedAt.toISOString(),

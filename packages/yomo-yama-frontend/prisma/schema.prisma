@@ -2,16 +2,6 @@ generator prismaClient {
     provider = "prisma-client-js"
 }
 
-generator serverClient {
-    provider = "prisma-client-js"
-    output   = "../yomo-yama-server/node_modules/.prisma/client"
-}
-
-generator frontendClient {
-    provider = "prisma-client-js"
-    output   = "../yomo-yama-frontend/node_modules/.prisma/client"
-}
-
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
@@ -38,6 +28,15 @@ model Post {
 
     // Tagging     Tagging[]
     @@unique(fields: [categoryId, slug], name: "postKey")
+    @@index([publishedAt(sort: Desc), categoryId, published], map: "Post_publishedAt_idx")
+}
+
+model PostExtra {
+    // ChatGPT から取得した追加データを入れておくための場所
+
+    id      String        @id
+    type    PostExtraType
+    content String?
 }
 
 model Category {
@@ -45,6 +44,10 @@ model Category {
     name String @unique
     // Tag  Tag[]
     Post Post[]
+}
+
+enum PostExtraType {
+    INCIDENT_GPT
 }
 
 // model Tag {

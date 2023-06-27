@@ -7,12 +7,17 @@ import {
   IndexScraper,
 } from "../datasource/incident"
 import Np24Scraper from "../datasource/incident/np24"
-import { AddMountainTagProcessor } from "../datasource/incident/postprocessor"
+import {
+  AddMountainTagProcessor,
+  ChatGptPostExtraProcessor,
+} from "../datasource/incident/postprocessor"
 import { ArticleScrapers } from "../datasource/incident/scraper"
 import YahooIndexScraper from "../datasource/incident/yahoo"
 import { DictionaryBuilder } from "../datasource/mountain/gsi-prefecture/buildDictionary"
 import { getLogger } from "../logger"
 import { PrismaClient } from "@prisma/client"
+import * as dotenv from "dotenv"
+dotenv.config()
 
 const registerHandler = async function (
   app: Express,
@@ -21,13 +26,19 @@ const registerHandler = async function (
   // const repository: ArticleRepository = new FirestoreArticleRepository(
   //   firestore
   // )
-  const repository: ArticleRepository = new PrismaArticleRepository(
-    new PrismaClient()
-  )
+  const prisma = new PrismaClient()
+  const repository: ArticleRepository = new PrismaArticleRepository(prisma)
   const articleScrapers: ArticleScrapers = new ArticleScrapers()
   const addMountainTagProcessor = new AddMountainTagProcessor()
   await addMountainTagProcessor.initialize()
   articleScrapers.registerPostProcessor(addMountainTagProcessor)
+
+  const chatGptPostExtraProcessor = new ChatGptPostExtraProcessor(
+    process.env.OPENAI_API_KEY || "",
+    prisma
+  )
+  await chatGptPostExtraProcessor.initialize()
+  articleScrapers.registerPostProcessor(chatGptPostExtraProcessor)
 
   async function update(
     repository: ArticleRepository,
@@ -38,7 +49,7 @@ const registerHandler = async function (
     const articleUrls = await indexScraper.getArticleUrls()
 
     const allArticle: IncidentArticle[] = []
-    for (const url of articleUrls) {
+    for await (const url of articleUrls) {
       const articles = await articleScrapers.scrape(url)
       allArticle.push(...articles)
     }
@@ -174,6 +185,22 @@ const registerHandler = async function (
     res.send(modifiedArticles.map((e) => e.toData()))
   })
 
+  app.post("/datasource/mountain/incident/post-extra", async (req, res) => {
+    req.log.info("updateing...")
+    const articles = await repository.findAll("np24")
+    req.log.info(`loaded ${articles.length} articles`)
+    const filteredArticles = articles.filter((a) => a.tags.has("山岳事故"))
+
+    const modifiedArticles: IncidentArticle[] = []
+    for (const a of filteredArticles) {
+      req.log.info(`extracting extra info`, a.toKey().getId(), a.subject, a.url)
+      const article = await chatGptPostExtraProcessor.postProcess(a)
+      await repository.save(article)
+    }
+
+    res.send(modifiedArticles.map((e) => e.toData()))
+  })
+
   app.post("/datasource/mountain/incident/hide", async (req, res) => {
     req.log.info("updateing...")
     const articles = await repository.findAll("yj-news")
@@ -241,7 +268,7 @@ const registerHandler = async function (
 
     const articleScrapers = new ArticleScrapers()
     const allArticle: IncidentArticle[] = []
-    for (const url of articleUrls) {
+    for await (const url of articleUrls) {
       const articles = await articleScrapers.scrape(url)
       allArticle.push(...articles)
     }

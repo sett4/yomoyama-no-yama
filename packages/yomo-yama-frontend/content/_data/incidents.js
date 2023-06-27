@@ -28,7 +28,7 @@ module.exports = async function main() {
         slug: i.slug,
       },
       ...i,
-      tags: i.tags.split(','),
+      tags: i.tags.split(',').filter((tag) => !tag.startsWith('__')),
     };
   });
 

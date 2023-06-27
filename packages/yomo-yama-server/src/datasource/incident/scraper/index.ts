@@ -4,6 +4,7 @@ import { YahooArticleScraper, YahooVideoArticleScraper } from "./yahoo"
 import { NhkLocalArticleScraper, NhkArticleScraper } from "./nhk"
 import moment = require("moment")
 import { ArticlePostProcessor } from "../postprocessor"
+import { log } from "../../../logger"
 
 export interface ArticleScraper {
   canAccept(url: string): boolean
@@ -30,14 +31,14 @@ export class ArticleScrapers {
   }
 
   async scrape(url: string): Promise<IncidentArticle[]> {
-    let scraper = this.scrapers.find(s => s.canAccept(url))
+    let scraper = this.scrapers.find((s) => s.canAccept(url))
     if (!scraper) {
       return new Promise<IncidentArticle[]>((resolve, reject) => {
         resolve([])
       })
     }
 
-    const articleList = await scraper.scrape(url).catch(err => {
+    const articleList = await scraper.scrape(url).catch((err) => {
       console.error(`error on ${url} `, err)
       return new Promise<IncidentArticle[]>((resolve, reject) => {
         resolve([])
@@ -45,7 +46,7 @@ export class ArticleScrapers {
     })
 
     const result: IncidentArticle[] = []
-    for (const article of articleList) {
+    for await (const article of articleList) {
       result.push(await this.postProcess(article))
     }
     return result
@@ -54,13 +55,19 @@ export class ArticleScrapers {
   private postProcessors: ArticlePostProcessor[] = []
 
   registerPostProcessor(processor: ArticlePostProcessor) {
+    log.info(`register post processor: ${processor.constructor.name}`)
     this.postProcessors.push(processor)
   }
 
   async postProcess(article: IncidentArticle): Promise<IncidentArticle> {
-    this.postProcessors.forEach(
-      async p => (article = await p.postProcess(article))
-    )
+    for await (const processor of this.postProcessors) {
+      log.info(
+        `post processing: ${article.toKey().getId()} by ${
+          processor.constructor.name
+        }`
+      )
+      article = await processor.postProcess(article)
+    }
     return article
   }
 }

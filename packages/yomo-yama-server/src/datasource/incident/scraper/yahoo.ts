@@ -73,8 +73,8 @@ class DateExtractor {
   }
   extract(dateBlock: string): moment.Moment {
     const dateList = this.dateExtractors
-      .map(f => f(dateBlock))
-      .filter(e => e !== null)
+      .map((f) => f(dateBlock))
+      .filter((e) => e !== null)
 
     if (dateList.length == 0) {
       getLogger().error(`cannot parse ${dateBlock}`)
@@ -97,7 +97,8 @@ export class YahooArticleScraper implements ArticleScraper {
   readonly articleCssSelector: string = "#uamods"
   readonly axios: AxiosInstance
 
-  readonly NOT_INCIDENT_REGEXP: RegExp = /(指名式|追悼|指定式|発隊式|開始式|祈願|訓練を|開設|会議|ワニ|政府|地震|ヨット|訓示|注意点|約束|観光|感謝状|思いやり|急増している|命名|激撮|設置|運転|リニア|報告|出発式|社会貢献|閉所式|気がかり|結隊式|祈り|祈る|献花|追悼式|開幕|冥福|授業|遺族|復旧|慰霊)/
+  readonly NOT_INCIDENT_REGEXP: RegExp =
+    /(指名式|追悼|指定式|発隊式|開始式|祈願|訓練を|開設|会議|ワニ|政府|地震|ヨット|訓示|注意点|約束|観光|感謝状|思いやり|急増している|命名|激撮|設置|運転|リニア|報告|出発式|社会貢献|閉所式|気がかり|結隊式|祈り|祈る|献花|追悼式|開幕|冥福|授業|遺族|復旧|慰霊)/
 
   constructor() {
     this.axios = axios.create({
@@ -117,7 +118,7 @@ export class YahooArticleScraper implements ArticleScraper {
 
     const dateExtractor = new DateExtractor()
 
-    let articles: IncidentArticle[] = await this.axios.get(url).then(res => {
+    let articles: IncidentArticle[] = await this.axios.get(url).then((res) => {
       let $ = cheerio.load(res.data)
       return $(this.articleCssSelector)
         .map((i, el) => {
@@ -141,6 +142,7 @@ export class YahooArticleScraper implements ArticleScraper {
             this.sourceName,
             url,
             subject,
+            content,
             content,
             dateStr,
             publishedDateStr,
@@ -192,7 +194,7 @@ export class YahooVideoArticleScraper implements ArticleScraper {
     const dateExtractor = new DateExtractor()
 
     getLogger().info(`updating ${url} , source ${this.source}`)
-    let articles: IncidentArticle[] = await this.axios.get(url).then(res => {
+    let articles: IncidentArticle[] = await this.axios.get(url).then((res) => {
       let $ = cheerio.load(res.data)
       return $(this.articleCssSelector)
         .map((i, el) => {
@@ -219,6 +221,7 @@ export class YahooVideoArticleScraper implements ArticleScraper {
             this.sourceName,
             url,
             subject,
+            content,
             content,
             dateStr,
             publishedDateStr,
