@@ -88,28 +88,28 @@ export class ChatGptPostExtraProcessor {
     }
 
     const content = `
-    ## 指示
-    以下の入力テキストは山岳事故のニュース記事です。指示する出力テンプレートに沿って情報を抽出してください。
-    
-    ## 入力テキスト
-    ${article.content}
-    
-    ## 出力の制約
-    回答はJSONとしてパース可能であること
+## 指示
+以下の入力テキストは山岳事故のニュース記事です。指示する出力テンプレートに沿って情報を抽出してください。
 
-    ## 出力テンプレート
-    {
-    "articleTags":  <入力テキストを表すタグをArrayで表現。最大5つ>,
-    "isMountainIncidentArticle": <入力テキストが山岳事故のニュース記事かどうかbooleanで表現>,
-    "incidentProbability": <isMountainIncidentArticleの確からしさを0-1で表現>,
-    "isSurveyArticle": <特定の事故ではなく統計的な記事かどうかbooleanで表現>,
-    "surveyProbability": <isSurveyArticleの確からしさを0-1で表現>,
-    "summary":  "<入力テキストの230文字以内の要約>",
-    "incidentLocation": ["<事故の場所>", ...],
-    "mountain": "<事故の発生した山の名前>",
-    "prefecture": "<都道府県名>",
-    "incidentDate": "<事故の発生した日をISO 8601形式で>"
-    }`
+## 入力テキスト
+${article.content}
+
+## 出力の制約
+回答はJSONとしてパース可能であること
+
+## 出力テンプレート
+{
+"articleTags":  <入力テキストを表すタグをArrayで表現。最大5つ>,
+"isMountainIncidentArticle": <入力テキストが山岳事故のニュース記事かどうかbooleanで表現>,
+"incidentProbability": <isMountainIncidentArticleの確からしさを0-1で表現>,
+"isSurveyArticle": <特定の事故ではなく統計的な記事かどうかbooleanで表現>,
+"surveyProbability": <isSurveyArticleの確からしさを0-1で表現>,
+"summary":  "<入力テキストの230文字以内の要約。事故の概要や事故の発生した場所を含むこと>",
+"incidentLocation": ["<事故の場所>", ...],
+"mountain": "<事故の発生した山の名前>",
+"prefecture": "<都道府県名>",
+"incidentDate": "<事故の発生した日をISO 8601形式で>"
+}`
     let response
     try {
       response = await this.openai.createChatCompletion({
