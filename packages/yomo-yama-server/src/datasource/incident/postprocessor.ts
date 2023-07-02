@@ -83,6 +83,7 @@ export class ChatGptPostExtraProcessor {
     })
     if (tmpPostExtra) {
       log.info({ message: "already processed", key: article.toKey().getId() })
+      article = this.updateArticle(article, tmpPostExtra.content || "")
       return article
     }
 
@@ -130,40 +131,7 @@ export class ChatGptPostExtraProcessor {
     log.info({ message: "ChatGPT Answer is", answer })
 
     if (answer) {
-      let parsed
-      try {
-        parsed = JSON.parse(answer)
-      } catch (e) {
-        log.error({ message: "cannot parse ChatGPT answer", error: e, answer })
-        return article
-      }
-      if (parsed.isMountainIncidentArticle) {
-        article.tags.add("山岳事故")
-      } else {
-        article.tags.delete("山岳事故")
-      }
-
-      if (parsed.isSurveyArticle) {
-        article.tags.add("__hidden")
-      } else {
-        article.tags.delete("__hidden")
-      }
-
-      if (parsed.tags) {
-        parsed.tags.forEach((t: string) => article.tags.add(t))
-      }
-
-      if (parsed.prefecture) {
-        article.tags.add(parsed.prefecture)
-      }
-
-      if (parsed.mountain) {
-        article.tags.add(parsed.mountain)
-      }
-
-      if (article.tags.has("__private-use") && parsed.summary) {
-        article.content = parsed.summary
-      }
+      article = this.updateArticle(article, answer)
 
       log.info({ postId: article.toKey().getId(), article })
       await this.prisma.postExtra.upsert({
@@ -181,6 +149,51 @@ export class ChatGptPostExtraProcessor {
       })
     }
 
+    return article
+  }
+
+  updateArticle(article: IncidentArticle, answer: string): IncidentArticle {
+    if (!answer) {
+      log.info({ message: "ChatGPT Answer is empty", answer })
+      return article
+    }
+
+    let parsed
+    try {
+      parsed = JSON.parse(answer)
+    } catch (e) {
+      log.error({ message: "cannot parse ChatGPT answer", error: e, answer })
+      return article
+    }
+    if (parsed.isMountainIncidentArticle) {
+      article.tags.add("山岳事故")
+    } else {
+      article.tags.delete("山岳事故")
+    }
+
+    if (parsed.isSurveyArticle) {
+      article.tags.add("__hidden")
+    } else {
+      article.tags.delete("__hidden")
+    }
+
+    if (parsed.tags) {
+      parsed.tags.forEach((t: string) => article.tags.add(t))
+    }
+
+    if (parsed.prefecture) {
+      article.tags.add(parsed.prefecture)
+    }
+
+    if (parsed.mountain) {
+      article.tags.add(parsed.mountain)
+    }
+
+    if (article.tags.has("__private-use") && parsed.summary) {
+      article.content = parsed.summary
+    }
+
+    log.info({ postId: article.toKey().getId(), article })
     return article
   }
 }
