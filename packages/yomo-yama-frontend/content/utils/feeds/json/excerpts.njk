@@ -10,7 +10,7 @@ eleventyExcludeFromCollections: true
 {
   {%- include "partials/feeds/json/feed-meta.njk" -%}
   "items": [
-    {%- for post in collections.publishedPosts|limit(itemLimit) %}
+    {%- for post in collections.incidents|limit(itemLimit) %}
     {%- set absolutePostUrl %}{{ post.url | alwaysProductionUrl }}{% endset -%}
     {
       {%- include "partials/feeds/json/item-meta.njk" -%}
