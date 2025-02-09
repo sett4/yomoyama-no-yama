@@ -24,6 +24,7 @@ module.exports = function (eleventyConfig) {
   // --- Collections
 
   Object.values(collections).forEach(({ name, body }) => {
+    console.log(`collection adding ${name}`);
     eleventyConfig.addCollection(name, body);
   });
 

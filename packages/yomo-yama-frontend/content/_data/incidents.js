@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { INCIDENT_COLLECTION_TAG_NAME } = require('../../_11ty/constants');
 // const { createContext } = require('@sett4/yomo-yama-prisma-client');
 
 const prisma = new PrismaClient();
@@ -19,6 +20,8 @@ module.exports = async function main() {
   });
 
   const transformed = incidents.map((i) => {
+    const tags = i.tags.split(',').filter((tag) => !tag.startsWith('__'));
+    tags.push(INCIDENT_COLLECTION_TAG_NAME);
     return {
       templateContent: i.content,
       url: '/incident/' + i.slug,
@@ -28,7 +31,7 @@ module.exports = async function main() {
         slug: i.slug,
       },
       ...i,
-      tags: i.tags.split(',').filter((tag) => !tag.startsWith('__')),
+      tags: tags,
     };
   });
 

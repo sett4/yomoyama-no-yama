@@ -10,6 +10,7 @@ module.exports = {
     'publishedPosts',
     'publishedPages',
     'tagList',
+    'categoryIncident',
   ],
   ASSETS_FOLDER: 'assets',
   SCRIPTS_FOLDER: 'src/scripts',
@@ -17,6 +18,7 @@ module.exports = {
   BUILD_FOLDER: '_site',
   POST_COLLECTION_TAG_NAME: 'post',
   PAGE_COLLECTION_TAG_NAME: 'page',
+  INCIDENT_COLLECTION_TAG_NAME: 'incident',
   POSTS_PER_TAG_PAGE: siteConfig.tags.postsPerPage,
   IS_PRODUCTION: process.env.NODE_ENV === 'production',
   SLUGIFY_CONFIG: {
