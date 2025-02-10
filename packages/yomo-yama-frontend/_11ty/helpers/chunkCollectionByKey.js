@@ -1,5 +1,5 @@
-const chunk = require('lodash/chunk');
-const getCollectionKeyValues = require('./getCollectionKeyValues.js');
+import chunk from 'lodash/chunk';
+import getCollectionKeyValues from './getCollectionKeyValues.js';
 
 /**
  * Returns a chunked array of objects representing
@@ -111,6 +111,4 @@ const chunkCollectionByKey = (collection, key, itemsPerPage = 10) => {
   return paginatedCollection;
 };
 
-module.exports = {
-  chunkCollectionByKey,
-};
+export { chunkCollectionByKey };

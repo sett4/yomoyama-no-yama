@@ -1,17 +1,15 @@
-// Paginated collection by tags
-// Based on briliant solution by Jérôme Coupé
-// https://github.com/jeromecoupe/11ty-paginate-taxonomies
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import moduleName from '../helpers/moduleName.js';
+import { POSTS_PER_TAG_PAGE, POST_COLLECTION_TAG_NAME } from '../constants.js';
+import { chunkCollectionByKey } from '../helpers/chunkCollectionByKey.js';
 
-const moduleName = require('../helpers/moduleName');
-const {
-  POSTS_PER_TAG_PAGE,
-  POST_COLLECTION_TAG_NAME,
-} = require('../constants');
-const { chunkCollectionByKey } = require('../helpers/chunkCollectionByKey');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const collectionKey = 'tags';
 
-module.exports = {
+export default {
   name: moduleName(__filename),
   body: (collectionApi) => {
     const taggedPosts = collectionApi.getFilteredByTag(

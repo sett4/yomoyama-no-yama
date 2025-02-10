@@ -1,6 +1,6 @@
-const jsonminify = require('jsonminify');
-const moduleName = require('../helpers/moduleName');
-const { IS_PRODUCTION } = require('../constants');
+import jsonminify from 'jsonminify';
+import moduleName from '../helpers/moduleName.js';
+import { IS_PRODUCTION } from '../constants.js';
 
 const body = (content) => {
   if (!IS_PRODUCTION) {
@@ -9,7 +9,7 @@ const body = (content) => {
   return jsonminify(content);
 };
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

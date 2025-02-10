@@ -1,4 +1,4 @@
-const moduleName = require('../helpers/moduleName');
+import moduleName from '../helpers/moduleName.js';
 
 const body = (str) =>
   str
@@ -6,7 +6,7 @@ const body = (str) =>
     .map((word) => word[0].toUpperCase() + word.substring(1))
     .join(' ');
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

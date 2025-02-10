@@ -1,4 +1,4 @@
-const {
+import {
   initialSetup,
   layoutAliases,
   collections,
@@ -8,9 +8,9 @@ const {
   plugins,
   constants,
   events,
-} = require('./_11ty');
+} from './_11ty/index.js';
 
-module.exports = function (eleventyConfig) {
+export default function (eleventyConfig) {
   // --- Initial config
 
   initialSetup(eleventyConfig);
@@ -70,4 +70,4 @@ module.exports = function (eleventyConfig) {
     htmlTemplateEngine: 'njk',
     markdownTemplateEngine: 'njk',
   };
-};
+}

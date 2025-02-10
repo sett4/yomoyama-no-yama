@@ -1,5 +1,4 @@
-const { max } = require('lodash');
-const moduleName = require('../helpers/moduleName');
+import moduleName from '../helpers/moduleName.js';
 
 const body = (article) => {
   if (!Object.prototype.hasOwnProperty.call(article, 'templateContent')) {
@@ -18,7 +17,7 @@ const body = (article) => {
   return excerpt.substring(0, max) + '…';
 };
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

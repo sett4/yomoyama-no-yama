@@ -1,6 +1,6 @@
-const { parse } = require('node-html-parser');
-const moduleName = require('../helpers/moduleName');
-const siteConfig = require('../../content/_data/siteConfig');
+import { parse } from 'node-html-parser';
+import moduleName from '../helpers/moduleName.js';
+import siteConfig from '../../content/_data/siteConfig.js';
 
 const body = (content) => {
   const root = parse(content);
@@ -21,7 +21,7 @@ const body = (content) => {
   return content;
 };
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

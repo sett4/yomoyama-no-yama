@@ -1,15 +1,14 @@
-const { DateTime } = require('luxon');
-const moduleName = require('../helpers/moduleName');
+import { DateTime } from 'luxon';
+import moduleName from '../helpers/moduleName.js';
 
 const body = (url) => {
   const [urlPart, paramPart] = url.split('?');
   const params = new URLSearchParams(paramPart || '');
-  // eslint-disable-next-line no-undef
   params.set('v', DateTime.local().toFormat('X'));
   return `${urlPart}?${params}`;
 };
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

@@ -1,15 +1,14 @@
-const requireDir = require('require-dir');
-const initialSetup = require('./initialSetup');
-const layoutAliases = require('./layoutAliases');
-const collections = requireDir('./collections');
-const transforms = requireDir('./transforms');
-const shortcodes = requireDir('./shortcodes');
-const filters = requireDir('./filters');
-const plugins = require('./plugins');
-const constants = require('./constants');
-const events = require('./events');
+import initialSetup from './initialSetup.js';
+import layoutAliases from './layoutAliases.js';
+import collections from './collections/index.js';
+import transforms from './transforms/index.js';
+import shortcodes from './shortcodes/index.js';
+import filters from './filters/index.js';
+import plugins from './plugins.js';
+import constants from './constants.js';
+import events from './events.js';
 
-module.exports = {
+export {
   initialSetup,
   layoutAliases,
   collections,

@@ -1,6 +1,6 @@
-const moduleName = require('../helpers/moduleName');
-const { minify } = require('terser');
-const { IS_PRODUCTION } = require('../constants');
+import moduleName from '../helpers/moduleName.js';
+import { minify } from 'terser';
+import { IS_PRODUCTION } from '../constants.js';
 
 const JS_MINIFIER_OPTIONS = {
   mangle: true,
@@ -15,7 +15,7 @@ const body = async (content, outputPath) => {
   }
 };
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

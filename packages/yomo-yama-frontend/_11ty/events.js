@@ -1,7 +1,7 @@
-const socialImages = require('./events/socialImages');
+import socialImages from './events/socialImages.js';
 
 const afterBuildEvents = [socialImages];
 
-module.exports = {
+export default {
   after: afterBuildEvents,
 };

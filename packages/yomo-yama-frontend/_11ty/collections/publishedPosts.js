@@ -1,7 +1,12 @@
-const moduleName = require('../helpers/moduleName');
-const { POST_COLLECTION_TAG_NAME } = require('../constants');
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import moduleName from '../helpers/moduleName.js';
+import { POST_COLLECTION_TAG_NAME } from '../constants.js';
 
-module.exports = {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export default {
   name: moduleName(__filename),
   body: (collectionApi) =>
     collectionApi

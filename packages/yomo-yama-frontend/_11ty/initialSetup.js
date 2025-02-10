@@ -1,12 +1,8 @@
-const markdownIt = require('markdown-it');
-const markdownItAnchor = require('markdown-it-anchor');
-const markdownItFootnote = require('markdown-it-footnote');
-const slugify = require('slugify');
-const {
-  ASSETS_FOLDER,
-  SCRIPTS_FOLDER,
-  SLUGIFY_CONFIG,
-} = require('./constants');
+import markdownIt from 'markdown-it';
+import markdownItAnchor from 'markdown-it-anchor';
+import markdownItFootnote from 'markdown-it-footnote';
+import slugify from 'slugify';
+import { ASSETS_FOLDER, SCRIPTS_FOLDER, SLUGIFY_CONFIG } from './constants.js';
 
 const MARKDOWN_IT_OPTIONS = {
   html: true,
@@ -20,7 +16,7 @@ const MARKDOWN_IT_ANCHOR_OPTIONS = {
   decamelize: false,
 };
 
-module.exports = function (eleventyConfig) {
+export default function (eleventyConfig) {
   eleventyConfig.setLibrary(
     'md',
     markdownIt(MARKDOWN_IT_OPTIONS)
@@ -32,4 +28,4 @@ module.exports = function (eleventyConfig) {
     [ASSETS_FOLDER]: './',
     [SCRIPTS_FOLDER]: './js',
   });
-};
+}

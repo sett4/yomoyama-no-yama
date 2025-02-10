@@ -1,4 +1,4 @@
-const moduleName = require('../helpers/moduleName');
+import moduleName from '../helpers/moduleName.js';
 
 const CHARACTERS_PER_LINE = 14;
 
@@ -24,7 +24,7 @@ const body = (input) => {
   return lines;
 };
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

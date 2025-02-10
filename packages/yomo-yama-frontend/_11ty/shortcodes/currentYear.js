@@ -1,9 +1,9 @@
-const moduleName = require('../helpers/moduleName');
-const { DateTime } = require('luxon');
+import moduleName from '../helpers/moduleName.js';
+import { DateTime } from 'luxon';
 
 const body = () => DateTime.local().toFormat('yyyy');
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

@@ -1,5 +1,5 @@
-const { DateTime } = require('luxon');
-const moduleName = require('../helpers/moduleName');
+import { DateTime } from 'luxon';
+import moduleName from '../helpers/moduleName.js';
 
 const body = (postList) => {
   const yearMonthPosts = {};
@@ -25,7 +25,7 @@ const body = (postList) => {
   return ret;
 };
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

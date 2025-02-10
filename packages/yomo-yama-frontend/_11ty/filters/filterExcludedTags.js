@@ -1,10 +1,10 @@
-const moduleName = require('../helpers/moduleName');
-const { EXCLUDED_TAGS } = require('../constants');
+import moduleName from '../helpers/moduleName.js';
+import { EXCLUDED_TAGS } from '../constants.js';
 
 const body = (tagArray) =>
   tagArray.filter((tag) => !EXCLUDED_TAGS.includes(tag));
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

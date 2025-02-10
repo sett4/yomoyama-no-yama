@@ -1,6 +1,6 @@
-const moduleName = require('../helpers/moduleName');
-const sharp = require('sharp');
-const path = require('path');
+import moduleName from '../helpers/moduleName.js';
+import sharp from 'sharp';
+import path from 'path';
 
 const ASSETS_DIRECTORY = path.join(process.cwd(), 'assets');
 const IMAGES_DIRECTORY = 'images';
@@ -21,7 +21,7 @@ const body = (src, width, height) => {
   return path.join(IMAGES_DIRECTORY, imageName);
 };
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

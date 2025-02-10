@@ -1,9 +1,9 @@
-const moduleName = require('../helpers/moduleName');
-const siteConfig = require('../../content/_data/siteConfig');
+import moduleName from '../helpers/moduleName.js';
+import siteConfig from '../../content/_data/siteConfig.js';
 
 const body = (path) => new URL(path, siteConfig.site.url);
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

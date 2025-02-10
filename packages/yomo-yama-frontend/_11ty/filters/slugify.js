@@ -1,9 +1,9 @@
 // Using custom slug filter to ensure configurability
 // and backwards compatibility with existing permalinks
 
-const slugify = require('slugify');
-const moduleName = require('../helpers/moduleName');
-const { SLUGIFY_CONFIG } = require('../constants');
+import slugify from 'slugify';
+import moduleName from '../helpers/moduleName.js';
+import { SLUGIFY_CONFIG } from '../constants.js';
 
 const body = (input) => {
   if (typeof input !== 'string' || input instanceof String) {
@@ -14,7 +14,7 @@ const body = (input) => {
   return slug;
 };
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };

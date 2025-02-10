@@ -1,6 +1,6 @@
-const moduleName = require('../helpers/moduleName');
-const minifyXML = require('minify-xml').minify;
-const { IS_PRODUCTION } = require('../constants');
+import moduleName from '../helpers/moduleName.js';
+import { minify as minifyXML } from 'minify-xml';
+import { IS_PRODUCTION } from '../constants.js';
 
 const XML_MINIFIER_OPTIONS = {
   trimWhitespaceFromTexts: true,
@@ -14,7 +14,7 @@ const body = (content, outputPath) => {
   return content;
 };
 
-module.exports = {
-  name: moduleName(__filename),
+export default {
+  name: moduleName(import.meta.url),
   body,
 };
