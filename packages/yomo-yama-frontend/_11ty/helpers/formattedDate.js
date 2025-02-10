@@ -1,5 +1,7 @@
-const { DateTime } = require('luxon');
+import { DateTime } from 'luxon';
 
-module.exports = (dateObj, format) => {
+const formattedDate = (dateObj, format) => {
   return DateTime.fromJSDate(dateObj, { zone: 'utc' }).toFormat(format);
 };
+
+export default formattedDate;

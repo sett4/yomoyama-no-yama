@@ -1,7 +1,7 @@
-const incidents = require('./incidents');
-const { DateTime } = require('luxon');
+import incidents from './incidents.js';
+import { DateTime } from 'luxon';
 
-module.exports = async function main() {
+export default async function main() {
   // ... you will write your Prisma Client queries here
   const transformed = await incidents();
 
@@ -27,4 +27,4 @@ module.exports = async function main() {
   console.log('loaded', postsByYearMonth.length, 'monthList');
   // console.log(postsByYearMonth[0].posts);
   return postsByYearMonth;
-};
+}

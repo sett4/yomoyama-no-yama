@@ -3,7 +3,7 @@
 // so that the whole template can be translated
 // by editing just a handful of files (mostly this one :))
 
-module.exports = {
+export default {
   main_page: 'Main page',
   skip_to_main_content: 'Skip to main content',
   disclaimer: 'Disclaimer',

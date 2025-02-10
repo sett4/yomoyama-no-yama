@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   eleventyComputed: {
     title: (data) => {
       return data.post.data.title;

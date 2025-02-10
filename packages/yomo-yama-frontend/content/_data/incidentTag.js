@@ -1,7 +1,6 @@
-const incidents = require('./incidents');
-const { DateTime } = require('luxon');
+import incidents from './incidents.js';
 
-module.exports = async function main() {
+export default async function main() {
   // ... you will write your Prisma Client queries here
   const transformed = await incidents();
 
@@ -21,4 +20,4 @@ module.exports = async function main() {
   });
   console.log('loaded', tags.length, 'tags.');
   return tags;
-};
+}

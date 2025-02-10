@@ -1,5 +1,5 @@
-const slugify = require('slugify');
-const { SLUGIFY_CONFIG } = require('../constants');
+import slugify from 'slugify';
+import { SLUGIFY_CONFIG } from '../constants.js';
 /**
  * Transforms a string into a slug
  * @param {String} str string to slugify
@@ -7,4 +7,4 @@ const { SLUGIFY_CONFIG } = require('../constants');
  */
 const slugifyString = (str) => slugify(str, SLUGIFY_CONFIG);
 
-module.exports = slugifyString;
+export default slugifyString;

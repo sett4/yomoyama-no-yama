@@ -1,4 +1,4 @@
-const path = require('path');
+import path from 'path';
 
 const makeImgSrcsLocal = (content, newImagePath = '..') => {
   content.querySelectorAll('img').map((image) => {
@@ -10,4 +10,4 @@ const makeImgSrcsLocal = (content, newImagePath = '..') => {
   return content;
 };
 
-module.exports = makeImgSrcsLocal;
+export default makeImgSrcsLocal;

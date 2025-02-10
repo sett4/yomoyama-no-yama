@@ -1,4 +1,4 @@
-const slugifyString = require('./slugifyString');
+import slugifyString from './slugifyString';
 
 /**
  * Returns array of unique key values for passed collection
@@ -7,7 +7,7 @@ const slugifyString = require('./slugifyString');
  * @returns {Array} unique values corresponding to passed key
  */
 
-const uniqueKeyValues = (collection, key) => {
+export const uniqueKeyValues = (collection, key) => {
   // get all used key values
   let collectionKeyValues = collection
     .filter((item) => key in item.data)
@@ -33,5 +33,3 @@ const uniqueKeyValues = (collection, key) => {
 
   return valuesObjects;
 };
-
-module.exports = uniqueKeyValues;

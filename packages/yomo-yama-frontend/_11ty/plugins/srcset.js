@@ -25,11 +25,12 @@
 
 // Adapted from https://github.com/muenzpraeger/eleventy-chirpy-blog-template
 
-const { JSDOM } = require('jsdom');
-const sharp = require('sharp');
-const { copyFileSync, existsSync, mkdirSync, readFileSync } = require('fs');
-const { MD5 } = require('crypto-js');
-const { extname, join } = require('path');
+// const { JSDOM } = require('jsdom');
+import { JSDOM } from 'jsdom';
+import sharp from 'sharp';
+import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'fs';
+import MD5 from 'crypto-js';
+import { extname, join } from 'path';
 
 const widths = [1024, 820, 640, 320];
 
@@ -159,7 +160,7 @@ const convert = async (rawContent, outputPath) => {
   return content;
 };
 
-module.exports = {
+export default {
   initArguments: {},
   configFunction: async (eleventyConfig = {}) => {
     eleventyConfig.addTransform('imageConversion', convert);

@@ -1,6 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
-const { INCIDENT_COLLECTION_TAG_NAME } = require('../../_11ty/constants');
-// const { createContext } = require('@sett4/yomo-yama-prisma-client');
+import { PrismaClient } from '@prisma/client';
+import { INCIDENT_COLLECTION_TAG_NAME } from '../../_11ty/constants.js';
+// import { createContext } from '@sett4/yomo-yama-prisma-client';
 
 const prisma = new PrismaClient();
 
@@ -11,7 +11,7 @@ function truncateString(str, num) {
   return str.slice(0, num) + '...';
 }
 
-module.exports = async function main() {
+export default async function main() {
   // ... you will write your Prisma Client queries here
   const incidents = await prisma.post.findMany({
     where: { published: true, category: { name: 'incident' } },
@@ -38,4 +38,4 @@ module.exports = async function main() {
   console.log('loaded', incidents.length, 'incidents');
   prisma.$disconnect();
   return transformed;
-};
+}

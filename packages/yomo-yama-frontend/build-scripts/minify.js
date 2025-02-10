@@ -1,6 +1,6 @@
-const Terser = require('terser');
-const fs = require('fs');
-const path = require('path');
+import Terser from 'terser';
+import fs from 'fs';
+import path from 'path';
 
 const getAllFiles = (dirPath, arrayOfFiles) => {
   let files = fs.readdirSync(dirPath);

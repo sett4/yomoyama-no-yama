@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   eleventyComputed: {
     title: (data) => {
       return '山岳事故 ' + data.post.yearMonth;

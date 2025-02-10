@@ -1,12 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const Image = require('@11ty/eleventy-img');
-const siteConfig = require('../../content/_data/siteConfig');
+import fs from 'fs';
+import path from 'path';
+import Image from '@11ty/eleventy-img';
+import siteConfig from '../../content/_data/siteConfig.js';
 
 const SOCIAL_PREVIEW_IMAGES_DIR = path.join('_site', 'images', 'share');
 const OUTPUT_IMAGE_EXTENSION = 'jpg';
 
-module.exports = () => {
+export default () => {
   const files = fs.readdirSync(SOCIAL_PREVIEW_IMAGES_DIR);
 
   if (siteConfig.opengraph.enableImageGeneration) {
