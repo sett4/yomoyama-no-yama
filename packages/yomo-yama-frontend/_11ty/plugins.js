@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import { IS_PRODUCTION } from './constants.js';
-import pluginRss from '@11ty/eleventy-plugin-rss';
+import { feedPlugin } from '@11ty/eleventy-plugin-rss';
 import { EleventyHtmlBasePlugin } from '@11ty/eleventy';
 import pluginEmoji from 'eleventy-plugin-emoji';
 import eleventyNavigationPlugin from '@11ty/eleventy-navigation';
@@ -20,7 +20,25 @@ const plugins = [
     body: EleventyHtmlBasePlugin,
   },
   {
-    body: pluginRss,
+    body: feedPlugin,
+    options: {
+      type: 'atom', // or "rss", "json"
+      outputPath: '/feed.xml',
+      collection: {
+        name: 'incidents', // iterate over `collections.posts`
+        limit: 10, // 0 means no limit
+      },
+      metadata: {
+        language: 'ja',
+        title: 'よもやまの山',
+        subtitle: '',
+        base: 'https://yama.4dir.com/',
+        author: {
+          name: 'sett4',
+          email: '', // Optional
+        },
+      },
+    },
   },
   {
     body: pluginEmoji,
