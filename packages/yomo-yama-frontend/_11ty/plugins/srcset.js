@@ -29,7 +29,7 @@
 import { JSDOM } from 'jsdom';
 import sharp from 'sharp';
 import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'fs';
-import MD5 from 'crypto-js';
+import MD5 from 'crypto-js/md5.js';
 import { extname, join } from 'path';
 
 const widths = [1024, 820, 640, 320];
