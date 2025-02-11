@@ -25,19 +25,3 @@ export const SLUGIFY_CONFIG = {
   lower: true,
   strict: true,
 };
-
-const constants = {
-  ASSETS_FOLDER,
-  EXCLUDED_TAGS,
-  SCRIPTS_FOLDER,
-  CONTENT_FOLDER,
-  BUILD_FOLDER,
-  POST_COLLECTION_TAG_NAME,
-  PAGE_COLLECTION_TAG_NAME,
-  INCIDENT_COLLECTION_TAG_NAME,
-  POSTS_PER_TAG_PAGE,
-  IS_PRODUCTION,
-  SLUGIFY_CONFIG,
-};
-
-export default constants;
