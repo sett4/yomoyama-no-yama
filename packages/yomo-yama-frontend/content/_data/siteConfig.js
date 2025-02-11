@@ -217,6 +217,15 @@ export default {
       // How many posts should be presented in full-post-contents RSS feed?
       limit: 20,
     },
+    // Settings for RSS feed displaying full post contents
+    incidents: {
+      // Title of RSS feed displaying full post contents
+      title: 'ATOM feed (full articles)',
+      // Path of RSS feed displaying only post excerpts
+      path: '/incident/feed-mountain-incident.xml',
+      // How many posts should be presented in full-post-contents RSS feed?
+      limit: 20,
+    },
   },
   // ---------------------------------------------------------------------------
   // Settings for JSON feeds.
