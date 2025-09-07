@@ -1,7 +1,7 @@
 export default {
   eleventyComputed: {
     title: (data) => {
-      return data.post.data.title;
+      return data.post.title;
     },
     incidentTags: (data) => {
       if (data.post.tags) {
@@ -9,8 +9,6 @@ export default {
       }
       return [];
     },
-    date: (data) => {
-      return data.post.data.date;
-    },
+    date: (data) => data.post.publishedDate,
   },
 };

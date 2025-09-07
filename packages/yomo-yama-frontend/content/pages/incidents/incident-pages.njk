@@ -7,6 +7,8 @@ pagination:
     addAllPagesToCollections: true
 permalink: "/incident/{{ post.slug }}.html"
 description: "{{ post.content }}"
+eleventyComputed:
+  date: "{{ post.publishedAt }}"
 tags:
   - incident
 ---

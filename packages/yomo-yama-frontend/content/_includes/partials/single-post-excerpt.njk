@@ -1,10 +1,10 @@
 {%- set wordCount -%}{{ post.templateContent | striptags | wordcount }}{%- endset -%}
 {%- set readingTime -%}{{ wordCount | readingTimeMin }}{%- endset -%}
-{%- set postDate -%}{{ post.data.date|readableDate }}{%- endset -%}
+{%- set postDate -%}{{ post.date|readableDate }}{%- endset -%}
 <a href="{{ post.url }}">
   <article>
     <header>
-      <h2 class="post-title">{{ post.data.title }}</h2>
+      <h2 class="post-title">{{ post.title }}</h2>
     </header>
     <div class="excerpt"> 
       {% excerpt post %}

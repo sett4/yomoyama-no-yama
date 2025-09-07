@@ -16,7 +16,7 @@ export default async function main() {
   const incidents = await prisma.post.findMany({
     where: { published: true, category: { name: 'incident' } },
     orderBy: { publishedAt: 'desc' },
-    // take: 100,
+    take: undefined,
   });
 
   const transformed = incidents.map((i) => {
@@ -25,16 +25,16 @@ export default async function main() {
     return {
       templateContent: i.content,
       url: '/incident/' + i.slug,
-      data: {
-        date: i.publishedAt,
-        title: i.title,
-        slug: i.slug,
-      },
       ...i,
       tags: tags,
+      date: i.publishedAt,
     };
   });
 
+
+  // transformed.forEach((i) => {
+  //   console.log(i.publishedDate, '-');
+  // });
   console.log('loaded', incidents.length, 'incidents');
   prisma.$disconnect();
   return transformed;
