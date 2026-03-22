@@ -1,0 +1,28 @@
+{
+  "name": "@sett4/yomo-yama-db",
+  "version": "0.0.1",
+  "description": "Shared Drizzle ORM and libSQL utilities for yomoyama-no-yama",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "seed-data"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "ts-node ./src/migrate.ts",
+    "db:seed": "ts-node ./src/seed.ts"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.15",
+    "drizzle-orm": "^0.44.5"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.4.4",
+    "drizzle-kit": "^0.31.4",
+    "ms": "^3.0.0-canary.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}

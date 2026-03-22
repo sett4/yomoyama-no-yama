@@ -5,7 +5,12 @@ import zlib from "zlib"
 import { DictionaryBuilder } from "../mountain/gsi-prefecture/buildDictionary"
 import { log } from "../../logger"
 import { Configuration, OpenAIApi } from "openai"
-import { Post, PostExtraType, PrismaClient } from "@prisma/client"
+import {
+  type DbClient,
+  findPostExtraById,
+  POST_EXTRA_TYPE,
+  upsertPostExtra,
+} from "@sett4/yomo-yama-db"
 
 export interface ArticlePostProcessor {
   postProcess(article: IncidentArticle): Promise<IncidentArticle>
@@ -57,12 +62,12 @@ export class AddMountainTagProcessor {
 
 export class ChatGptPostExtraProcessor {
   private openai: OpenAIApi
-  private prisma: PrismaClient
+  private db: DbClient
   private chatGptModel: string
 
   constructor(
     openaiApiKey: string,
-    prisma: PrismaClient,
+    db: DbClient,
     model: string = "gpt-3.5-turbo"
   ) {
     const configuration = new Configuration({
@@ -71,16 +76,14 @@ export class ChatGptPostExtraProcessor {
     })
     // console.log("Key", openaiApiKey)
     this.openai = new OpenAIApi(configuration)
-    this.prisma = prisma
+    this.db = db
     this.chatGptModel = model
   }
 
   async initialize() {}
 
   async postProcess(article: IncidentArticle): Promise<IncidentArticle> {
-    const tmpPostExtra = await this.prisma.postExtra.findUnique({
-      where: { id: article.toKey().getId() },
-    })
+    const tmpPostExtra = await findPostExtraById(this.db, article.toKey().getId())
     if (tmpPostExtra) {
       log.info({ message: "already processed", key: article.toKey().getId() })
       article = this.updateArticle(article, tmpPostExtra.content || "")
@@ -134,18 +137,10 @@ ${article.content}
       article = this.updateArticle(article, answer)
 
       log.info({ postId: article.toKey().getId(), article })
-      await this.prisma.postExtra.upsert({
-        where: { id: article.toKey().getId() },
-        update: {
-          id: article.toKey().getId(),
-          type: PostExtraType.INCIDENT_GPT,
-          content: answer,
-        },
-        create: {
-          id: article.toKey().getId(),
-          type: PostExtraType.INCIDENT_GPT,
-          content: answer,
-        },
+      await upsertPostExtra(this.db, {
+        id: article.toKey().getId(),
+        type: POST_EXTRA_TYPE.INCIDENT_GPT,
+        content: answer,
       })
     }
 

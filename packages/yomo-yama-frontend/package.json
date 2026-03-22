@@ -25,11 +25,10 @@
     "build:sass": "sass --no-source-map src/styles:_site/css --style compressed",
     "sort-package-json": "sort-package-json",
     "start": "npm run dev",
-    "prepare": "prisma generate --schema=./prisma/schema.prisma --generator=prismaClient"
+    "prepare": "npm --prefix ../yomo-yama-db run build"
   },
   "devDependencies": {
     "dotenv-cli": "^7.2.1",
-    "prisma": "^4.14.1",
     "typescript": "^5.0.4"
   },
   "dependencies": {
@@ -38,7 +37,7 @@
     "@11ty/eleventy-navigation": "^0.3.5",
     "@11ty/eleventy-plugin-rss": "^2.0.3",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
-    "@prisma/client": "^4.14.1",
+    "@sett4/yomo-yama-db": "file:../yomo-yama-db",
     "crypto-js": "^4.1.1",
     "eleventy-plugin-emoji": "^1.1.0",
     "eslint": "^8.36.0",

@@ -1,5 +1,10 @@
 import crypto from "crypto"
-import { Post, PrismaClient } from "@prisma/client"
+import {
+  type DbClient,
+  ensureCategory,
+  findPublishedPostsByCategoryAndSource,
+  upsertPost,
+} from "@sett4/yomo-yama-db"
 
 export interface ArticleRepository {
   exists(key: ArticleKey): boolean
@@ -130,12 +135,12 @@ export class EmptyArticleRepository implements ArticleRepository {
   }
 }
 
-export class PrismaArticleRepository implements ArticleRepository {
-  prisma: PrismaClient
+export class DbArticleRepository implements ArticleRepository {
+  db: DbClient
   readonly COLLECTION_ARTICLE: string = "incident"
 
-  constructor(prisma: PrismaClient) {
-    this.prisma = prisma
+  constructor(db: DbClient) {
+    this.db = db
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -152,31 +157,23 @@ export class PrismaArticleRepository implements ArticleRepository {
     }
 
     try {
-      const category = await this.prisma.category.findFirstOrThrow({
-        where: { name: "incident" },
-      })
+      const category = await ensureCategory(this.db, "incident")
       const published =
         article.tags.has("山岳事故") && !article.tags.has("hidden")
-      const post = {
+      await upsertPost(this.db, {
         publishedAt: new Date(article.publishedDate),
         title: article.subject,
         content: article.content,
         contentType: "incident",
         categoryId: category.id,
         rawContent: article.rawContent,
+        published: published,
         author: "",
         source: article.source,
         sourceUrl: article.url,
         slug: article.toKey().getId(),
         scraper: article.scraper,
         tags: [...article.tags].join(","),
-      }
-      await this.prisma.post.upsert({
-        where: {
-          postKey: { categoryId: category.id, slug: article.toKey().getId() },
-        },
-        update: post,
-        create: { ...post, published: published },
       })
     } catch (err) {
       throw err
@@ -190,15 +187,12 @@ export class PrismaArticleRepository implements ArticleRepository {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async findAll(source: string): Promise<IncidentArticle[]> {
-    const posts = await this.prisma.post.findMany({
-      where: {
-        published: true,
-        category: { name: "incident" },
-        source: source,
-      },
-      orderBy: { publishedAt: "desc" },
-    })
-    return posts.map((p) => {
+    const incidentPosts = await findPublishedPostsByCategoryAndSource(
+      this.db,
+      "incident",
+      source
+    )
+    return incidentPosts.map((p) => {
       const article: IncidentArticle = new IncidentArticle(
         p.source,
         p.source,
@@ -211,7 +205,7 @@ export class PrismaArticleRepository implements ArticleRepository {
         p.publishedAt,
         p.author
       )
-      article.tags = new Set<string>(p.tags.split(","))
+      article.tags = new Set<string>(p.tags.split(",").filter(Boolean))
       return article
     })
   }

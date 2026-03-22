@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import dbPkg from '@sett4/yomo-yama-db';
 import { INCIDENT_COLLECTION_TAG_NAME } from '../../_11ty/constants.js';
-// import { createContext } from '@sett4/yomo-yama-prisma-client';
 
-const prisma = new PrismaClient();
+const { createDbClient, findPublishedPostsByCategory } = dbPkg;
 
 function truncateString(str, num) {
   if (str.length <= num) {
@@ -12,12 +11,8 @@ function truncateString(str, num) {
 }
 
 export default async function main() {
-  // ... you will write your Prisma Client queries here
-  const incidents = await prisma.post.findMany({
-    where: { published: true, category: { name: 'incident' } },
-    orderBy: { publishedAt: 'desc' },
-    take: undefined,
-  });
+  const { client, db } = createDbClient();
+  const incidents = await findPublishedPostsByCategory(db, 'incident');
 
   const transformed = incidents.map((i) => {
     const tags = i.tags.split(',').filter((tag) => !tag.startsWith('__'));
@@ -36,6 +31,6 @@ export default async function main() {
   //   console.log(i.publishedDate, '-');
   // });
   console.log('loaded', incidents.length, 'incidents');
-  prisma.$disconnect();
+  client.close();
   return transformed;
 }

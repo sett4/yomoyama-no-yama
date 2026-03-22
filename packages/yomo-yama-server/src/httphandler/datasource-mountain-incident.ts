@@ -1,7 +1,7 @@
 import { Express } from "express"
 import {
   ArticleRepository,
-  PrismaArticleRepository,
+  DbArticleRepository,
   IncidentArticle,
   IndexScraper,
 } from "../datasource/incident"
@@ -14,15 +14,15 @@ import { ArticleScrapers } from "../datasource/incident/scraper"
 import YahooIndexScraper from "../datasource/incident/yahoo"
 import { DictionaryBuilder } from "../datasource/mountain/gsi-prefecture/buildDictionary"
 import { getLogger } from "../logger"
-import { PrismaClient } from "@prisma/client"
+import { createDbClient } from "@sett4/yomo-yama-db"
 import * as dotenv from "dotenv"
 dotenv.config()
 
 const registerHandler = async function (
   app: Express
 ) {
-  const prisma = new PrismaClient()
-  const repository: ArticleRepository = new PrismaArticleRepository(prisma)
+  const { db } = createDbClient()
+  const repository: ArticleRepository = new DbArticleRepository(db)
   const articleScrapers: ArticleScrapers = new ArticleScrapers()
   const addMountainTagProcessor = new AddMountainTagProcessor()
   await addMountainTagProcessor.initialize()
@@ -30,7 +30,7 @@ const registerHandler = async function (
 
   const chatGptPostExtraProcessor = new ChatGptPostExtraProcessor(
     process.env.OPENAI_API_KEY || "",
-    prisma
+    db
   )
   await chatGptPostExtraProcessor.initialize()
   articleScrapers.registerPostProcessor(chatGptPostExtraProcessor)
