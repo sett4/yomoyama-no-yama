@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "npm run clean",
     "build:eleventy": "dotenv -- npx eleventy --quiet",
-    "build": "npm-run-all -l -s prepare build:eleventy build:sass",
+    "build": "npm-run-all -l -s build:eleventy build:sass",
     "postbuild": "npm-run-all -l minify:js",
     "clean": "rimraf _site",
     "predev": "npm run clean",
@@ -24,8 +24,7 @@
     "watch:sass": "sass --no-source-map --watch ./src/styles:_site/css --style compressed",
     "build:sass": "sass --no-source-map src/styles:_site/css --style compressed",
     "sort-package-json": "sort-package-json",
-    "start": "npm run dev",
-    "prepare": "npm --prefix ../yomo-yama-db run build"
+    "start": "npm run dev"
   },
   "devDependencies": {
     "dotenv-cli": "^7.2.1",
@@ -37,7 +36,7 @@
     "@11ty/eleventy-navigation": "^0.3.5",
     "@11ty/eleventy-plugin-rss": "^2.0.3",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
-    "@sett4/yomo-yama-db": "file:../yomo-yama-db",
+    "@sett4/yomo-yama-db": "workspace:*",
     "crypto-js": "^4.1.1",
     "eleventy-plugin-emoji": "^1.1.0",
     "eslint": "^8.36.0",

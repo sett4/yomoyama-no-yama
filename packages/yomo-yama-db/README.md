@@ -2,6 +2,22 @@
 
 Drizzle ORM と libSQL(Turso) を使う共有 DB パッケージです。
 
+## Monorepo Build
+
+Cloudflare Pages では `packages/yomo-yama-frontend` を root directory にせず、repo root を root directory に設定します。
+
+- `root directory`: `/`
+- `build command`: `npm run pages:build`
+- `build output directory`: `packages/yomo-yama-frontend/_site`
+
+ローカルでも monorepo 全体で install する前提です。
+
+```bash
+npm install
+npm run build:db
+npm run build:frontend
+```
+
 ## Environment Variables
 
 - `DATABASE_URL`: `file:./local.db` 形式または Turso/libSQL URL

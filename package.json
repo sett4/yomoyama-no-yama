@@ -1,6 +1,12 @@
 {
   "name": "mt-incident-root",
   "private": true,
+  "scripts": {
+    "build:db": "npm run build --workspace @sett4/yomo-yama-db",
+    "build:frontend": "npm run build --workspace eleventy-template-bliss",
+    "build:server": "npm run gcp-build --workspace yomo-yama-server",
+    "pages:build": "npm run build:db && npm run build:frontend"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/sett4/mt-incident"
@@ -8,7 +14,11 @@
   "bugs": {
     "url": "https://github.com/sett4/mt-incident/issues"
   },
-  "workspaces": [],
+  "workspaces": [
+    "packages/yomo-yama-db",
+    "packages/yomo-yama-server",
+    "packages/yomo-yama-frontend"
+  ],
   "devDependencies": {
     "lerna": "^3.13.2"
   }
