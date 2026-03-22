@@ -1,7 +1,6 @@
 import { Express } from "express"
 import {
   ArticleRepository,
-  FirestoreArticleRepository,
   PrismaArticleRepository,
   IncidentArticle,
   IndexScraper,
@@ -20,12 +19,8 @@ import * as dotenv from "dotenv"
 dotenv.config()
 
 const registerHandler = async function (
-  app: Express,
-  firestore: FirebaseFirestore.Firestore
+  app: Express
 ) {
-  // const repository: ArticleRepository = new FirestoreArticleRepository(
-  //   firestore
-  // )
   const prisma = new PrismaClient()
   const repository: ArticleRepository = new PrismaArticleRepository(prisma)
   const articleScrapers: ArticleScrapers = new ArticleScrapers()
@@ -187,7 +182,7 @@ const registerHandler = async function (
 
   app.post("/datasource/mountain/incident/post-extra", async (req, res) => {
     req.log.info("updateing...")
-    const articles = await repository.findAll("np24")
+    const articles = await repository.findAll("yj-news")
     req.log.info(`loaded ${articles.length} articles`)
     const filteredArticles = articles.filter((a) => a.tags.has("山岳事故"))
 

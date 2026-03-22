@@ -89,7 +89,7 @@ export class ChatGptPostExtraProcessor {
 
     const content = `
 ## 指示
-以下の入力テキストは山岳事故のニュース記事です。指示する出力テンプレートに沿って情報を抽出してください。
+以下の入力テキストはニュース記事です。指示する出力テンプレートに沿って情報を抽出してください。
 
 ## 入力テキスト
 ${article.content}

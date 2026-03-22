@@ -1,4 +1,3 @@
-import * as admin from "firebase-admin"
 import crypto from "crypto"
 import { Post, PrismaClient } from "@prisma/client"
 
@@ -128,87 +127,6 @@ export class EmptyArticleRepository implements ArticleRepository {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   findAll(source: string): Promise<IncidentArticle[]> {
     throw new Error("Method not implemented.")
-  }
-}
-
-export class FirestoreArticleRepository implements ArticleRepository {
-  db: admin.firestore.Firestore
-  readonly COLLECTION_ARTICLE: string = "incident"
-
-  constructor(firestore: admin.firestore.Firestore) {
-    this.db = firestore
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  exists(key: ArticleKey): boolean {
-    throw new Error("Method not implemented.")
-  }
-
-  async save(article: IncidentArticle): Promise<any> {
-    const data = article.toData()
-    if (data.tags && data.tags.length > 0) {
-      // data.tags = admin.firestore.FieldValue.arrayUnion(...data.tags)
-    } else {
-      delete data.tags
-    }
-
-    try {
-      await this.db
-        .collection(this.COLLECTION_ARTICLE)
-        .doc(article.toKey().getId())
-        .update(data)
-    } catch (err) {
-      if ((err as Error).message.startsWith("5 NOT_FOUND")) {
-        await this.db
-          .collection(this.COLLECTION_ARTICLE)
-          .doc(article.toKey().getId())
-          .set(article.toData())
-      }
-    }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  load(key: ArticleKey): Promise<IncidentArticle> {
-    throw new Error("Method not implemented.")
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  findAll(source: string): Promise<IncidentArticle[]> {
-    return this.db
-      .collection(this.COLLECTION_ARTICLE)
-      .listDocuments()
-      .then((refs) => {
-        return Promise.all(refs.map((r) => r.get()))
-      })
-      .then((snapshots) => {
-        return snapshots.map((s) => {
-          const d = s.data()
-          if (d === undefined) {
-            throw Error("document data is undefined.")
-          }
-          const article: IncidentArticle = new IncidentArticle(
-            d.source,
-            d.sourceName,
-            d.url,
-            d.subject,
-            d.content,
-            d.content,
-            d.date,
-            d.publishedDate,
-            d.processedDate,
-            d.author
-          )
-          if (d.category) {
-            article.tags = new Set<string>(d.category)
-          } else {
-            article.tags = new Set<string>(d.tags)
-          }
-          if (s.id) {
-            article.keyCreator = (): StaticKey => new StaticKey(s.id)
-          }
-          return article
-        })
-      })
   }
 }
 

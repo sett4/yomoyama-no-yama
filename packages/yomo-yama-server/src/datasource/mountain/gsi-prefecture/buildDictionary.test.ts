@@ -1,15 +1,10 @@
-process.env.FIRESTORE_EMULATOR_HOST = "localhost:7080"
-
 import assert from "power-assert"
-import * as admin from "firebase-admin"
 
 import fs from "fs"
 import zlib from "zlib"
 
 import { DictionaryBuilder } from "./buildDictionary"
 import { Trie } from "@tanishiking/aho-corasick"
-
-const projectId = "mt-incident"
 
 describe("parse mountain csv", () => {
   test("hoge", () => {

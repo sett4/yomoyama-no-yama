@@ -2,10 +2,7 @@ import axios from "axios"
 import { Express } from "express"
 import { getLogger } from "../logger"
 
-const registerHandler = async function (
-  app: Express,
-  firestore: FirebaseFirestore.Firestore
-) {
+const registerHandler = async function (app: Express) {
   async function notifyToNetlify(): Promise<void> {
     if (process.env.NETLIFY_HOOK_URL) {
       const hookUrl: string = process.env.NETLIFY_HOOK_URL
