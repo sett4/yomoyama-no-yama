@@ -6,6 +6,8 @@ Drizzle ORM と libSQL(Turso) を使う共有 DB パッケージです。
 
 Cloudflare Pages では `packages/yomo-yama-frontend` を root directory にせず、repo root を root directory に設定します。
 
+shared package の依存指定は npm 互換性のため `workspace:*` ではなく `file:../yomo-yama-db` を使います。
+
 - `root directory`: `/`
 - `build command`: `npm run pages:build`
 - `build output directory`: `packages/yomo-yama-frontend/_site`

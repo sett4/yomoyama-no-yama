@@ -74,19 +74,11 @@ async function loadIncidentFromJsonFile() {
 }
 
 async function main() {
-  performance.mark("start")
+  const start = performance.now()
   const totalUpdateCount = await loadIncidentFromJsonFile()
-  performance.mark("loadIncidentFromJsonFileEnd")
-  performance.measure(
-    "loadIncidentFromJsonFileDiff",
-    "start",
-    "loadIncidentFromJsonFileEnd"
-  )
   console.info({
     location: "seed.incident",
-    duration: ms(
-      performance.getEntriesByName("loadIncidentFromJsonFileDiff")[0].duration
-    ),
+    duration: ms(performance.now() - start),
     totalUpdateCount,
   })
 }

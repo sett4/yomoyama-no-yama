@@ -36,7 +36,7 @@
     "@11ty/eleventy-navigation": "^0.3.5",
     "@11ty/eleventy-plugin-rss": "^2.0.3",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
-    "@sett4/yomo-yama-db": "workspace:*",
+    "@sett4/yomo-yama-db": "file:../yomo-yama-db",
     "crypto-js": "^4.1.1",
     "eleventy-plugin-emoji": "^1.1.0",
     "eslint": "^8.36.0",

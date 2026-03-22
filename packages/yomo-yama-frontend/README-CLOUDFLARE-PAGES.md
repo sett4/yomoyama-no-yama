@@ -2,6 +2,8 @@
 
 Cloudflare Pages では frontend package 単体ではなく、リポジトリ root を build 起点にします。
 
+workspace は root script の実行順制御に使い、shared package の依存指定自体は npm 互換性のため `file:../yomo-yama-db` を使います。
+
 ## Pages Settings
 
 - `root directory`: `/`
