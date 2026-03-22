@@ -5,6 +5,8 @@
     "build:db": "npm run build --workspace @sett4/yomo-yama-db",
     "build:frontend": "npm run build --workspace eleventy-template-bliss",
     "build:server": "npm run gcp-build --workspace yomo-yama-server",
+    "dev:frontend": "npm run dev --workspace eleventy-template-bliss",
+    "dev:server": "npm run dev --workspace yomo-yama-server",
     "pages:build": "npm run build:db && npm run build:frontend"
   },
   "repository": {
