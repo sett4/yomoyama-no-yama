@@ -25,6 +25,26 @@ export type UpsertPostInput = {
   tags: string
 }
 
+function logQueryError(context: string, error: unknown, metadata: Record<string, unknown>) {
+  const details =
+    error && typeof error === "object"
+      ? {
+          name: (error as { name?: unknown }).name,
+          message: (error as { message?: unknown }).message,
+          code: (error as { code?: unknown }).code,
+          causeMessage: (
+            (error as { cause?: { message?: unknown } }).cause || {}
+          ).message,
+          causeCode: ((error as { cause?: { code?: unknown } }).cause || {}).code,
+        }
+      : { message: String(error) }
+
+  console.error(`[db] ${context} failed`, {
+    ...metadata,
+    ...details,
+  })
+}
+
 export async function ensureCategory(
   db: DbClient,
   name: string
@@ -121,46 +141,61 @@ export async function findPublishedPostsByCategoryAndSource(
   categoryName: string,
   source: string
 ): Promise<DbPost[]> {
-  const existingCategory = await db
-    .select()
-    .from(categories)
-    .where(eq(categories.name, categoryName))
-    .limit(1)
-  const category = existingCategory[0]
-  if (!category) {
-    return []
-  }
-  return db
-    .select()
-    .from(posts)
-    .where(
-      and(
-        eq(posts.published, true),
-        eq(posts.categoryId, category.id),
-        eq(posts.source, source)
+  try {
+    const existingCategory = await db
+      .select()
+      .from(categories)
+      .where(eq(categories.name, categoryName))
+      .limit(1)
+    const category = existingCategory[0]
+    if (!category) {
+      console.warn("[db] category not found", { categoryName, source })
+      return []
+    }
+    return db
+      .select()
+      .from(posts)
+      .where(
+        and(
+          eq(posts.published, true),
+          eq(posts.categoryId, category.id),
+          eq(posts.source, source)
+        )
       )
-    )
-    .orderBy(desc(posts.publishedAt))
+      .orderBy(desc(posts.publishedAt))
+  } catch (error) {
+    logQueryError("findPublishedPostsByCategoryAndSource", error, {
+      categoryName,
+      source,
+    })
+    throw error
+  }
 }
 
 export async function findPublishedPostsByCategory(
   db: DbClient,
   categoryName: string
 ): Promise<DbPost[]> {
-  const existingCategory = await db
-    .select()
-    .from(categories)
-    .where(eq(categories.name, categoryName))
-    .limit(1)
-  const category = existingCategory[0]
-  if (!category) {
-    return []
+  try {
+    const existingCategory = await db
+      .select()
+      .from(categories)
+      .where(eq(categories.name, categoryName))
+      .limit(1)
+    const category = existingCategory[0]
+    if (!category) {
+      console.warn("[db] category not found", { categoryName })
+      return []
+    }
+    return db
+      .select()
+      .from(posts)
+      .where(and(eq(posts.published, true), eq(posts.categoryId, category.id)))
+      .orderBy(desc(posts.publishedAt))
+  } catch (error) {
+    logQueryError("findPublishedPostsByCategory", error, { categoryName })
+    throw error
   }
-  return db
-    .select()
-    .from(posts)
-    .where(and(eq(posts.published, true), eq(posts.categoryId, category.id)))
-    .orderBy(desc(posts.publishedAt))
 }
 
 export async function findPostExtraById(

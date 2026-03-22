@@ -11,8 +11,12 @@ function truncateString(str, num) {
 }
 
 export default async function main() {
+  console.info('[incidents] loading incident collection');
   const { client, db } = createDbClient();
   const incidents = await findPublishedPostsByCategory(db, 'incident');
+  console.info('[incidents] incident collection fetched', {
+    count: incidents.length,
+  });
 
   const transformed = incidents.map((i) => {
     const tags = i.tags.split(',').filter((tag) => !tag.startsWith('__'));
