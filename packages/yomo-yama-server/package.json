@@ -19,7 +19,6 @@
   },
   "scripts": {
     "format": "prettier --write src/**/*.{ts,tsx}",
-    "prepare": "npm run gcp-build",
     "test": "jest ./src --watch",
     "posttest": "npm run lint",
     "lint": "eslint ./src/**.ts ./src/*.ts",
