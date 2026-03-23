@@ -5,10 +5,10 @@
     "gcp-build": "npm run build --workspace @sett4/yomo-yama-db && npm run gcp-build --workspace yomo-yama-server",
     "start": "node packages/yomo-yama-server/dist/index.js",
     "build:db": "npm run build --workspace @sett4/yomo-yama-db",
-    "build:frontend": "npm run build --workspace eleventy-template-bliss",
+    "build:frontend": "npm run build --workspace yomo-yama-frontend",
     "build:server": "npm run gcp-build --workspace yomo-yama-server",
     "deploy:server": "gcloud app deploy",
-    "dev:frontend": "npm run dev --workspace eleventy-template-bliss",
+    "dev:frontend": "npm run dev --workspace yomo-yama-frontend",
     "dev:server": "npm run dev --workspace yomo-yama-server",
     "pages:build": "npm run build:db && npm run build:frontend"
   },
