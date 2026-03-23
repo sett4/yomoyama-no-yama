@@ -3,13 +3,6 @@ import { INCIDENT_COLLECTION_TAG_NAME } from '../../_11ty/constants.js';
 
 const { createDbClient, findPublishedPostsByCategory } = dbPkg;
 
-function truncateString(str, num) {
-  if (str.length <= num) {
-    return str;
-  }
-  return str.slice(0, num) + '...';
-}
-
 export default async function main() {
   console.info('[incidents] loading incident collection');
   const { client, db } = createDbClient();
