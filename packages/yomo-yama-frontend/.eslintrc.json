@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "browser": true,
     "commonjs": true,
@@ -6,10 +7,10 @@
     "node": true
   },
   "extends": "eslint:recommended",
-  "plugins": ["import"],
   "overrides": [],
   "parserOptions": {
-    "ecmaVersion": "latest"
+    "ecmaVersion": "latest",
+    "sourceType": "module"
   },
   "rules": {
     "no-unexpected-multiline": "off",

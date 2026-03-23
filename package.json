@@ -23,11 +23,5 @@
     "packages/yomo-yama-db",
     "packages/yomo-yama-server",
     "packages/yomo-yama-frontend"
-  ],
-  "devDependencies": {
-    "lerna": "^3.13.2"
-  },
-  "dependencies": {
-    "@dotenvx/dotenvx": "^1.57.1"
-  }
+  ]
 }
