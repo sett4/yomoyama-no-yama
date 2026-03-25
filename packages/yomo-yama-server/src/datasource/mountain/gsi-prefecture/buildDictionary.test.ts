@@ -14,7 +14,7 @@ describe("parse mountain csv", () => {
     test("ビルド結果を用いて山を抽出", async () => {
       const stream = fs
         .createReadStream(
-          "packages/yomo-yama-server/src/datasource/mountain/gsi-prefecture/gsi_experimental_nnfpt_with_prefecture.csv.gz"
+          "src/datasource/mountain/gsi-prefecture/gsi_experimental_nnfpt_with_prefecture.csv.gz"
         )
         .pipe(zlib.createGunzip())
 
