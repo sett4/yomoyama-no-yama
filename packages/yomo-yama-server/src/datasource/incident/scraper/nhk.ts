@@ -34,74 +34,76 @@ export class NhkLocalArticleScraper implements ArticleScraper {
 
   async scrape(url: string): Promise<IncidentArticle[]> {
     getLogger().info(`updating ${url} , source ${this.source}`)
-    let articles: IncidentArticle[] = await this.axios.get(url).then((res) => {
-      let $ = cheerio.load(res.data)
-      return $(this.articleCssSelector)
-        .map((i, el) => {
-          let tmpUpdatedDate: string = $("p.content--date").text()
-          let subject: string = $("h1.content--title").text()
-          let content: string = $(el).text()
-          let author: string = "NHK"
+    const articles: IncidentArticle[] = await this.axios
+      .get(url)
+      .then((res) => {
+        const $ = cheerio.load(res.data)
+        return $(this.articleCssSelector)
+          .map((i, el) => {
+            const tmpUpdatedDate: string = $("p.content--date").text()
+            const subject: string = $("h1.content--title").text()
+            const content: string = $(el).text()
+            const author = "NHK"
 
-          let matchedDate = tmpUpdatedDate.match(/\d\d?月\d\d?/)
-          if (!matchedDate) {
-            getLogger().error(
-              `cannot parse ${tmpUpdatedDate} on scraping ${url}.`
+            const matchedDate = tmpUpdatedDate.match(/\d\d?月\d\d?/)
+            if (!matchedDate) {
+              getLogger().error(
+                `cannot parse ${tmpUpdatedDate} on scraping ${url}.`
+              )
+              return undefined
+            }
+
+            const matchedTime = tmpUpdatedDate.match(/\d\d?時\d\d?/)
+            if (!matchedTime) {
+              getLogger().error(
+                `cannot parse ${tmpUpdatedDate} on scraping ${url}.`
+              )
+              return undefined
+            }
+
+            const now = moment.tz("Asia/Tokyo")
+            const date = asJst(
+              moment.tz(
+                now.year() +
+                  "-" +
+                  matchedDate[0].replace("月", "-") +
+                  " " +
+                  matchedTime[0].replace("時", ":"),
+                "YYYY-M-D HH:mm",
+                "Asia/Tokyo"
+              )
             )
-            return undefined
-          }
-
-          let matchedTime = tmpUpdatedDate.match(/\d\d?時\d\d?/)
-          if (!matchedTime) {
-            getLogger().error(
-              `cannot parse ${tmpUpdatedDate} on scraping ${url}.`
+            // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
+            if (date.isAfter(now)) {
+              date.subtract(1, "year")
+            }
+            const publishedDateStr: string = date.format()
+            const dateStr = date.format()
+            const article = new IncidentArticle(
+              this.source,
+              this.sourceName,
+              url,
+              subject,
+              content,
+              content,
+              dateStr,
+              publishedDateStr,
+              new Date(),
+              author
             )
-            return undefined
-          }
 
-          let now = moment.tz("Asia/Tokyo")
-          let date = asJst(
-            moment.tz(
-              now.year() +
-                "-" +
-                matchedDate[0].replace("月", "-") +
-                " " +
-                matchedTime[0].replace("時", ":"),
-              "YYYY-M-D HH:mm",
-              "Asia/Tokyo"
-            )
-          )
-          // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
-          if (date.isAfter(now)) {
-            date.subtract(1, "year")
-          }
-          let publishedDateStr: string = date.format()
-          let dateStr = date.format()
-          let article = new IncidentArticle(
-            this.source,
-            this.sourceName,
-            url,
-            subject,
-            content,
-            content,
-            dateStr,
-            publishedDateStr,
-            new Date(),
-            author
-          )
+            const tmp = "" + article.content + article.subject
+            if (tmp.match(this.NOT_INCIDENT_REGEXP) === null) {
+              article.tags.add("山岳事故")
+            }
+            article.tags.add("__private-use")
 
-          const tmp = "" + article.content + article.subject
-          if (tmp.match(this.NOT_INCIDENT_REGEXP) === null) {
-            article.tags.add("山岳事故")
-          }
-          article.tags.add("__private-use")
+            article.scraper = NhkLocalArticleScraper.name
 
-          article.scraper = NhkLocalArticleScraper.name
-
-          return article
-        })
-        .get()
-    })
+            return article
+          })
+          .get()
+      })
 
     if (articles.length == 0) {
       getLogger().error(`cannot scrape ${url}`)
@@ -132,43 +134,45 @@ export class NhkArticleScraper implements ArticleScraper {
 
   async scrape(url: string): Promise<IncidentArticle[]> {
     getLogger().info(`updating ${url} , source ${this.source}`)
-    let articles: IncidentArticle[] = await this.axios.get(url).then((res) => {
-      let $ = cheerio.load(res.data)
-      return $(this.articleCssSelector)
-        .map((i, el) => {
-          let tmpUpdatedDate: string =
-            $("header.module--header p.title time").attr("datetime") || ""
-          let subject: string = $(
-            "header.module--header p.title span.contentTitle"
-          ).text()
-          let content: string = $(el).text()
-          let author: string = "NHK"
+    const articles: IncidentArticle[] = await this.axios
+      .get(url)
+      .then((res) => {
+        const $ = cheerio.load(res.data)
+        return $(this.articleCssSelector)
+          .map((i, el) => {
+            const tmpUpdatedDate: string =
+              $("header.module--header p.title time").attr("datetime") || ""
+            const subject: string = $(
+              "header.module--header p.title span.contentTitle"
+            ).text()
+            const content: string = $(el).text()
+            const author = "NHK"
 
-          let date = moment.tz(tmpUpdatedDate, "Asia/Tokyo")
-          let publishedDateStr: string = date.format()
-          let dateStr = date.format()
-          let article = new IncidentArticle(
-            this.source,
-            this.sourceName,
-            url,
-            subject,
-            content,
-            content,
-            dateStr,
-            publishedDateStr,
-            new Date(),
-            author
-          )
+            const date = moment.tz(tmpUpdatedDate, "Asia/Tokyo")
+            const publishedDateStr: string = date.format()
+            const dateStr = date.format()
+            const article = new IncidentArticle(
+              this.source,
+              this.sourceName,
+              url,
+              subject,
+              content,
+              content,
+              dateStr,
+              publishedDateStr,
+              new Date(),
+              author
+            )
 
-          article.tags.add("山岳事故")
-          article.tags.add("__private-use")
+            article.tags.add("山岳事故")
+            article.tags.add("__private-use")
 
-          article.scraper = NhkArticleScraper.name
+            article.scraper = NhkArticleScraper.name
 
-          return article
-        })
-        .get()
-    })
+            return article
+          })
+          .get()
+      })
 
     if (articles.length == 0) {
       getLogger().error(`cannot scrape ${url}`)

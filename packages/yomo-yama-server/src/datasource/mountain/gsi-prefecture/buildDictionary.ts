@@ -1,6 +1,6 @@
 import { parseStream } from "@fast-csv/parse"
 import { Readable } from "stream"
-import { Trie, Emit } from "@tanishiking/aho-corasick"
+import { Trie } from "@tanishiking/aho-corasick"
 
 export type Mountain = {
   key: string
@@ -28,12 +28,12 @@ export type Mountain = {
 
 export class DictionaryBuilder {
   async build(mountains: Mountain[]): Promise<Trie> {
-    const mountainNames: string[] = mountains.map(e => e.name)
+    const mountainNames: string[] = mountains.map((e) => e.name)
     const trie = new Trie(Array.from(new Set<string>(mountainNames).keys()), {
       allowOverlaps: false,
       onlyWholeWords: true,
     })
-    this.getPrefectures().forEach(p => trie.addKeyword(p))
+    this.getPrefectures().forEach((p) => trie.addKeyword(p))
     return trie
   }
 
@@ -124,7 +124,7 @@ export class DictionaryBuilder {
         .on("end", () => {
           resolve(result)
         })
-        .on("error", err => {
+        .on("error", (err) => {
           reject(err)
         })
     })

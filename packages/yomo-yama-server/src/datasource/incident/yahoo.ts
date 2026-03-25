@@ -1,13 +1,11 @@
 import * as cheerio from "cheerio"
-import axios, { AxiosStatic, AxiosInstance } from "axios"
-import * as Url from "url"
+import axios, { AxiosInstance } from "axios"
 import UrlParse from "url-parse"
-import moment from "moment-timezone"
 
-import { IncidentArticle, ArticleRepository, ArticleKey, IndexScraper } from "."
+import { IndexScraper } from "."
 
 export default class YahooIndexScraper implements IndexScraper {
-  indexCssSelector: string = 'li a[class*="ThemeArticleItem_ThemeArticleItem"]'
+  indexCssSelector = 'li a[class*="ThemeArticleItem_ThemeArticleItem"]'
   baseUrl: string
   origin: string
   axios: AxiosInstance
@@ -26,9 +24,9 @@ export default class YahooIndexScraper implements IndexScraper {
     })
   }
   async getArticleUrls(): Promise<string[]> {
-    let urls: string[] = await this.axios
+    const urls: string[] = await this.axios
       .get(this.baseUrl)
-      .then(res => {
+      .then((res) => {
         const $ = cheerio.load(res.data)
         const urls = $(this.indexCssSelector)
           .map((i, el) => {
@@ -37,7 +35,7 @@ export default class YahooIndexScraper implements IndexScraper {
           .get()
         return urls
       })
-      .catch(err => {
+      .catch((err) => {
         return err
       })
 

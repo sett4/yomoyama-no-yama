@@ -10,6 +10,8 @@
     "deploy:server": "gcloud app deploy",
     "dev:frontend": "npm run dev --workspace yomo-yama-frontend",
     "dev:server": "npm run dev --workspace yomo-yama-server",
+    "lint:frontend": "npm run lint --workspace yomo-yama-frontend",
+    "lint:server": "npm run lint --workspace yomo-yama-server",
     "pages:build": "npm run build:db && npm run build:frontend"
   },
   "repository": {
@@ -23,5 +25,14 @@
     "packages/yomo-yama-db",
     "packages/yomo-yama-server",
     "packages/yomo-yama-frontend"
-  ]
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-n": "^17.23.1",
+    "globals": "^16.4.0",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.42.0"
+  }
 }

@@ -10,7 +10,7 @@ class DateExtractor {
 
   constructor() {
     this.dateExtractors.push((tmpUpdatedDate: string) => {
-      var matchedDate = tmpUpdatedDate.match(/\d\d\d\d\/\d\d?\/\d\d?/)
+      const matchedDate = tmpUpdatedDate.match(/\d\d\d\d\/\d\d?\/\d\d?/)
       if (!matchedDate) {
         return null
       }
@@ -31,8 +31,7 @@ class DateExtractor {
     })
 
     this.dateExtractors.push((tmpUpdatedDate: string) => {
-      let matchedDate
-      matchedDate = tmpUpdatedDate.match(/\d\d?\/\d\d?/)
+      const matchedDate = tmpUpdatedDate.match(/\d\d?\/\d\d?/)
       if (!matchedDate) {
         return null
       }
@@ -49,20 +48,15 @@ class DateExtractor {
         matchedDate[0].replace(/\//g, "-") +
         " " +
         matchedTime[0]
-      let date: moment.Moment
-      try {
-        const m: moment.Moment | string = moment.tz(
-          tmpDateStr,
-          "YYYY-M-D HH:mm",
-          "Asia/Tokyo"
-        )
-        if (m.isValid() === false) {
-          return null
-        }
-        date = asJst(m)
-      } catch (e) {
-        throw e
+      const m: moment.Moment | string = moment.tz(
+        tmpDateStr,
+        "YYYY-M-D HH:mm",
+        "Asia/Tokyo"
+      )
+      if (m.isValid() === false) {
+        return null
       }
+      const date = asJst(m)
       // published dateが2019-01-01で、dateが12/31となっていたばあい、2019-12-31となるので2018-12-31に戻す
       if (date.isAfter(now)) {
         date.subtract(1, "year")
@@ -118,50 +112,52 @@ export class YahooArticleScraper implements ArticleScraper {
 
     const dateExtractor = new DateExtractor()
 
-    let articles: IncidentArticle[] = await this.axios.get(url).then((res) => {
-      let $ = cheerio.load(res.data)
-      return $(this.articleCssSelector)
-        .map((i, el) => {
-          let tmpUpdatedDate: string = $("#uamods footer time").text()
-          let subject: string = $("#uamods header h1").text()
-          let content: string = $("#uamods .article_body").text()
-          let author: string = $("#uamods .article_body > p").text()
+    const articles: IncidentArticle[] = await this.axios
+      .get(url)
+      .then((res) => {
+        const $ = cheerio.load(res.data)
+        return $(this.articleCssSelector)
+          .map((_i, _el) => {
+            const tmpUpdatedDate: string = $("#uamods footer time").text()
+            const subject: string = $("#uamods header h1").text()
+            const content: string = $("#uamods .article_body").text()
+            const author: string = $("#uamods .article_body > p").text()
 
-          let date: moment.Moment
-          try {
-            date = dateExtractor.extract(tmpUpdatedDate)
-          } catch (e) {
-            getLogger().error(e)
-            throw new Error(e + ` on ${url}`)
-          }
+            let date: moment.Moment
+            try {
+              date = dateExtractor.extract(tmpUpdatedDate)
+            } catch (e) {
+              getLogger().error(e)
+              throw new Error(e + ` on ${url}`)
+            }
 
-          let publishedDateStr: string = date.format()
-          let dateStr = date.format()
-          let article = new IncidentArticle(
-            this.source,
-            this.sourceName,
-            url,
-            subject,
-            content,
-            content,
-            dateStr,
-            publishedDateStr,
-            new Date(),
-            author
-          )
+            const publishedDateStr: string = date.format()
+            const dateStr = date.format()
+            const article = new IncidentArticle(
+              this.source,
+              this.sourceName,
+              url,
+              subject,
+              content,
+              content,
+              dateStr,
+              publishedDateStr,
+              new Date(),
+              author
+            )
 
-          const tmp = "" + article.content + article.subject
-          if (tmp.match(this.NOT_INCIDENT_REGEXP) === null) {
-            article.tags.add("山岳事故")
-          }
-          article.tags.add("__private-use")
+            const tmp = "" + article.content + article.subject
+            if (tmp.match(this.NOT_INCIDENT_REGEXP) === null) {
+              article.tags.add("山岳事故")
+            }
+            article.tags.add("__private-use")
 
-          article.scraper = YahooArticleScraper.name
+            article.scraper = YahooArticleScraper.name
 
-          return article
-        })
-        .get()
-    })
+            return article
+          })
+          .get()
+      })
 
     if (articles.length == 0) {
       getLogger().error(`cannot scrape ${url}`)
@@ -194,50 +190,52 @@ export class YahooVideoArticleScraper implements ArticleScraper {
     const dateExtractor = new DateExtractor()
 
     getLogger().info(`updating ${url} , source ${this.source}`)
-    let articles: IncidentArticle[] = await this.axios.get(url).then((res) => {
-      let $ = cheerio.load(res.data)
-      return $(this.articleCssSelector)
-        .map((i, el) => {
-          let tmpUpdatedDate: string = $(
-            "#ym_newsarticle div div p.source"
-          ).text()
-          let subject: string = $("#ym_newsarticle div.hd h1").text()
-          let content: string = $(
-            "#ym_newsarticle div.articleMain div.yjDirectSLinkTarget"
-          ).text()
-          let author: string = $(".ynCpName a").text()
+    const articles: IncidentArticle[] = await this.axios
+      .get(url)
+      .then((res) => {
+        const $ = cheerio.load(res.data)
+        return $(this.articleCssSelector)
+          .map((_i, _el) => {
+            const tmpUpdatedDate: string = $(
+              "#ym_newsarticle div div p.source"
+            ).text()
+            const subject: string = $("#ym_newsarticle div.hd h1").text()
+            const content: string = $(
+              "#ym_newsarticle div.articleMain div.yjDirectSLinkTarget"
+            ).text()
+            const author: string = $(".ynCpName a").text()
 
-          let date: moment.Moment
-          try {
-            date = dateExtractor.extract(tmpUpdatedDate)
-          } catch (e) {
-            throw new Error(e + `on ${url}`)
-          }
+            let date: moment.Moment
+            try {
+              date = dateExtractor.extract(tmpUpdatedDate)
+            } catch (e) {
+              throw new Error(e + `on ${url}`)
+            }
 
-          let publishedDateStr: string = date.format()
-          let dateStr = date.format()
-          let article = new IncidentArticle(
-            this.source,
-            this.sourceName,
-            url,
-            subject,
-            content,
-            content,
-            dateStr,
-            publishedDateStr,
-            new Date(),
-            author
-          )
+            const publishedDateStr: string = date.format()
+            const dateStr = date.format()
+            const article = new IncidentArticle(
+              this.source,
+              this.sourceName,
+              url,
+              subject,
+              content,
+              content,
+              dateStr,
+              publishedDateStr,
+              new Date(),
+              author
+            )
 
-          article.tags.add("山岳事故")
-          article.tags.add("__private-use")
+            article.tags.add("山岳事故")
+            article.tags.add("__private-use")
 
-          article.scraper = YahooVideoArticleScraper.name
+            article.scraper = YahooVideoArticleScraper.name
 
-          return article
-        })
-        .get()
-    })
+            return article
+          })
+          .get()
+      })
 
     if (articles.length == 0) {
       getLogger().error(`cannot scrape ${url}`)

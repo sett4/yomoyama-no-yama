@@ -29,7 +29,7 @@ export default class Np24Scraper implements IndexScraper {
   async getArticleUrls(): Promise<string[]> {
     const urls: string[] = await this.axios
       .get(this.baseUrl)
-      .then(res => {
+      .then((res) => {
         const $ = cheerio.load(res.data)
         const urls = $(this.indexCssSelector)
           .map((i, el) => {
@@ -38,11 +38,11 @@ export default class Np24Scraper implements IndexScraper {
           .get()
         return urls
       })
-      .catch(err => {
+      .catch((err) => {
         return err
       })
 
-    return urls.map(url => {
+    return urls.map((url) => {
       let fullUrl: string
       if (url.startsWith("/")) {
         fullUrl = this.origin + url

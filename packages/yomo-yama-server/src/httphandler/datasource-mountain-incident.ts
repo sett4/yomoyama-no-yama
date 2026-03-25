@@ -18,9 +18,7 @@ import { createDbClient } from "@sett4/yomo-yama-db"
 import * as dotenv from "dotenv"
 dotenv.config()
 
-const registerHandler = async function (
-  app: Express
-) {
+const registerHandler = async function (app: Express) {
   const { db } = createDbClient()
   const repository: ArticleRepository = new DbArticleRepository(db)
   const articleScrapers: ArticleScrapers = new ArticleScrapers()
@@ -45,7 +43,7 @@ const registerHandler = async function (
 
     const allArticle: IncidentArticle[] = []
     for await (const url of articleUrls) {
-      const articles = await articleScrapers.scrape(url)
+      const articles = await articleScraper.scrape(url)
       allArticle.push(...articles)
     }
     getLogger().info(`extract ${allArticle.length} articles.`)
@@ -201,7 +199,7 @@ const registerHandler = async function (
     const articles = await repository.findAll("yj-news")
     req.log.info(`loaded ${articles.length} articles`)
 
-    const hiddenKeys: Array<String> = [
+    const hiddenKeys: Array<string> = [
       "yj-news.2ca45df1e58dee83b77a5396ae68f563a89f0692327a796c69e4acb9cbdeb649",
       "yj-news.5fc4c2393983b8afa1adfa2944a885ce8982094180b033010bca7665a4a4a10c",
       "yj-news.9bdd550c1914866be047274e6ae3962987e08c562770f502da76d0ce7e4ea480",

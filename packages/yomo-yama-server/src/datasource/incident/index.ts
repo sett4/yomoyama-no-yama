@@ -13,24 +13,6 @@ export interface ArticleRepository {
   findAll(source: string): Promise<IncidentArticle[]>
 }
 
-class StaticKey implements ArticleKey {
-  id: string
-  constructor(id: string) {
-    this.id = id
-  }
-
-  getId(): string {
-    return this.id
-  }
-}
-
-function truncateString(str: string, num: number): string {
-  if (str.length <= num) {
-    return str
-  }
-  return str.slice(0, num) + "..."
-}
-
 export class SingleArticleKey {
   source: string
   url: string
@@ -114,23 +96,19 @@ export class IncidentArticle {
 }
 
 export class EmptyArticleRepository implements ArticleRepository {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  exists(key: ArticleKey): boolean {
+  exists(_key: ArticleKey): boolean {
     throw new Error("Method not implemented.")
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  save(article: any): Promise<any> {
+  save(_article: any): Promise<any> {
     return new Promise<any>((resolve) => {
-      resolve(article)
+      resolve(_article)
     })
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  load(key: ArticleKey): Promise<IncidentArticle> {
+  load(_key: ArticleKey): Promise<IncidentArticle> {
     throw new Error("Method not implemented.")
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  findAll(source: string): Promise<IncidentArticle[]> {
+  findAll(_source: string): Promise<IncidentArticle[]> {
     throw new Error("Method not implemented.")
   }
 }
@@ -143,8 +121,7 @@ export class DbArticleRepository implements ArticleRepository {
     this.db = db
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  exists(key: ArticleKey): boolean {
+  exists(_key: ArticleKey): boolean {
     throw new Error("Method not implemented.")
   }
 
@@ -156,36 +133,30 @@ export class DbArticleRepository implements ArticleRepository {
       delete data.tags
     }
 
-    try {
-      const category = await ensureCategory(this.db, "incident")
-      const published =
-        article.tags.has("山岳事故") && !article.tags.has("hidden")
-      await upsertPost(this.db, {
-        publishedAt: new Date(article.publishedDate),
-        title: article.subject,
-        content: article.content,
-        contentType: "incident",
-        categoryId: category.id,
-        rawContent: article.rawContent,
-        published: published,
-        author: "",
-        source: article.source,
-        sourceUrl: article.url,
-        slug: article.toKey().getId(),
-        scraper: article.scraper,
-        tags: [...article.tags].join(","),
-      })
-    } catch (err) {
-      throw err
-    }
+    const category = await ensureCategory(this.db, "incident")
+    const published =
+      article.tags.has("山岳事故") && !article.tags.has("hidden")
+    await upsertPost(this.db, {
+      publishedAt: new Date(article.publishedDate),
+      title: article.subject,
+      content: article.content,
+      contentType: "incident",
+      categoryId: category.id,
+      rawContent: article.rawContent,
+      published: published,
+      author: "",
+      source: article.source,
+      sourceUrl: article.url,
+      slug: article.toKey().getId(),
+      scraper: article.scraper,
+      tags: [...article.tags].join(","),
+    })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  load(key: ArticleKey): Promise<IncidentArticle> {
+  load(_key: ArticleKey): Promise<IncidentArticle> {
     throw new Error("Method not implemented.")
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async findAll(source: string): Promise<IncidentArticle[]> {
     const incidentPosts = await findPublishedPostsByCategoryAndSource(
       this.db,

@@ -113,16 +113,16 @@ describe("db-backed incident repository", () => {
     await upsertPostExtra((repository as any).db, {
       id: "post-1",
       type: POST_EXTRA_TYPE.INCIDENT_GPT,
-      content: "{\"summary\":\"first\"}",
+      content: '{"summary":"first"}',
     })
     await upsertPostExtra((repository as any).db, {
       id: "post-1",
       type: POST_EXTRA_TYPE.INCIDENT_GPT,
-      content: "{\"summary\":\"second\"}",
+      content: '{"summary":"second"}',
     })
 
     const postExtra = await findPostExtraById((repository as any).db, "post-1")
     assert.equal(postExtra?.type, POST_EXTRA_TYPE.INCIDENT_GPT)
-    assert.equal(postExtra?.content, "{\"summary\":\"second\"}")
+    assert.equal(postExtra?.content, '{"summary":"second"}')
   })
 })

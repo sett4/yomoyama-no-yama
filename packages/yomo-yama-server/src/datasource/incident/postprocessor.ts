@@ -65,11 +65,7 @@ export class ChatGptPostExtraProcessor {
   private db: DbClient
   private chatGptModel: string
 
-  constructor(
-    openaiApiKey: string,
-    db: DbClient,
-    model: string = "gpt-3.5-turbo"
-  ) {
+  constructor(openaiApiKey: string, db: DbClient, model = "gpt-3.5-turbo") {
     const configuration = new Configuration({
       organization: "org-jETSENZkkC9Pye2vSp2NHDgJ",
       apiKey: openaiApiKey,
@@ -80,10 +76,15 @@ export class ChatGptPostExtraProcessor {
     this.chatGptModel = model
   }
 
-  async initialize() {}
+  async initialize() {
+    return Promise.resolve()
+  }
 
   async postProcess(article: IncidentArticle): Promise<IncidentArticle> {
-    const tmpPostExtra = await findPostExtraById(this.db, article.toKey().getId())
+    const tmpPostExtra = await findPostExtraById(
+      this.db,
+      article.toKey().getId()
+    )
     if (tmpPostExtra) {
       log.info({ message: "already processed", key: article.toKey().getId() })
       article = this.updateArticle(article, tmpPostExtra.content || "")

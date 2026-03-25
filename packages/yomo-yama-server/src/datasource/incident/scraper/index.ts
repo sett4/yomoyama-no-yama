@@ -1,8 +1,8 @@
-import { IncidentArticle, MultipleArticleKey } from "../"
+import { IncidentArticle } from "../"
 import { Np24ArticleScraper } from "./np24"
 import { YahooArticleScraper, YahooVideoArticleScraper } from "./yahoo"
 import { NhkLocalArticleScraper, NhkArticleScraper } from "./nhk"
-import moment = require("moment")
+import moment from "moment-timezone"
 import { ArticlePostProcessor } from "../postprocessor"
 import { log } from "../../../logger"
 
@@ -31,18 +31,14 @@ export class ArticleScrapers {
   }
 
   async scrape(url: string): Promise<IncidentArticle[]> {
-    let scraper = this.scrapers.find((s) => s.canAccept(url))
+    const scraper = this.scrapers.find((s) => s.canAccept(url))
     if (!scraper) {
-      return new Promise<IncidentArticle[]>((resolve, reject) => {
-        resolve([])
-      })
+      return []
     }
 
     const articleList = await scraper.scrape(url).catch((err) => {
       console.error(`error on ${url} `, err)
-      return new Promise<IncidentArticle[]>((resolve, reject) => {
-        resolve([])
-      })
+      return []
     })
 
     const result: IncidentArticle[] = []
