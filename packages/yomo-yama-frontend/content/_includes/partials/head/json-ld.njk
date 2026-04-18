@@ -1,4 +1,8 @@
 {%- set jsonLD -%}
+    {%- set newestPublishedDate = collections.publishedPosts | getNewestCollectionItemDate -%}
+    {%- if not newestPublishedDate -%}
+        {%- set newestPublishedDate = collections.incidents | getNewestCollectionItemDate -%}
+    {%- endif -%}
     {
         "@context": "https://schema.org",
         "@type": "Article",
@@ -9,7 +13,7 @@
             "name": "{{ author.name }}"
         },
         "mainEntityOfPage": "{{ page.url | alwaysProductionUrl }}",
-        "datePublished": "{{ collections.publishedPosts | getNewestCollectionItemDate | isoDate }}",
+        {% if newestPublishedDate %}"datePublished": "{{ newestPublishedDate | isoDate }}",{% endif %}
         "description": "{{ pageDescription }}"
     }
 {% endset -%}

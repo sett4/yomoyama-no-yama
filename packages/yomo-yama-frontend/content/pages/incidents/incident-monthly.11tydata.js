@@ -1,3 +1,5 @@
+import normalizeDate from '../../../_11ty/helpers/normalizeDate.js';
+
 export default {
   eleventyComputed: {
     title: (data) => {
@@ -9,8 +11,6 @@ export default {
       }
       return [];
     },
-    date: (data) => {
-      return data.post.date;
-    },
+    date: (data) => normalizeDate(data.post.latestDate || data.post.date),
   },
 };

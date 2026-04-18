@@ -1,12 +1,16 @@
 import incidents from './incidents.js';
 import { DateTime } from 'luxon';
+import normalizeDate from '../../_11ty/helpers/normalizeDate.js';
 
 export default async function main() {
-  // ... you will write your Prisma Client queries here
   const transformed = await incidents();
 
   const monthMap = transformed.reduce((acc, cur) => {
-    const date = new Date(cur.publishedAt);
+    const date = normalizeDate(cur.date || cur.publishedAt);
+    if (!date) {
+      return acc;
+    }
+
     const yearMonth = date.toISOString().slice(0, 7);
     acc[yearMonth] = acc[yearMonth] || [];
     acc[yearMonth].push(cur);
@@ -17,14 +21,13 @@ export default async function main() {
     return {
       yearMonth,
       posts: monthMap[yearMonth],
+      latestDate: monthMap[yearMonth][0]?.date || null,
       date: DateTime.fromISO(yearMonth + '-01')
         .endOf('month')
         .toJSDate(),
     };
   });
 
-  // console.log(monthList);
   console.log('loaded', postsByYearMonth.length, 'monthList');
-  // console.log(postsByYearMonth[0].posts);
   return postsByYearMonth;
 }

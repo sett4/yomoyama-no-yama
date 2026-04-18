@@ -1,12 +1,13 @@
 {%- set site = siteConfig.site -%}
 {%- set feed = siteConfig.feed -%}
 {%- set author = siteConfig.author -%}
+{%- set feedUpdated = collections.incidents | getNewestCollectionItemDate -%}
 <title>{{ site.title }}</title>
 <subtitle>{{ site.description }}</subtitle>
 {%- set absoluteUrl -%}{{ outputFilePath | alwaysProductionUrl }}{%- endset -%}
 <link href="{{ absoluteUrl }}" rel="self"/>
 <link href="{{ '/' | alwaysProductionUrl }}" rel="alternate" />
-<updated>{{ collections.publishedPosts | getNewestCollectionItemDate | dateToRfc3339 }}</updated>
+{% if feedUpdated %}<updated>{{ feedUpdated | dateToRfc3339 }}</updated>{% endif %}
 <id>{{ '/' | alwaysProductionUrl }}</id>
 <author>
   <name>{{ author.name }}</name>

@@ -1,7 +1,7 @@
 import incidents from './incidents.js';
+import normalizeDate from '../../_11ty/helpers/normalizeDate.js';
 
 export default async function main() {
-  // ... you will write your Prisma Client queries here
   const transformed = await incidents();
 
   const tagMap = transformed.reduce((acc, cur) => {
@@ -13,11 +13,24 @@ export default async function main() {
   }, {});
 
   const tags = Object.keys(tagMap).map((tag) => {
+    const posts = tagMap[tag].filter((post) => normalizeDate(post.date));
+    const latestDate = posts.reduce((latest, post) => {
+      const date = normalizeDate(post.date);
+      if (!date) {
+        return latest;
+      }
+      if (!latest || date.getTime() > latest.getTime()) {
+        return date;
+      }
+      return latest;
+    }, null);
+
     return {
       tag,
-      posts: tagMap[tag],
+      posts,
+      latestDate,
     };
-  });
+  }).filter((tag) => tag.posts.length > 0 && tag.latestDate);
   console.log('loaded', tags.length, 'tags.');
   return tags;
 }
