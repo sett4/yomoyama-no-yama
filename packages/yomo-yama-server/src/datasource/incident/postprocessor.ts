@@ -27,7 +27,7 @@ export class AddMountainTagProcessor {
     log.info("initializing Mountain name Trie.")
     const stream = fs
       .createReadStream(
-        "src/datasource/mountain/gsi-prefecture/gsi_experimental_nnfpt_with_prefecture.csv.gz"
+        "./packages/yomo-yama-server/src/datasource/mountain/gsi-prefecture/gsi_experimental_nnfpt_with_prefecture.csv.gz"
       )
       .pipe(zlib.createGunzip())
 

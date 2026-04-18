@@ -5,7 +5,7 @@ import UrlParse from "url-parse"
 import { IndexScraper } from "."
 
 export default class YahooIndexScraper implements IndexScraper {
-  indexCssSelector = 'li a[class*="ThemeArticleItem_ThemeArticleItem"]'
+  indexCssSelector = 'li a[class*="ThemeArticleItem-module-scss-module__zzLfua__ThemeArticleItem__anchor cl-nofollow"]'
   baseUrl: string
   origin: string
   axios: AxiosInstance

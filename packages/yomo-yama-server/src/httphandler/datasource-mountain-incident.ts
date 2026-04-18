@@ -69,13 +69,13 @@ const registerHandler = async function (app: Express) {
 
   app.get("/datasource/mountain/incident/np24/update", async (req, res) => {
     if (process.env.NODE_ENV !== "development") {
-      if (req.header("X-Appengine-Cron") !== "true") {
+      if (req.header("X-Appengine-Cron") !== "true" || req.header("X-CloudScheduler") !== "true") {
         res.send("NG")
         res.status(401)
         return
       }
     }
-    req.log.info("updateing np24")
+    getLogger().info("updateing np24")
     const indexScraper = new Np24Scraper()
     await update(repository, indexScraper, articleScrapers)
     res.send("OK")
@@ -83,7 +83,7 @@ const registerHandler = async function (app: Express) {
 
   app.get("/datasource/mountain/incident/yahoo/update", async (req, res) => {
     if (process.env.NODE_ENV !== "development") {
-      if (req.header("X-Appengine-Cron") !== "true") {
+      if (req.header("X-Appengine-Cron") !== "true" || req.header("X-CloudScheduler") !== "true") {
         res.send("NG")
         res.status(401)
         return
@@ -96,9 +96,9 @@ const registerHandler = async function (app: Express) {
   })
 
   app.post("/datasource/mountain/incident/modify", async (req, res) => {
-    req.log.info("updateing...")
+    getLogger().info("updateing...")
     const articles = await repository.findAll("yj-news")
-    req.log.info(`loaded ${articles.length} articles`)
+    getLogger().info(`loaded ${articles.length} articles`)
     const modifiedArticles = articles
       .filter((a) => a.tags.has("山岳事故"))
       .filter((a) => {
@@ -119,7 +119,7 @@ const registerHandler = async function (app: Express) {
       // .filter(a => idList.includes(a.toKey().getId()))
       .map((a) => {
         a.tags.delete("山岳事故")
-        req.log.info("deleted 山岳事故 ", a.toKey().getId(), a.subject, a.url)
+        getLogger().info("deleted 山岳事故 ", a.toKey().getId(), a.subject, a.url)
         return a
       })
 
@@ -132,10 +132,10 @@ const registerHandler = async function (app: Express) {
   })
 
   app.post("/datasource/mountain/incident/remove-tag", async (req, res) => {
-    req.log.info("updateing...")
+    getLogger().info("updateing...")
     const prefectureList = new DictionaryBuilder().getPrefectures()
     const articles = await repository.findAll("yj-news")
-    req.log.info(`loaded ${articles.length} articles`)
+    getLogger().info(`loaded ${articles.length} articles`)
     const modifiedArticles = articles
       .filter((a) => a.tags.has("山岳事故"))
       .filter((a) => prefectureList.filter((p) => a.tags.has(p)))
@@ -144,7 +144,7 @@ const registerHandler = async function (app: Express) {
         prefectureList.forEach((p) => {
           if (a.tags.has(p)) {
             a.tags.delete(p)
-            req.log.info(`deleted ${p} from ${a.toKey().getId()}`)
+            getLogger().info(`deleted ${p} from ${a.toKey().getId()}`)
           }
         })
         return a
@@ -159,14 +159,14 @@ const registerHandler = async function (app: Express) {
   })
 
   app.post("/datasource/mountain/incident/extract-tags", async (req, res) => {
-    req.log.info("updateing...")
+    getLogger().info("updateing...")
     const articles = await repository.findAll("yj-news")
-    req.log.info(`loaded ${articles.length} articles`)
+    getLogger().info(`loaded ${articles.length} articles`)
     const filteredArticles = articles.filter((a) => a.tags.has("山岳事故"))
 
     const modifiedArticles: IncidentArticle[] = []
     for (const a of filteredArticles) {
-      req.log.info(`extracting tags`, a.toKey().getId(), a.subject, a.url)
+      getLogger().info(`extracting tags`, a.toKey().getId(), a.subject, a.url)
       modifiedArticles.push(await addMountainTagProcessor.postProcess(a))
     }
 
@@ -179,14 +179,14 @@ const registerHandler = async function (app: Express) {
   })
 
   app.post("/datasource/mountain/incident/post-extra", async (req, res) => {
-    req.log.info("updateing...")
+    getLogger().info("updateing...")
     const articles = await repository.findAll("yj-news")
-    req.log.info(`loaded ${articles.length} articles`)
+    getLogger().info(`loaded ${articles.length} articles`)
     const filteredArticles = articles.filter((a) => a.tags.has("山岳事故"))
 
     const modifiedArticles: IncidentArticle[] = []
     for (const a of filteredArticles) {
-      req.log.info(`extracting extra info`, a.toKey().getId(), a.subject, a.url)
+      getLogger().info(`extracting extra info`, a.toKey().getId(), a.subject, a.url)
       const article = await chatGptPostExtraProcessor.postProcess(a)
       await repository.save(article)
     }
@@ -195,9 +195,9 @@ const registerHandler = async function (app: Express) {
   })
 
   app.post("/datasource/mountain/incident/hide", async (req, res) => {
-    req.log.info("updateing...")
+    getLogger().info("updateing...")
     const articles = await repository.findAll("yj-news")
-    req.log.info(`loaded ${articles.length} articles`)
+    getLogger().info(`loaded ${articles.length} articles`)
 
     const hiddenKeys: Array<string> = [
       "yj-news.2ca45df1e58dee83b77a5396ae68f563a89f0692327a796c69e4acb9cbdeb649",
@@ -243,7 +243,7 @@ const registerHandler = async function (app: Express) {
       // .filter(a => idList.includes(a.toKey().getId()))
       .map((a) => {
         a.tags.add("__hidden")
-        req.log.info("add hidden ", a.toKey().getId(), a.subject, a.url)
+        getLogger().info("add hidden ", a.toKey().getId(), a.subject, a.url)
         return a
       })
 
@@ -265,7 +265,7 @@ const registerHandler = async function (app: Express) {
       const articles = await articleScrapers.scrape(url)
       allArticle.push(...articles)
     }
-    req.log.info(`extract ${allArticle.length} articles.`)
+    getLogger().info(`extract ${allArticle.length} articles.`)
 
     const allArticleData = allArticle.map((a) => a.toData())
 

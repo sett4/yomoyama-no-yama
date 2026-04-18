@@ -1,6 +1,6 @@
-import crypto from "crypto"
 import { and, desc, eq } from "drizzle-orm"
 import { DbClient } from "./client"
+import { generateId } from "./ids"
 import { categories, postExtras, posts, POST_EXTRA_TYPE, PostExtraType } from "./schema"
 
 export { POST_EXTRA_TYPE }
@@ -59,7 +59,7 @@ export async function ensureCategory(
     return existing[0]
   }
 
-  const id = crypto.randomUUID()
+  const id = generateId()
   await db.insert(categories).values({ id, name }).onConflictDoNothing()
 
   const created = await db
@@ -100,7 +100,7 @@ export async function upsertPost(
   await db
     .insert(posts)
     .values({
-      id: crypto.randomUUID(),
+      id: generateId(),
       createdAt: now,
       updatedAt: now,
       publishedAt: input.publishedAt,

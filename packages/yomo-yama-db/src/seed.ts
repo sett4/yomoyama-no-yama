@@ -1,4 +1,3 @@
-import crypto from "crypto"
 import * as fs from "fs"
 import * as path from "path"
 import { performance } from "perf_hooks"
@@ -29,7 +28,6 @@ function postObjectToPost(
     .sort()
     .join(",")
   return {
-    id: crypto.randomUUID(),
     publishedAt: new Date(j["date"]),
     title: j["subject"],
     content: content,

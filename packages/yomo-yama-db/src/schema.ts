@@ -29,13 +29,13 @@ export const posts = sqliteTable(
   "Post",
   {
     id: text("id").primaryKey(),
-    createdAt: integer("createdAt", { mode: "timestamp_ms" })
+    createdAt: integer("createdAt", { mode: "timestamp" })
       .notNull()
-      .default(sql`(unixepoch() * 1000)`),
-    updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
+      .default(sql`(unixepoch())`),
+    updatedAt: integer("updatedAt", { mode: "timestamp" })
       .notNull()
-      .default(sql`(unixepoch() * 1000)`),
-    publishedAt: integer("publishedAt", { mode: "timestamp_ms" }).notNull(),
+      .default(sql`(unixepoch())`),
+    publishedAt: integer("publishedAt", { mode: "timestamp" }).notNull(),
     title: text("title").notNull(),
     content: text("content"),
     contentType: text("contentType").notNull(),

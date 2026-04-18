@@ -1,5 +1,6 @@
 export { createDbClient, resolveDatabaseUrl } from "./client"
 export type { DbClient } from "./client"
+export { generateId } from "./ids"
 export { applyMigrations } from "./migrations"
 export {
   categories,
