@@ -5,6 +5,7 @@ import { filterDisplayTags, normalizeDate } from './utils';
 const require = createRequire(import.meta.url);
 const dbPkg = require('@sett4/yomo-yama-db') as typeof import('@sett4/yomo-yama-db');
 const { createDbClient, findPublishedPostsByCategory } = dbPkg;
+const COPYRIGHT_LIMITED_CONTENT_LENGTH = 120;
 
 export type Incident = Omit<DbPost, 'publishedAt' | 'tags'> & {
   publishedAt: Date;
@@ -76,21 +77,43 @@ function transformIncident(record: DbPost, onInvalidDate: () => void): Incident 
     return null;
   }
 
-  const tags = record.tags
+  const sourceTags = record.tags
     .split(',')
     .map((tag) => tag.trim())
-    .filter(Boolean)
-    .filter((tag) => !tag.startsWith('__'));
+    .filter(Boolean);
+  const tags = sourceTags.filter((tag) => !tag.startsWith('__'));
+  const content = limitCopyrightSensitiveContent(record, sourceTags);
 
   return {
     ...record,
+    content,
     publishedAt: date,
     date,
     tags: [...tags, 'incident'],
     incidentTags: filterDisplayTags(tags),
-    templateContent: record.content || '',
+    templateContent: content,
     url: `/incident/${record.slug}.html`,
   };
+}
+
+function limitCopyrightSensitiveContent(record: DbPost, tags: string[]): string {
+  const content = record.content || '';
+  const shouldLimit = tags.some((tag) => tag === '__private-use' || tag === '__private_use');
+  const hasUnabridgedPrivateContent = record.content === record.rawContent;
+
+  if (
+    !shouldLimit ||
+    !hasUnabridgedPrivateContent ||
+    content.length <= COPYRIGHT_LIMITED_CONTENT_LENGTH
+  ) {
+    return content;
+  }
+
+  if (content.length <= COPYRIGHT_LIMITED_CONTENT_LENGTH + 3 && content.endsWith('...')) {
+    return content;
+  }
+
+  return `${content.slice(0, COPYRIGHT_LIMITED_CONTENT_LENGTH)}...`;
 }
 
 export async function getIncidentMonths(): Promise<IncidentMonth[]> {
