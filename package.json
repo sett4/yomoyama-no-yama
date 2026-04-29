@@ -15,7 +15,8 @@
     "dev:server": "npm run dev --workspace yomo-yama-server",
     "lint:frontend": "npm run lint --workspace yomo-yama-frontend",
     "lint:server": "npm run lint --workspace yomo-yama-server",
-    "pages:build": "npm run build:db && npm run build:frontend"
+    "pages:build": "npm run build:db && npm run build:frontend",
+    "pages:build2": "npm run build:db && npm run build:frontend2"
   },
   "repository": {
     "type": "git",
