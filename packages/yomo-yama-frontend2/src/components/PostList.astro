@@ -1,0 +1,17 @@
+---
+import type { Incident } from '../lib/incidents';
+import PostExcerpt from './PostExcerpt.astro';
+
+const { posts } = Astro.props as { posts: Incident[] };
+---
+
+<div class="post-list">
+  <ul>
+    {posts.map((post) => (
+      <li>
+        <PostExcerpt post={post} />
+      </li>
+    ))}
+  </ul>
+</div>
+

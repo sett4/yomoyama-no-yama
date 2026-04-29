@@ -1,0 +1,20 @@
+---
+import PostList from '../../../components/PostList.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getIncidentTags, type IncidentTag } from '../../../lib/incidents';
+
+export async function getStaticPaths() {
+  const tags = await getIncidentTags();
+  return tags.map((tag) => ({
+    params: { tag: tag.tag },
+    props: { tagPage: tag },
+  }));
+}
+
+const { tagPage } = Astro.props as { tagPage: IncidentTag };
+---
+
+<BaseLayout title={tagPage.tag} description={`Incidents tagged with ${tagPage.tag}`} canonicalPath={`/incident/tags/${tagPage.tag}.html`}>
+  <PostList posts={tagPage.posts} />
+</BaseLayout>
+

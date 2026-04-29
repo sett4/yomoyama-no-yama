@@ -1,0 +1,36 @@
+---
+import type { Incident } from '../lib/incidents';
+import { filterDisplayTags, formatDate } from '../lib/utils';
+import { phrases, siteConfig } from '../lib/site';
+import ShareButtons from './ShareButtons.astro';
+
+const { post } = Astro.props as { post: Incident };
+const sourceName = phrases.sources[post.source] || post.source;
+const tags = filterDisplayTags(post.tags);
+---
+
+<div class="top-meta">
+  <time>{formatDate(post.date)}</time>
+</div>
+
+<div class="bottom-meta">
+  {post.sourceUrl && (
+    <div class="post-tags">
+      <p>{phrases.source_from}:</p>
+      <a href={post.sourceUrl}>{sourceName}</a>
+    </div>
+  )}
+  {siteConfig.tags.displayOnPostPage && tags.length > 0 && (
+    <div class="post-tags">
+      <p>{phrases.tagged_as}:</p>
+      <ul>
+        {tags.map((tag) => (
+          <li>
+            <a title={`Articles tagged as '${tag}'`} href={`/incident/tags/${tag}.html`}>{tag}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+  <ShareButtons title={post.title} path={post.url} />
+</div>

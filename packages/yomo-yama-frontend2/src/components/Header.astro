@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+import { navigationItems, phrases, siteConfig } from '../lib/site';
+
+const currentPath = Astro.url.pathname;
+---
+
+<a href="#main" id="skipToMain" class="skip-link">{phrases.skip_to_main_content}</a>
+<header class="header">
+  <input class="menu-btn" type="checkbox" id="menu-btn" />
+  <label class="hamburger" tabindex="0" for="menu-btn">
+    <span></span>
+  </label>
+  <div class="main-nav">
+    <div class="site-logo">
+      <a href="/" title={`${siteConfig.site.title} - ${phrases.main_page}`}>
+        <img src={siteConfig.site.logo} alt="Site logo" />
+        <span class="title">{siteConfig.site.title}</span>
+      </a>
+    </div>
+    <ul class="site-links">
+      {
+        navigationItems.map((item) => (
+          <li class={currentPath === item.href || currentPath === item.href.replace(/\.html$/, '/') ? 'active' : undefined} aria-current={currentPath === item.href ? 'page' : undefined}>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="theme-switcher" tabindex="0">
+    <Icon name="dark-toggle" />
+    <Icon name="light-toggle" />
+  </div>
+</header>
+

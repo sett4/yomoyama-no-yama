@@ -6,9 +6,12 @@
     "start": "node packages/yomo-yama-server/dist/index.js",
     "build:db": "npm run build --workspace @sett4/yomo-yama-db",
     "build:frontend": "npm run build --workspace yomo-yama-frontend",
+    "build:frontend2": "npm run build --workspace yomo-yama-frontend2",
     "build:server": "npm run gcp-build --workspace yomo-yama-server",
     "deploy:server": "gcloud app deploy",
     "dev:frontend": "npm run dev --workspace yomo-yama-frontend",
+    "dev:frontend2": "npm run dev --workspace yomo-yama-frontend2",
+    "check:frontend2": "npm run check --workspace yomo-yama-frontend2",
     "dev:server": "npm run dev --workspace yomo-yama-server",
     "lint:frontend": "npm run lint --workspace yomo-yama-frontend",
     "lint:server": "npm run lint --workspace yomo-yama-server",
@@ -24,7 +27,8 @@
   "workspaces": [
     "packages/yomo-yama-db",
     "packages/yomo-yama-server",
-    "packages/yomo-yama-frontend"
+    "packages/yomo-yama-frontend",
+    "packages/yomo-yama-frontend2"
   ],
   "devDependencies": {
     "@eslint/js": "^9.35.0",

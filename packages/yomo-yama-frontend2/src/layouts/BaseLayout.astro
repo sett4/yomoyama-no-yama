@@ -1,0 +1,74 @@
+---
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { absoluteUrl, makeDescription } from '../lib/utils';
+import { siteConfig } from '../lib/site';
+import '../styles/style.scss';
+
+type Props = {
+  title?: string;
+  description?: string | null;
+  canonicalPath?: string;
+  image?: string;
+};
+
+const {
+  title,
+  description,
+  canonicalPath = Astro.url.pathname,
+  image = siteConfig.opengraph.image,
+} = Astro.props as Props;
+
+const pageTitle = title ? `${title} - ${siteConfig.site.title}` : siteConfig.site.title;
+const pageDescription = makeDescription(description, siteConfig.site.description);
+const canonicalUrl = absoluteUrl(canonicalPath);
+const ogImage = absoluteUrl(image);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title || siteConfig.site.title,
+  image: [ogImage],
+  author: {
+    '@type': 'Person',
+    name: siteConfig.author.name,
+  },
+  mainEntityOfPage: canonicalUrl,
+  description: pageDescription,
+};
+---
+
+<!doctype html>
+<html lang={siteConfig.site.language} dir={siteConfig.site.dir} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="theme-color" content={siteConfig.manifestJson.themeColor} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="generator" content={siteConfig.site.generator.name} />
+    <link rel="alternate" type="application/atom+xml;type=feed" title={`${siteConfig.site.title} ${siteConfig.feed.incidents.title}`} href={siteConfig.feed.incidents.path} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={siteConfig.opengraph.type} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="twitter:image" content={ogImage} />
+    <meta property="twitter:card" content={siteConfig.twitter.card} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+  </head>
+  <body>
+    <Header />
+    <div id="main" class="container">
+      <slot />
+      <Footer />
+    </div>
+    <script>
+      import '../scripts/scripts.js';
+    </script>
+  </body>
+</html>

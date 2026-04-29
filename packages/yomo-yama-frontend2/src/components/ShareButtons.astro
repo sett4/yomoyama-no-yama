@@ -1,0 +1,37 @@
+---
+import Icon from './Icon.astro';
+import { absoluteUrl } from '../lib/utils';
+import { phrases, siteConfig } from '../lib/site';
+
+const { title, path } = Astro.props as { title: string; path: string };
+const url = absoluteUrl(path);
+---
+
+{siteConfig.shareButtons.length > 0 && (
+  <div class="share-buttons">
+    <p>{phrases.share_this_article}:</p>
+    <ul>
+      {siteConfig.shareButtons.includes('twitter') && (
+        <li>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            data-tooltip={`${phrases.share_on} Twitter - ${phrases.opens_new_tab}`}
+            href={`https://twitter.com/intent/tweet/?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`}
+            class="twitter"
+          >
+            <Icon name="twitter" />
+          </a>
+        </li>
+      )}
+      {siteConfig.shareButtons.includes('clipboard') && (
+        <li>
+          <div class="clipboard" data-tooltip={phrases.copy_to_clipboard} tabindex="0">
+            <Icon name="clipboard" />
+          </div>
+        </li>
+      )}
+    </ul>
+  </div>
+)}
+

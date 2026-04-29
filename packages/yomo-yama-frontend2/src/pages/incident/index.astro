@@ -1,0 +1,22 @@
+---
+import PostList from '../../components/PostList.astro';
+import ScrollUpArrow from '../../components/ScrollUpArrow.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getIncidentMonths, loadIncidents } from '../../lib/incidents';
+
+const incidents = await loadIncidents();
+const months = await getIncidentMonths();
+---
+
+<BaseLayout title="山岳事故" canonicalPath="/incident/">
+  <PostList posts={incidents.slice(0, 20)} />
+  <ScrollUpArrow />
+
+  <h2 id="chronological-archive">アーカイブ</h2>
+
+  <ul class="archive">
+    {months.map((month) => (
+      <li><a href={`/incident/${month.yearMonth}.html`}>{month.title}</a></li>
+    ))}
+  </ul>
+</BaseLayout>

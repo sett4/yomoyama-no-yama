@@ -1,0 +1,21 @@
+---
+import type { Incident } from '../lib/incidents';
+import { excerpt, formatDate } from '../lib/utils';
+
+const { post } = Astro.props as { post: Incident };
+---
+
+<a href={post.url}>
+  <article>
+    <header>
+      <h2 class="post-title">{post.title}</h2>
+    </header>
+    <div class="excerpt">
+      {excerpt(post.templateContent)}
+    </div>
+    <div class="post-meta">
+      <time>{formatDate(post.date)}</time>
+    </div>
+  </article>
+</a>
+

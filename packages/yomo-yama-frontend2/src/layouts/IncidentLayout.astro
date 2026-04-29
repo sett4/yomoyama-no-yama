@@ -1,0 +1,20 @@
+---
+import IncidentMeta from '../components/IncidentMeta.astro';
+import ScrollUpArrow from '../components/ScrollUpArrow.astro';
+import type { Incident } from '../lib/incidents';
+import { makeDescription } from '../lib/utils';
+import BaseLayout from './BaseLayout.astro';
+
+const { post } = Astro.props as { post: Incident };
+---
+
+<BaseLayout title={post.title} description={makeDescription(post.content)} canonicalPath={post.url}>
+  <article class="single-article">
+    <header>
+      <h1>{post.title}</h1>
+    </header>
+    <IncidentMeta post={post} />
+    <p set:html={post.content || ''}></p>
+  </article>
+  <ScrollUpArrow />
+</BaseLayout>

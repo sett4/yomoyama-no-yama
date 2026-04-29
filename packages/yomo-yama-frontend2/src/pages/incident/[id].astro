@@ -1,0 +1,43 @@
+---
+import PostList from '../../components/PostList.astro';
+import ScrollUpArrow from '../../components/ScrollUpArrow.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import IncidentLayout from '../../layouts/IncidentLayout.astro';
+import { getIncidentMonths, loadIncidents, type Incident, type IncidentMonth } from '../../lib/incidents';
+import { groupByDate } from '../../lib/utils';
+
+type PageProps =
+  | { kind: 'incident'; post: Incident }
+  | { kind: 'month'; month: IncidentMonth };
+
+export async function getStaticPaths() {
+  const [incidents, months] = await Promise.all([loadIncidents(), getIncidentMonths()]);
+  return [
+    ...incidents.map((post) => ({
+      params: { id: post.slug },
+      props: { kind: 'incident', post } satisfies PageProps,
+    })),
+    ...months.map((month) => ({
+      params: { id: month.yearMonth },
+      props: { kind: 'month', month } satisfies PageProps,
+    })),
+  ];
+}
+
+const props = Astro.props as PageProps;
+---
+
+{props.kind === 'incident' ? (
+  <IncidentLayout post={props.post} />
+) : (
+  <BaseLayout title={props.month.title} description={props.month.posts[0]?.content} canonicalPath={`/incident/${props.month.yearMonth}.html`}>
+    {groupByDate(props.month.posts).map((byDate) => (
+      <>
+        <h2>{byDate.date}</h2>
+        <PostList posts={byDate.posts} />
+      </>
+    ))}
+    <ScrollUpArrow />
+  </BaseLayout>
+)}
+

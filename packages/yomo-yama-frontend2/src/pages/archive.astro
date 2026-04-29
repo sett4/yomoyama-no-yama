@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getIncidentMonths } from '../lib/incidents';
+
+const months = await getIncidentMonths();
+---
+
+<BaseLayout title="Archive" description="All posts published since the start of of the blog back in 2020." canonicalPath="/archive/">
+  <h2 id="chronological-archive">Chronological archive</h2>
+  <ul class="archive">
+    {months.map((month) => (
+      <li><a href={`/incident/${month.yearMonth}.html`}>{month.title}</a></li>
+    ))}
+  </ul>
+</BaseLayout>
+

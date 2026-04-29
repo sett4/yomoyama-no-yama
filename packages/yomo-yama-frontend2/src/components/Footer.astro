@@ -1,0 +1,28 @@
+---
+import { navigationItems, phrases, siteConfig } from '../lib/site';
+
+const currentYear = new Date().getFullYear();
+const startYear = siteConfig.site.startYear ? `${siteConfig.site.startYear}-` : '';
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="links">
+      <ul>
+        {navigationItems.map((item) => (
+          <li>
+            <a href={item.href}><span>{item.label}</span></a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="copyright">
+      &copy; {startYear}{currentYear}{' '}
+      <a href={siteConfig.author.url}>{siteConfig.author.name}</a><br />
+      {phrases.powered_by} <a href={siteConfig.site.generator.url}>{siteConfig.site.generator.name}</a><br />
+      {phrases.template}: <a href={siteConfig.site.template.url}>{siteConfig.site.template.name}</a>{' '}
+      {phrases.by} <a href={siteConfig.site.template.credit.url}>{siteConfig.site.template.credit.name}</a>
+    </div>
+  </div>
+</footer>
+
