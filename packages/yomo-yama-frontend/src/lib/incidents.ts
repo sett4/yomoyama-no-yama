@@ -40,12 +40,12 @@ export async function loadIncidents(): Promise<Incident[]> {
 }
 
 async function loadIncidentsFromDb(): Promise<Incident[]> {
-  console.info('[frontend2:incidents] loading incident collection');
+  console.info('[frontend:incidents] loading incident collection');
   const { client, db } = createDbClient();
 
   try {
     const records = await findPublishedPostsByCategory(db, 'incident');
-    console.info('[frontend2:incidents] incident collection fetched', {
+    console.info('[frontend:incidents] incident collection fetched', {
       count: records.length,
     });
 
@@ -58,12 +58,12 @@ async function loadIncidentsFromDb(): Promise<Incident[]> {
       .sort((a, b) => b.date.getTime() - a.date.getTime());
 
     if (invalidCount > 0) {
-      console.warn('[frontend2:incidents] skipped incidents with invalid publishedAt', {
+      console.warn('[frontend:incidents] skipped incidents with invalid publishedAt', {
         invalidCount,
       });
     }
 
-    console.info('[frontend2:incidents] loaded', incidents.length, 'incidents');
+    console.info('[frontend:incidents] loaded', incidents.length, 'incidents');
     return incidents;
   } finally {
     client.close();

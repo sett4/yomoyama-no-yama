@@ -57,6 +57,8 @@ typings/
 # gatsby files
 .cache/
 public
+!packages/yomo-yama-frontend/public/
+!packages/yomo-yama-frontend/public/**
 
 # Mac files
 .DS_Store
