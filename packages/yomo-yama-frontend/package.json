@@ -14,7 +14,7 @@
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
     "@sett4/yomo-yama-db": "file:../yomo-yama-db",
-    "astro": "^5.18.1",
+    "astro": "^6.2.1",
     "sass": "^1.99.0"
   },
   "devDependencies": {

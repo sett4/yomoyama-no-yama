@@ -1,4 +1,4 @@
-import assert from "power-assert"
+import assert from "assert/strict"
 import fs from "fs"
 import os from "os"
 import path from "path"
@@ -106,7 +106,10 @@ describe("db-backed incident repository", () => {
     assert.equal(all.length, 2)
     assert.equal(all[0].subject, "after-update")
     assert.equal(all[0].content, "after-content")
-    assert.equal(all[0].publishedDate.toISOString(), "2026-03-21T00:00:00.000Z")
+    assert.equal(
+      new Date(all[0].publishedDate).toISOString(),
+      "2026-03-21T00:00:00.000Z"
+    )
     assert.ok(all[0].tags.has("山岳事故"))
     assert.ok(all[0].tags.has("北アルプス"))
     assert.equal(all[1].subject, "older")

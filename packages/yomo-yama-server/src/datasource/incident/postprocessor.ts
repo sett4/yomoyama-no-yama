@@ -4,7 +4,7 @@ import fs from "fs"
 import zlib from "zlib"
 import { DictionaryBuilder } from "../mountain/gsi-prefecture/buildDictionary"
 import { log } from "../../logger"
-import { Configuration, OpenAIApi } from "openai"
+import OpenAI from "openai"
 import {
   type DbClient,
   findPostExtraById,
@@ -61,17 +61,15 @@ export class AddMountainTagProcessor {
 }
 
 export class ChatGptPostExtraProcessor {
-  private openai: OpenAIApi
+  private openai: OpenAI
   private db: DbClient
   private chatGptModel: string
 
   constructor(openaiApiKey: string, db: DbClient, model = "gpt-3.5-turbo") {
-    const configuration = new Configuration({
+    this.openai = new OpenAI({
       organization: "org-jETSENZkkC9Pye2vSp2NHDgJ",
       apiKey: openaiApiKey,
     })
-    // console.log("Key", openaiApiKey)
-    this.openai = new OpenAIApi(configuration)
     this.db = db
     this.chatGptModel = model
   }
@@ -116,7 +114,7 @@ ${article.content}
 }`
     let response
     try {
-      response = await this.openai.createChatCompletion({
+      response = await this.openai.chat.completions.create({
         model: this.chatGptModel,
         messages: [{ role: "user", content: content }],
       })
@@ -131,7 +129,7 @@ ${article.content}
 
     await new Promise((r) => setTimeout(r, 0.2))
 
-    const answer = response.data.choices[0].message?.content
+    const answer = response.choices[0]?.message?.content
     log.info({ message: "ChatGPT Answer is", answer })
 
     if (answer) {
