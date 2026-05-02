@@ -15,6 +15,11 @@ const { tagPage } = Astro.props as { tagPage: IncidentTag };
 ---
 
 <BaseLayout title={tagPage.tag} description={`Incidents tagged with ${tagPage.tag}`} canonicalPath={`/incident/tags/${tagPage.tag}.html`}>
-  <PostList posts={tagPage.posts} />
+  <section class="mx-auto max-w-4xl">
+    <header class="mb-8 border-b border-line pb-6">
+      <p class="mb-3 font-sans text-sm font-bold uppercase tracking-[0.16em] text-ridge">Tagged records</p>
+      <h1 class="font-sans text-4xl font-bold leading-tight text-ink sm:text-5xl">{tagPage.tag}</h1>
+    </header>
+    <PostList posts={tagPage.posts} />
+  </section>
 </BaseLayout>
-

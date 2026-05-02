@@ -6,7 +6,7 @@ const { posts } = Astro.props as { posts: Incident[] };
 ---
 
 <div class="post-list">
-  <ul>
+  <ul class="space-y-4">
     {posts.map((post) => (
       <li>
         <PostExcerpt post={post} />
@@ -14,4 +14,3 @@ const { posts } = Astro.props as { posts: Incident[] };
     ))}
   </ul>
 </div>
-

@@ -7,10 +7,10 @@ import { siteConfig } from '../lib/site';
 <PageLayout title="Subscribe" description="Follow this blog to get notified whenever new article is published." canonicalPath="/subscribe/">
   <p>Subscribe to <strong>{siteConfig.site.title}</strong> to get updates whenever a new article is published.</p>
 
-  <div class="feed-list">
-    <ul>
-      <li>
-        <a href={siteConfig.feed.incidents.path}>
+  <div class="feed-list not-prose">
+    <ul class="list-none p-0">
+      <li class="m-0">
+        <a class="inline-flex items-center gap-3 rounded-md border border-line bg-paper-soft px-4 py-3 font-sans font-bold no-underline shadow-sm" href={siteConfig.feed.incidents.path}>
           <Icon name="rss" />
           <span class="name">Atom Feed</span>
         </a>

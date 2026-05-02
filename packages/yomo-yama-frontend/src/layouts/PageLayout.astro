@@ -9,7 +9,7 @@ const { title, description, canonicalPath } = Astro.props as {
 ---
 
 <BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
-  <article>
+  <article class="content-flow mx-auto max-w-3xl">
     {title && (
       <header>
         <h1>{title}</h1>
@@ -18,4 +18,3 @@ const { title, description, canonicalPath } = Astro.props as {
     <slot />
   </article>
 </BaseLayout>
-

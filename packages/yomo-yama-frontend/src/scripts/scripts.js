@@ -1,25 +1,4 @@
-const themeKey = 'theme';
-const darkSetting = 'dark';
-const lightSetting = 'light';
-
 const htmlElement = document.querySelector('html');
-
-const setTheme = (theme) => {
-  const themeSwitcherBtn = document.querySelector('.theme-switcher');
-
-  const themeSettings = [lightSetting, darkSetting];
-  const [classToRemove, classToAdd] =
-    theme === lightSetting
-      ? [darkSetting, lightSetting]
-      : [lightSetting, darkSetting];
-
-  if (themeSettings.includes(theme)) {
-    htmlElement.classList.remove(classToRemove);
-    themeSwitcherBtn.classList.remove(classToRemove);
-    htmlElement.classList.add(classToAdd);
-    themeSwitcherBtn.classList.add(classToAdd);
-  }
-};
 
 const scrollToTop = () => {
   window.scroll({
@@ -33,59 +12,6 @@ const scrollToTop = () => {
 
 window.addEventListener('DOMContentLoaded', () => {
   const htmlElement = document.querySelector('html');
-
-  // If that doesn't happen JS-based features won't work
-
-  htmlElement.classList.remove('no-js');
-
-  // Dark theme (base switch logic)
-
-  const handleThemeSwitch = () => {
-    const isDarkActive = htmlElement.classList.contains(darkSetting);
-    const desiredSetting = isDarkActive ? lightSetting : darkSetting;
-    setTheme(desiredSetting);
-
-    try {
-      localStorage.setItem(themeKey, desiredSetting);
-    } catch {
-      return false;
-    }
-  };
-
-  const handleThemeSwitchFromKeyboard = (e) => {
-    e.preventDefault();
-    if (e.keyCode === 13) {
-      handleThemeSwitch();
-    }
-  };
-
-  // Dark theme - honor browser preference
-
-  const systemWideDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
-
-  if (systemWideDarkMode.matches) {
-    setTheme(darkSetting);
-  }
-
-  systemWideDarkMode.addEventListener('change', (e) => {
-    const colorSchemePreference = e.matches ? darkSetting : lightSetting;
-    setTheme(colorSchemePreference);
-  });
-
-  // Dark theme - honor local storage setting if present
-
-  const currentSavedTheme = localStorage.getItem(themeKey) || null;
-
-  if (currentSavedTheme) {
-    setTheme(currentSavedTheme);
-  }
-
-  // Theme switcher button
-
-  const themeSwitcherBtn = document.querySelector('.theme-switcher');
-
-  themeSwitcherBtn.addEventListener('click', handleThemeSwitch);
-  themeSwitcherBtn.addEventListener('keyup', handleThemeSwitchFromKeyboard);
 
   // Hamburger menu
 
@@ -150,10 +76,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const handleArchiveToggle = (e) => {
     const clickedHeading = e.target.closest(yearHeadingSelector);
     const year = clickedHeading.getAttribute('id').split('-')[1];
-    clickedHeading.classList.toggle('hidden');
+    clickedHeading.classList.toggle('is-collapsed');
     document
       .getElementsByClassName(`posts-${year}`)[0]
-      .classList.toggle('hidden');
+      .classList.toggle('is-collapsed');
   };
 
   const handleArchiveToggleFromKeyboard = (e) => {
@@ -165,17 +91,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (postLists && postLists.length > 0) {
     for (const listItem of postLists) {
-      listItem.classList.add('hidden');
+      listItem.classList.add('is-collapsed');
     }
 
     for (const heading of archiveYearHeadings) {
-      heading.classList.add('clickable', 'hidden');
+      heading.classList.add('clickable', 'is-collapsed');
       heading.addEventListener('click', handleArchiveToggle);
       heading.addEventListener('keyup', handleArchiveToggleFromKeyboard);
     }
 
-    postLists[0].classList.remove('hidden');
-    archiveYearHeadings[0].classList.remove('hidden');
+    postLists[0].classList.remove('is-collapsed');
+    archiveYearHeadings[0].classList.remove('is-collapsed');
   }
 
   // Pagination - page number numerical input + jump button

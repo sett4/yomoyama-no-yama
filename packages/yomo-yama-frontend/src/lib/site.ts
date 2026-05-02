@@ -40,8 +40,8 @@ export const siteConfig = {
   },
   manifestJson: {
     language: 'ja-JP',
-    themeColor: '#1773cf',
-    backgroundColor: '#1773cf',
+    themeColor: '#2f5d46',
+    backgroundColor: '#f7f3ea',
   },
   shareButtons: ['twitter', 'clipboard'],
   feed: {

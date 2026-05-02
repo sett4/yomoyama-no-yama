@@ -3,20 +3,36 @@ import PostList from '../../components/PostList.astro';
 import ScrollUpArrow from '../../components/ScrollUpArrow.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getIncidentMonths, loadIncidents } from '../../lib/incidents';
+import { groupByDate } from '../../lib/utils';
 
 const incidents = await loadIncidents();
 const months = await getIncidentMonths();
+const recentByDate = groupByDate(incidents.slice(0, 20));
 ---
 
 <BaseLayout title="山岳事故" canonicalPath="/incident/">
-  <PostList posts={incidents.slice(0, 20)} />
-  <ScrollUpArrow />
+  <section class="mx-auto max-w-4xl">
+    <header class="mb-8 border-b border-line pb-6">
+      <p class="mb-3 font-sans text-sm font-bold uppercase tracking-[0.16em] text-ridge">Mountain incident database</p>
+      <h1 class="font-sans text-4xl font-bold leading-tight text-ink sm:text-5xl">山岳事故</h1>
+      <p class="mt-4 max-w-2xl text-lg leading-8 text-ink-muted">山岳事故のニュースを日付順に集めています。各記録から出典、タグ、本文概要を確認できます。</p>
+    </header>
 
-  <h2 id="chronological-archive">アーカイブ</h2>
-
-  <ul class="archive">
-    {months.map((month) => (
-      <li><a href={`/incident/${month.yearMonth}.html`}>{month.title}</a></li>
+    {recentByDate.map((byDate) => (
+      <section class="mb-10">
+        <h2 class="mb-4 font-sans text-2xl font-bold text-ink">{byDate.date}</h2>
+        <PostList posts={byDate.posts} />
+      </section>
     ))}
-  </ul>
+
+    <section class="mt-12 rounded-md border border-line bg-paper-soft p-5">
+      <h2 class="font-sans text-2xl font-bold text-ink" id="chronological-archive">アーカイブ</h2>
+      <ul class="archive mt-4 flex list-none flex-wrap gap-2 p-0">
+        {months.map((month) => (
+          <li class="m-0"><a class="inline-flex rounded border border-line bg-paper px-3 py-2 font-sans text-sm font-bold no-underline" href={`/incident/${month.yearMonth}.html`}>{month.title}</a></li>
+        ))}
+      </ul>
+    </section>
+  </section>
+  <ScrollUpArrow />
 </BaseLayout>
