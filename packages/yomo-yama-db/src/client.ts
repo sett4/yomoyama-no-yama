@@ -39,6 +39,6 @@ export function createDbClient(
     nodeEnv: process.env.NODE_ENV || "undefined",
   })
   const client = createClient({ url, authToken })
-  const db = drizzle(client, { schema })
+  const db = drizzle({ client, schema })
   return { client, db }
 }

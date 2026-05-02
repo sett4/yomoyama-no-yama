@@ -1,12 +1,11 @@
 const PORT = Number(process.env.PORT) || 8080
 import express from "express"
 import httphandler from "./httphandler"
-import { useCloudLogging, useClsLogging, log } from "./logger"
+import { useStructuredLogging, log } from "./logger"
 
 async function startServer() {
   const app = express()
-  await useCloudLogging(app)
-  await useClsLogging(app)
+  useStructuredLogging(app)
 
   await httphandler.registerHandler(app)
 
