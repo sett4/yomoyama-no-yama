@@ -1,6 +1,8 @@
 import type { Config } from "drizzle-kit"
+import * as path from "path"
 
-const databaseUrl = process.env.DATABASE_URL || "file:./local.db"
+const localDatabaseUrl = `file:${path.resolve(__dirname, "local.db")}`
+const databaseUrl = process.env.DATABASE_URL || localDatabaseUrl
 
 export default {
   schema: "./src/schema.ts",

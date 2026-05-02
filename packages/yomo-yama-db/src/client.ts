@@ -1,11 +1,14 @@
 import { createClient } from "@libsql/client"
 import { drizzle, type LibSQLDatabase } from "drizzle-orm/libsql"
+import * as path from "path"
 import * as schema from "./schema"
 
 export type DbClient = LibSQLDatabase<typeof schema>
 
+const localDatabaseUrl = `file:${path.resolve(__dirname, "../local.db")}`
+
 export function resolveDatabaseUrl(): string {
-  return process.env.DATABASE_URL || "file:./local.db"
+  return process.env.DATABASE_URL || localDatabaseUrl
 }
 
 function describeDatabaseTarget(url: string) {

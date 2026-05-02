@@ -18,7 +18,7 @@
 ## Test Plan
 
 - `npm run build:db`
-- `DATABASE_URL=file:../yomo-yama-db/local.db npm run build --workspace yomo-yama-frontend`
+- `DATABASE_URL="file:${PWD}/packages/yomo-yama-db/local.db" npm run build --workspace yomo-yama-frontend`
 - `npm run check --workspace yomo-yama-frontend`
 - 主要 URL と生成件数を現行 Eleventy 出力と比較する。
 - dev server で theme switcher, hamburger, scroll-to-top, pagination jump, clipboard share を確認する。
