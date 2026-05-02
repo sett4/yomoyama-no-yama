@@ -5,18 +5,18 @@ const currentYear = new Date().getFullYear();
 const startYear = siteConfig.site.startYear ? `${siteConfig.site.startYear}-` : '';
 ---
 
-<footer class="footer">
-  <div class="container">
+<footer class="footer mt-20 border-t border-line py-8 font-sans text-sm text-ink-muted">
+  <div class="mx-auto flex max-w-5xl flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
     <div class="links">
-      <ul>
+      <ul class="flex flex-wrap gap-3">
         {navigationItems.map((item) => (
           <li>
-            <a href={item.href}><span>{item.label}</span></a>
+            <a class="font-bold no-underline hover:underline" href={item.href}><span>{item.label}</span></a>
           </li>
         ))}
       </ul>
     </div>
-    <div class="copyright">
+    <div class="copyright leading-6 sm:text-right">
       &copy; {startYear}{currentYear}{' '}
       <a href={siteConfig.author.url}>{siteConfig.author.name}</a><br />
       {phrases.powered_by} <a href={siteConfig.site.generator.url}>{siteConfig.site.generator.name}</a><br />
@@ -25,4 +25,3 @@ const startYear = siteConfig.site.startYear ? `${siteConfig.site.startYear}-` : 
     </div>
   </div>
 </footer>
-

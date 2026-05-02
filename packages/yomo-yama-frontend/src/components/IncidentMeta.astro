@@ -9,24 +9,24 @@ const sourceName = phrases.sources[post.source] || post.source;
 const tags = filterDisplayTags(post.tags);
 ---
 
-<div class="top-meta">
+<div class="top-meta mt-5 font-sans text-sm font-bold text-ridge">
   <time>{formatDate(post.date)}</time>
 </div>
 
-<div class="bottom-meta">
+<div class="bottom-meta mt-6 grid gap-4 rounded-md border border-line bg-paper px-4 py-4 font-sans text-sm">
   {post.sourceUrl && (
-    <div class="post-tags">
-      <p>{phrases.source_from}:</p>
-      <a href={post.sourceUrl}>{sourceName}</a>
+    <div class="post-tags flex flex-wrap items-center gap-2">
+      <p class="m-0 text-xs font-bold uppercase tracking-[0.12em] text-ink-muted">{phrases.source_from}</p>
+      <a class="font-bold" href={post.sourceUrl}>{sourceName}</a>
     </div>
   )}
   {siteConfig.tags.displayOnPostPage && tags.length > 0 && (
-    <div class="post-tags">
-      <p>{phrases.tagged_as}:</p>
-      <ul>
+    <div class="post-tags flex flex-wrap items-center gap-2">
+      <p class="m-0 text-xs font-bold uppercase tracking-[0.12em] text-ink-muted">{phrases.tagged_as}</p>
+      <ul class="m-0 flex list-none flex-wrap gap-2 p-0">
         {tags.map((tag) => (
-          <li>
-            <a title={`Articles tagged as '${tag}'`} href={`/incident/tags/${tag}.html`}>{tag}</a>
+          <li class="m-0">
+            <a class="rounded border border-mountain/20 bg-mountain/5 px-2 py-1 text-xs font-bold no-underline" title={`Articles tagged as '${tag}'`} href={`/incident/tags/${tag}.html`}>{tag}</a>
           </li>
         ))}
       </ul>

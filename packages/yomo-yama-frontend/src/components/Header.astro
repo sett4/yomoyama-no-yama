@@ -6,31 +6,31 @@ const currentPath = Astro.url.pathname;
 ---
 
 <a href="#main" id="skipToMain" class="skip-link">{phrases.skip_to_main_content}</a>
-<header class="header">
-  <input class="menu-btn" type="checkbox" id="menu-btn" />
-  <label class="hamburger" tabindex="0" for="menu-btn">
+<header class="header sticky top-0 z-40 min-h-16 border-b border-line/80 bg-paper/95 font-sans backdrop-blur md:min-h-0">
+  <input class="menu-btn peer sr-only" type="checkbox" id="menu-btn" />
+  <label class="hamburger absolute left-3 top-3 flex h-11 w-11 cursor-pointer items-center justify-center text-mountain md:hidden" tabindex="0" for="menu-btn" aria-label="Toggle navigation">
     <span></span>
   </label>
-  <div class="main-nav">
+  <div class="main-nav hidden min-h-screen w-full flex-col gap-8 px-5 pb-8 pt-20 peer-checked:flex md:mx-auto md:flex md:min-h-0 md:max-w-6xl md:flex-row md:items-center md:justify-between md:px-6 md:py-4 lg:px-8">
     <div class="site-logo">
-      <a href="/" title={`${siteConfig.site.title} - ${phrases.main_page}`}>
-        <img src={siteConfig.site.logo} alt="Site logo" />
-        <span class="title">{siteConfig.site.title}</span>
+      <a class="inline-flex items-center gap-3 text-ink no-underline hover:text-mountain" href="/" title={`${siteConfig.site.title} - ${phrases.main_page}`}>
+        <img class="h-9 w-auto" src={siteConfig.site.logo} alt="Site logo" />
+        <span class="title text-lg font-bold tracking-normal">{siteConfig.site.title}</span>
       </a>
     </div>
-    <ul class="site-links">
+    <ul class="site-links flex flex-col gap-2 text-base font-bold md:flex-row md:items-center md:gap-1">
       {
         navigationItems.map((item) => (
           <li class={currentPath === item.href || currentPath === item.href.replace(/\.html$/, '/') ? 'active' : undefined} aria-current={currentPath === item.href ? 'page' : undefined}>
-            <a href={item.href}>{item.label}</a>
+            <a class:list={[
+              'block rounded-md px-3 py-2 no-underline transition-colors',
+              currentPath === item.href || currentPath === item.href.replace(/\.html$/, '/')
+                ? 'bg-mountain text-paper hover:text-paper'
+                : 'text-ink-muted hover:bg-line/45 hover:text-ink',
+            ]} href={item.href}>{item.label}</a>
           </li>
         ))
       }
     </ul>
   </div>
-  <div class="theme-switcher" tabindex="0">
-    <Icon name="dark-toggle" />
-    <Icon name="light-toggle" />
-  </div>
 </header>
-

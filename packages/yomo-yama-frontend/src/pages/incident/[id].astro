@@ -31,13 +31,18 @@ const props = Astro.props as PageProps;
   <IncidentLayout post={props.post} />
 ) : (
   <BaseLayout title={props.month.title} description={props.month.posts[0]?.content} canonicalPath={`/incident/${props.month.yearMonth}.html`}>
-    {groupByDate(props.month.posts).map((byDate) => (
-      <>
-        <h2>{byDate.date}</h2>
-        <PostList posts={byDate.posts} />
-      </>
-    ))}
+    <section class="mx-auto max-w-4xl">
+      <header class="mb-8 border-b border-line pb-6">
+        <p class="mb-3 font-sans text-sm font-bold uppercase tracking-[0.16em] text-ridge">Monthly archive</p>
+        <h1 class="font-sans text-4xl font-bold leading-tight text-ink sm:text-5xl">{props.month.title}</h1>
+      </header>
+      {groupByDate(props.month.posts).map((byDate) => (
+        <section class="mb-10">
+          <h2 class="mb-4 font-sans text-2xl font-bold text-ink">{byDate.date}</h2>
+          <PostList posts={byDate.posts} />
+        </section>
+      ))}
+    </section>
     <ScrollUpArrow />
   </BaseLayout>
 )}
-

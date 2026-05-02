@@ -1,0 +1,226 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Merriweather";
+  src: url("/fonts/merriweather-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Merriweather";
+  src: url("/fonts/merriweather-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Merriweather";
+  src: url("/fonts/merriweather-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Merriweather";
+  src: url("/fonts/merriweather-bolditalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@theme {
+  --color-paper: #f7f3ea;
+  --color-paper-soft: #fbf8f1;
+  --color-ink: #1d211c;
+  --color-ink-muted: #65685f;
+  --color-mountain: #2f5d46;
+  --color-ridge: #7b3f30;
+  --color-alert: #b45309;
+  --color-line: #d8d0bf;
+  --font-serif: "Merriweather", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: "PT Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "SF Pro", Helvetica, Arial, "Noto Sans", sans-serif;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth bg-paper text-ink antialiased;
+    font-family: var(--font-serif);
+  }
+
+  body.no-scrollbar {
+    overflow: hidden;
+  }
+
+  ::selection {
+    @apply bg-alert/25 text-ink;
+  }
+
+  a {
+    @apply text-mountain underline decoration-mountain/35 decoration-2 underline-offset-4 transition-colors hover:text-ridge focus:text-ridge focus:outline-2 focus:outline-offset-4 focus:outline-alert;
+  }
+
+  img,
+  video {
+    @apply h-auto max-w-full;
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  code,
+  kbd,
+  pre {
+    @apply rounded bg-line/45 px-2 py-1 text-sm text-ink;
+  }
+
+  pre {
+    @apply overflow-x-auto p-4;
+  }
+}
+
+@layer components {
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-ink focus:px-4 focus:py-3 focus:font-sans focus:text-sm focus:font-bold focus:text-paper focus:no-underline;
+  }
+
+  .content-flow {
+    @apply text-[1.0625rem] leading-8 text-ink;
+  }
+
+  .content-flow h1,
+  .content-flow h2,
+  .content-flow h3 {
+    @apply font-sans font-bold tracking-normal text-ink;
+  }
+
+  .content-flow h1 {
+    @apply mb-8 mt-2 text-4xl leading-tight sm:text-5xl;
+  }
+
+  .content-flow h2 {
+    @apply mb-4 mt-12 border-b border-line pb-3 text-2xl;
+  }
+
+  .content-flow h3 {
+    @apply mb-3 mt-9 text-xl;
+  }
+
+  .content-flow p {
+    @apply mb-7;
+  }
+
+  .content-flow ul {
+    @apply mb-7 pl-6;
+    list-style-type: square;
+  }
+
+  .content-flow li {
+    @apply mb-3;
+  }
+
+  .content-flow blockquote {
+    @apply my-8 border-l-4 border-mountain/50 pl-5 italic text-ink-muted;
+  }
+
+  .content-flow article a,
+  .content-flow p a {
+    @apply break-words;
+  }
+
+  .content-flow img {
+    @apply my-8 rounded-md border border-line bg-paper-soft;
+  }
+
+  .hamburger > span,
+  .hamburger::before,
+  .hamburger::after {
+    content: "";
+    display: block;
+    width: 1.75rem;
+    height: 0.1875rem;
+    border-radius: 999px;
+    background: currentColor;
+    transition: transform 160ms ease, opacity 160ms ease, top 160ms ease;
+  }
+
+  .hamburger::before,
+  .hamburger::after {
+    position: absolute;
+    left: 0.625rem;
+  }
+
+  .hamburger::before {
+    top: 0.8125rem;
+  }
+
+  .hamburger::after {
+    top: 1.875rem;
+  }
+
+  .menu-btn:checked ~ .hamburger > span {
+    opacity: 0;
+  }
+
+  .menu-btn:checked ~ .hamburger::before {
+    top: 1.375rem;
+    transform: rotate(-45deg);
+  }
+
+  .menu-btn:checked ~ .hamburger::after {
+    top: 1.375rem;
+    transform: rotate(45deg);
+  }
+
+  .scroll-up-arrow {
+    @apply fixed -bottom-20 right-5 z-40 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-mountain/20 bg-mountain text-paper shadow-lg transition-all hover:bg-ridge;
+  }
+
+  .scroll-up-arrow.visible {
+    @apply bottom-5;
+  }
+
+  .scroll-up-arrow svg {
+    @apply h-5 w-5;
+  }
+
+  .scroll-up-arrow svg .fillable {
+    fill: currentColor;
+  }
+
+  .archive .list.is-collapsed {
+    display: none;
+  }
+
+  .archive .year-heading.clickable {
+    cursor: pointer;
+  }
+
+  .archive .year-heading .eleventy-emoji {
+    display: inline-block;
+    transition: transform 160ms ease;
+  }
+
+  .archive .year-heading.is-collapsed .eleventy-emoji {
+    transform: rotate(-90deg);
+  }
+
+  .share-buttons svg {
+    @apply h-5 w-5;
+  }
+
+  .share-buttons svg .fillable {
+    fill: currentColor;
+  }
+
+  [data-tooltip] {
+    position: relative;
+  }
+}

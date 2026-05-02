@@ -8,25 +8,25 @@ const url = absoluteUrl(path);
 ---
 
 {siteConfig.shareButtons.length > 0 && (
-  <div class="share-buttons">
-    <p>{phrases.share_this_article}:</p>
-    <ul>
+  <div class="share-buttons flex flex-wrap items-center gap-2">
+    <p class="m-0 text-xs font-bold uppercase tracking-[0.12em] text-ink-muted">{phrases.share_this_article}</p>
+    <ul class="m-0 flex list-none gap-2 p-0">
       {siteConfig.shareButtons.includes('twitter') && (
-        <li>
+        <li class="m-0">
           <a
             target="_blank"
             rel="noopener noreferrer"
             data-tooltip={`${phrases.share_on} Twitter - ${phrases.opens_new_tab}`}
             href={`https://twitter.com/intent/tweet/?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`}
-            class="twitter"
+            class="twitter flex h-9 w-9 items-center justify-center rounded-md border border-line bg-paper text-mountain no-underline hover:bg-mountain hover:text-paper"
           >
             <Icon name="twitter" />
           </a>
         </li>
       )}
       {siteConfig.shareButtons.includes('clipboard') && (
-        <li>
-          <div class="clipboard" data-tooltip={phrases.copy_to_clipboard} tabindex="0">
+        <li class="m-0">
+          <div class="clipboard flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-line bg-paper text-mountain transition-colors hover:bg-mountain hover:text-paper" data-tooltip={phrases.copy_to_clipboard} tabindex="0">
             <Icon name="clipboard" />
           </div>
         </li>
@@ -34,4 +34,3 @@ const url = absoluteUrl(path);
     </ul>
   </div>
 )}
-

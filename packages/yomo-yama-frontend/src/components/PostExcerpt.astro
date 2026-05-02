@@ -1,21 +1,27 @@
 ---
 import type { Incident } from '../lib/incidents';
-import { excerpt, formatDate } from '../lib/utils';
+import { excerpt, filterDisplayTags, formatDate } from '../lib/utils';
+import { phrases } from '../lib/site';
 
 const { post } = Astro.props as { post: Incident };
+const sourceName = phrases.sources[post.source] || post.source;
+const tags = filterDisplayTags(post.tags).slice(0, 4);
 ---
 
-<a href={post.url}>
-  <article>
-    <header>
-      <h2 class="post-title">{post.title}</h2>
-    </header>
-    <div class="excerpt">
-      {excerpt(post.templateContent)}
+<article class="group rounded-md border border-line bg-paper-soft p-4 shadow-sm transition-colors hover:border-mountain/50 sm:p-5">
+  <a class="grid gap-4 text-ink no-underline hover:text-ink sm:grid-cols-[7.25rem_1fr]" href={post.url}>
+    <time class="font-sans text-sm font-bold tabular-nums text-ridge">{formatDate(post.date)}</time>
+    <div>
+      <header>
+        <h2 class="post-title font-sans text-xl font-bold leading-snug tracking-normal text-ink group-hover:text-mountain">{post.title}</h2>
+      </header>
+      <p class="excerpt mt-3 text-[0.98rem] leading-7 text-ink-muted">{excerpt(post.templateContent)}</p>
+      <div class="post-meta mt-4 flex flex-wrap items-center gap-2 font-sans text-xs font-bold text-ink-muted">
+        <span class="rounded border border-line bg-paper px-2 py-1">{sourceName}</span>
+        {tags.map((tag) => (
+          <span class="rounded border border-mountain/20 bg-mountain/5 px-2 py-1 text-mountain">{tag}</span>
+        ))}
+      </div>
     </div>
-    <div class="post-meta">
-      <time>{formatDate(post.date)}</time>
-    </div>
-  </article>
-</a>
-
+  </a>
+</article>
