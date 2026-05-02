@@ -4,7 +4,6 @@ import n from 'eslint-plugin-n'
 import prettierConfig from 'eslint-config-prettier'
 import tseslint from 'typescript-eslint'
 
-const frontendFiles = ['packages/yomo-yama-frontend/**/*.{js,mjs,cjs}']
 const serverFiles = ['packages/yomo-yama-server/src/**/*.ts']
 
 export default [
@@ -14,26 +13,8 @@ export default [
       '**/node_modules/**',
       '**/coverage/**',
       '**/dist/**',
-      'packages/yomo-yama-frontend/_site/**',
-      'packages/yomo-yama-frontend/src/scripts/vendors/**',
       'packages/yomo-yama-server/local.db',
     ],
-  },
-  {
-    files: frontendFiles,
-    ...js.configs.recommended,
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-    },
-    rules: {
-      ...js.configs.recommended.rules,
-      'no-unexpected-multiline': 'off',
-    },
   },
   {
     files: serverFiles,

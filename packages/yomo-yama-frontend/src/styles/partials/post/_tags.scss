@@ -15,6 +15,10 @@
     line-height: 1;
   }
 
+  > a {
+    align-self: flex-start;
+  }
+
   ul {
     margin: 0;
     padding: 0;

@@ -10,7 +10,7 @@ shared package の依存指定は npm 互換性のため `workspace:*` ではな
 
 - `root directory`: `/`
 - `build command`: `npm run pages:build`
-- `build output directory`: `packages/yomo-yama-frontend/_site`
+- `build output directory`: `packages/yomo-yama-frontend/dist`
 
 ローカルでも monorepo 全体で install する前提です。
 
