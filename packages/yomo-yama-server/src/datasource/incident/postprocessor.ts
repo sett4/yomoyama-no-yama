@@ -1,6 +1,7 @@
 import { Trie } from "@tanishiking/aho-corasick"
 import { IncidentArticle } from "."
 import fs from "fs"
+import path from "path"
 import zlib from "zlib"
 import { DictionaryBuilder } from "../mountain/gsi-prefecture/buildDictionary"
 import { log } from "../../logger"
@@ -27,7 +28,7 @@ export class AddMountainTagProcessor {
     log.info("initializing Mountain name Trie.")
     const stream = fs
       .createReadStream(
-        "./packages/yomo-yama-server/src/datasource/mountain/gsi-prefecture/gsi_experimental_nnfpt_with_prefecture.csv.gz"
+        path.join(__dirname, "../../../src/datasource/mountain/gsi-prefecture/gsi_experimental_nnfpt_with_prefecture.csv.gz")
       )
       .pipe(zlib.createGunzip())
 

@@ -83,7 +83,7 @@ const registerHandler = async function (app: Express) {
 
   app.get("/datasource/mountain/incident/yahoo/update", async (req, res) => {
     if (process.env.NODE_ENV !== "development") {
-      if (req.header("X-Appengine-Cron") !== "true" || req.header("X-CloudScheduler") !== "true") {
+      if (!req.header("X-Appengine-Cron")  && !req.header("X-CloudScheduler")) {
         res.send("NG")
         res.status(401)
         return

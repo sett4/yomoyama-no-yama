@@ -18,6 +18,7 @@
     "url": "git+https://github.com/sett4/yomoyama-no-yama.git"
   },
   "scripts": {
+    "clean": "rm -rf dist",
     "format": "prettier --write src/**/*.{ts,tsx}",
     "test": "jest ./src --watch",
     "posttest": "npm run lint",

@@ -2,6 +2,7 @@
   "name": "mt-incident-root",
   "private": true,
   "scripts": {
+    "clean": "npm run clean --workspaces --if-present",
     "gcp-build": "npm run build --workspace @sett4/yomo-yama-db && npm run gcp-build --workspace yomo-yama-server",
     "start": "node packages/yomo-yama-server/dist/index.js",
     "build:db": "npm run build --workspace @sett4/yomo-yama-db",

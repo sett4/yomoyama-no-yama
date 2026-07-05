@@ -9,6 +9,7 @@
     "seed-data"
   ],
   "scripts": {
+    "clean": "rm -rf dist",
     "build": "tsc -p tsconfig.json",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "ts-node ./src/migrate.ts",
